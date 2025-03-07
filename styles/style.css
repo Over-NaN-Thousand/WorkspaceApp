@@ -11,55 +11,77 @@
     --dark:#07272d; 
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body{
-    font-family: Arial, sans-serif;
-    background-color: #f6feff;
-    color: #030303;
-    font-size: clamp(12px, 3vw, 24px);
-}
+/********GENERAL********/
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-li{
-    list-style: none;
-    min-width: fit-content;
-}
+    body{
+        font-family: Arial, sans-serif;
+        background-color: #f1ede8;
+        /* background-color: #f6feff; */
+        color: #030303;
+        font-size: clamp(12px, 3vw, 24px);
+    }
 
-a{
-    text-decoration: none;
-    color: var(--light);
-}
+    li{
+        list-style: none;
+        min-width: fit-content;
+    }
 
-#logo{
-    width: 20vw;
-}
-
-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    
-    background-color: var(--prim);
-    color: var(--light);
-}
-
-header ul{
-    display: flex;
-    gap: 3rem;
-}
-
-footer{
-    color: var(--light);
-    background-color: var(--dark);
-}
+    a{
+        text-decoration: none;
+        color: var(--light);
+    }
 
 
+/********HEADER********/
+    #logo{
+        width: 20vw;
+    }
 
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        
+        background-color: var(--prim);
+        color: var(--light);
+    }
+
+    header ul{
+        display: flex;
+        gap: 3rem;
+    }
+
+
+ /********FOOTER********/
+    footer{
+        color: var(--light);
+        background-color: var(--dark);
+        min-height: 20vh;
+
+        display: flex;
+        gap: 10vw;
+        flex-direction: row;
+        justify-content: baseline;
+    }
+
+    footer div{
+        padding: 1.5rem .5rem;
+        font-size: small;
+    }
+
+    footer div ul{
+        padding-left: .25rem;
+    }
+
+
+/********NARROW SCREEN********/
 
 @media screen and (max-width: 768px){
     header ul{

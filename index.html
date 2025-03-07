@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
-    <script src="scripts\main.js" defer></script>
+    <script src="scripts\index.js" defer></script>
 
     <link rel="stylesheet" href="styles\style.css">
     <link rel="stylesheet" href="styles\index.css">
@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <img id="logo" src="resources\images\Qowork_logo.png" alt="Qowork Logo" title="Qowork Logo">
+        <img id="logo" src="resources\images\QoWork logo Vector.png" alt="Qowork Logo" title="Qowork Logo">
         <nav>
             <ul>
                 <li><a href="#">Cities</a></li>
@@ -35,76 +35,24 @@
             </form>
         </article>
 
-        <article class="article-grp">
+        <article id="top-cities" class="article-grp">
             <h2>Search Popular Cities</h2>
             <div class="items-container">
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Calgary">
-                        <img src="resources\images\Calgary-Andrei-Laqui.jpg" alt="City 1" title="City 1">
-                        <h3>Calgary</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Edmonton">
-                        <img src="resources\images\pexels-kamille-mendoza-2210918-6008580.jpg" alt="City 2" title="City 2">
-                        <h3>Edmonton</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Edmonton">
-                        <img src="resources\images\pexels-pixabay-315458.jpg" alt="City 3" title="City 3">
-                        <h3>San Francisco</h3>
-                    </a>
-                </div>
+                <!-- THIS IS NOW DYNAMICALLY CREATED IN index.js -->
             </div>
         </article>
 
-        <article class="article-grp">
+        <article id="top-workspaces" class="article-grp">
             <h2>Our Top Rated Workspaces</h2>
             <div class="items-container">
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Conference Rm1">
-                        <img src="resources\images\pexels-pixabay-260689.jpg" alt="WS 1" title="WS 1">
-                        <h3>Conference Rm1</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Blue Office">
-                        <img src="resources\images\pexels-kamo11235-667838.jpg" alt="WS 2" title="WS 2">
-                        <h3>Blue Office</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Simple Office">
-                        <img src="resources\images\pexels-fotios-photos-1957478.jpg" alt="WS 3" title="WS 3">
-                        <h3>Simple Office</h3>
-                    </a>
-                </div>
-                
+                <!-- THIS IS NOW DYNAMICALLY CREATED IN index.js -->
             </div>
         </article>
 
-        <article class="article-grp">
+        <article id="newest-workspaces" class="article-grp">
             <h2>Our Newest Workspaces</h2>
             <div class="items-container">
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Cozy Office">
-                        <img src="resources\images\pexels-karlsolano-2883049.jpg" alt="WS 1" title="WS 1">
-                        <h3>Cozy Office</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Blue Office">
-                        <img src="resources\images\pexels-kamo11235-667838.jpg" alt="WS 2" title="WS 2">
-                        <h3>Blue Office</h3>
-                    </a>
-                </div>
-                <div class="item">
-                    <a name="itemLink" href="javascript:void(0);" val="Desk 1">
-                        <img src="resources\images\pexels-pixabay-273671v2.jpg" alt="WS 3" title="WS 3">
-                        <h3>Desk 1</h3>
-                    </a>
-                </div>
+                <!-- THIS IS NOW DYNAMICALLY CREATED IN index.js -->
             </div>
         </article>
 
@@ -113,7 +61,10 @@
                 <div class="item">
                     <h3>What is Coworking?</h3>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, augue vel gravida tincidunt, turpis sem facilisis lorem, id pretium nunc risus eget orci. Cras ut dui quis velit euismod hendrerit. Morbi nec nisi id velit viverra lacinia in vel ex. Curabitur ac ligula at libero posuere sodales. Integer malesuada, lacus sed suscipit congue, dolor justo pretium magna, eget ultrices quam quam sit amet urna. Fusce ut nunc nec urna fermentum posuere vel id orci.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, augue vel gravida tincidunt, turpis sem facilisis lorem, id pretium nunc risus eget orci. Cras ut dui quis velit euismod hendrerit. 
+                    </p>
+                    <p>
+                        Morbi nec nisi id velit viverra lacinia in vel ex. Curabitur ac ligula at libero posuere sodales. Integer malesuada, lacus sed suscipit congue, dolor justo pretium magna, eget ultrices quam quam sit amet urna. Fusce ut nunc nec urna fermentum posuere vel id orci.
                     </p>
                 </div>
                 <div class="item">
@@ -136,13 +87,22 @@
         <div class="Navigation">
             <h3>Navigation Links</h3>
             <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li><a href="javascript:void(0);">Log In</a></li>
+                <li><a href="javascript:void(0);">Create an Account</a></li>
+                <li><a href="javascript:void(0);">Search for Workspaces</a></li>
+                <li><a href="javascript:void(0);">List a Workspace</a></li>
             </ul>
         </div>
+        <div class="Contact">
+            <h3>Company Info</h3>
+            <ul>
+                <li><a href="javascript:void(0);">About Us</a></li>
+                <li><a href="javascript:void(0);">Careers</a></li>
+                <li><a href="javascript:void(0);">Help Center</a></li>
+                <li><a href="javascript:void(0);">Subscribe</a></li>
+            </ul>
+        </div>
+
     </footer>
 </body>
 </html>

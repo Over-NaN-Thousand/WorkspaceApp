@@ -4,10 +4,11 @@
 
 }
 
-article {
-    /* border: 1px solid red; */
-}
+/* article {
+    border: 1px solid red;
+} */
 
+/********SEARCH SCREEN********/
 article.search {
     display: flex;
     flex-direction: column;
@@ -50,8 +51,7 @@ button#searchbtn {
 }
 
 
-
-
+/********ARTICLES********/
 .article-grp {
     display: flex;
     flex-direction: column;
@@ -61,7 +61,8 @@ button#searchbtn {
     margin-top: 20px;
     justify-content: center;
 
-    /* background-color: rgb(39, 81, 88, .05); */
+    /* background-color: rgb(39, 81, 88, .05);
+    border-radius: 14px; */
 }
 
 .article-grp h3 {
@@ -97,14 +98,16 @@ button#searchbtn {
 }
 
 div.item p {
-    padding: 1.5em 0 5em;
+    padding: 1em 0;
     font-size: small;
     text-align: left;
 }
 
-
-
-
+div.item p:last-child {
+    padding: 1.5em 0 5em;
+    font-size: small;
+    text-align: left;
+}
 
 
 
