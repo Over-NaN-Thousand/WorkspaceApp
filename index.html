@@ -11,26 +11,138 @@
     <script src="scripts\main.js" defer></script>
 
     <link rel="stylesheet" href="styles\style.css">
+    <link rel="stylesheet" href="styles\index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
 </head>
 <body>
     <header>
         <img id="logo" src="resources\images\Qowork_logo.png" alt="Qowork Logo" title="Qowork Logo">
-        <ul>
-            <li><a href="#">Cities</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">List Workspace</a></li>
-            <li><a href="#">
-                <i id="my-profile" class="fas fa-user"></i>
-            </a>
-            </li>
-        </ul>
+        <nav>
+            <ul>
+                <li><a href="#">Cities</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">List Workspace</a></li>
+                <li><a href="#"><i id="my-profile" class="fas fa-user"></i></a></li>
+            </ul>
+        </nav>
     </header>
-    <nav>
-
-    </nav>
     <main>
+        <article class="search">
+            <h2>Find My Workspace</h2>
+            <form action="search.php" method="GET">
+                <input type="text" id="searchtext" name="sesearchtextrch" placeholder="Search for workspace">
+                <button type="submit" id="searchbtn">Search</button>
+            </form>
+        </article>
 
+        <article class="article-grp">
+            <h2>Search Popular Cities</h2>
+            <div class="items-container">
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Calgary">
+                        <img src="resources\images\Calgary-Andrei-Laqui.jpg" alt="City 1" title="City 1">
+                        <h3>Calgary</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Edmonton">
+                        <img src="resources\images\pexels-kamille-mendoza-2210918-6008580.jpg" alt="City 2" title="City 2">
+                        <h3>Edmonton</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Edmonton">
+                        <img src="resources\images\pexels-pixabay-315458.jpg" alt="City 3" title="City 3">
+                        <h3>San Francisco</h3>
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="article-grp">
+            <h2>Our Top Rated Workspaces</h2>
+            <div class="items-container">
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Conference Rm1">
+                        <img src="resources\images\pexels-pixabay-260689.jpg" alt="WS 1" title="WS 1">
+                        <h3>Conference Rm1</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Blue Office">
+                        <img src="resources\images\pexels-kamo11235-667838.jpg" alt="WS 2" title="WS 2">
+                        <h3>Blue Office</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Simple Office">
+                        <img src="resources\images\pexels-fotios-photos-1957478.jpg" alt="WS 3" title="WS 3">
+                        <h3>Simple Office</h3>
+                    </a>
+                </div>
+                
+            </div>
+        </article>
+
+        <article class="article-grp">
+            <h2>Our Newest Workspaces</h2>
+            <div class="items-container">
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Cozy Office">
+                        <img src="resources\images\pexels-karlsolano-2883049.jpg" alt="WS 1" title="WS 1">
+                        <h3>Cozy Office</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Blue Office">
+                        <img src="resources\images\pexels-kamo11235-667838.jpg" alt="WS 2" title="WS 2">
+                        <h3>Blue Office</h3>
+                    </a>
+                </div>
+                <div class="item">
+                    <a name="itemLink" href="javascript:void(0);" val="Desk 1">
+                        <img src="resources\images\pexels-pixabay-273671v2.jpg" alt="WS 3" title="WS 3">
+                        <h3>Desk 1</h3>
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="article-grp">
+            <div class="items-container">
+                <div class="item">
+                    <h3>What is Coworking?</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, augue vel gravida tincidunt, turpis sem facilisis lorem, id pretium nunc risus eget orci. Cras ut dui quis velit euismod hendrerit. Morbi nec nisi id velit viverra lacinia in vel ex. Curabitur ac ligula at libero posuere sodales. Integer malesuada, lacus sed suscipit congue, dolor justo pretium magna, eget ultrices quam quam sit amet urna. Fusce ut nunc nec urna fermentum posuere vel id orci.
+                    </p>
+                </div>
+                <div class="item">
+                    <h3>What are Workspaces?</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel ligula a felis pulvinar feugiat. Curabitur in tortor malesuada, fringilla elit a, sodales nulla. Fusce dictum massa eget mi vehicula, nec lacinia ipsum fermentum. Sed ultrices, nulla in scelerisque volutpat, ligula enim rutrum magna, sit amet.
+                    </p>
+                </div>
+                <div class="item">
+                    <h3>Who are we?</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel ligula a felis pulvinar feugiat. Curabitur in tortor malesuada, fringilla elit a, sodales nulla. Fusce dictum massa eget mi vehicula, nec lacinia ipsum fermentum. Sed ultrices, nulla in scelerisque volutpat, ligula enim rutrum magna, sit amet.
+                    </p>
+                </div>
+            </div>
+        </article>
     </main>
+
+    <footer>
+        <div class="Navigation">
+            <h3>Navigation Links</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </footer>
 </body>
 </html>

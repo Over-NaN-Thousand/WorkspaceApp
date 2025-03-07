@@ -1,7 +1,14 @@
 :root{
-    --prim: #112d32;
+    /* --prim: #112d32;
+    --prim: #275158;
+    --sec: #88bdbc;
+    --light: #f6feff;*/
+
+
+    --prim: #1f7a8a;
     --sec: #88bdbc;
     --light: #f6feff;
+    --dark:#07272d; 
 }
 
 *{
@@ -14,11 +21,12 @@ body{
     font-family: Arial, sans-serif;
     background-color: #f6feff;
     color: #030303;
-    font-size: clamp(12px, 8vw, 20px);
+    font-size: clamp(12px, 3vw, 24px);
 }
 
 li{
     list-style: none;
+    min-width: fit-content;
 }
 
 a{
@@ -42,5 +50,20 @@ header{
 
 header ul{
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
+}
+
+footer{
+    color: var(--light);
+    background-color: var(--dark);
+}
+
+
+
+
+@media screen and (max-width: 768px){
+    header ul{
+        gap: 1rem;
+    }
+    
 }
