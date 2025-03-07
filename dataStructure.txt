@@ -28,7 +28,7 @@ Owner
   connects to Messages
   connects to Workspaces
 
-ContactForm array
+ContactForm
   messageId
   date
   message
@@ -73,6 +73,7 @@ Workspaces
   priceHourly
   priceDaily
   priceDailyTimesDays (price total for a date range)
+  smokingAllowed yes/no
   Connects to Availability
   connects to OwnerContactInfo
   connects to CurrentLeases
