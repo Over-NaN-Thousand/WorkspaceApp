@@ -1,101 +1,176 @@
-Save data in objects or arrays in JS file
+Data breakdown
 
-******TO DO*********** 
-object - manipulate it and assign actions to it
-array - set of data
+-define an object or an array in the JS file
+-update it each time new data is collected from the form
 
-  
-***** work in progress, please discuss and edit as necessary****** 
 
-Data breakdown:
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-User
-  userId
-  firstName
-  lastName
-  email
-  password
-  Owner-- yes/no -- connects to Owner
-  Coworker -- yes/no -- connects to Coworker
+-------------------------------------------user data----------------------------------------------------------------------
+_Users_
+userId
+firstName
+lastName
+email
+password
+Owner-- yes/no -- connects to Owner
+Coworker -- yes/no -- connects to Coworker
 
-  userData = [
-  { id: 59715, firstName: "Alice", lastName: "Bjorkn", email: "Alice@coolemail.com", password: "Alice1234", Owner: "Yes", Coworker: "No" },
-  { id: 20967, firstName: "Bob", lastName: "Johnson", email: "Bob@workmail.com", password: "Bob5678", Owner: "No", Coworker: "Yes" },
+----------------------------------userData ARRAY-----------------------------------------------------------------
+
+const userData = [
+  { id: 59715, firstName: "Alice", lastName: "Bjorkn", email: "Alice@coolemail.com", password: "schoolsout4summer", Owner: "Yes", Coworker: "No" },
+  { id: 20967, firstName: "Bob", lastName: "Johnson", email: "Bob@workmail.com", password: "tH3bEStpA$$w0rD", Owner: "No", Coworker: "Yes" },
   { id: 3, firstName: "Charlie", lastName: "Smith", email: "Charlie@company.com", password: "Charlie7890", Owner: "No", Coworker: "Yes" },
-  { id: 4, firstName: "Diana", lastName: "Evans", email: "Diana@bestmail.com", password: "Diana4321", Owner: "Yes", Coworker: "No" }
+  { id: 4, firstName: "Diana", lastName: "Evans", email: "Diana@bestmail.com", password: "diannaBananananna", Owner: "Yes", Coworker: "No" }
 ];
+---------------------------------------userData ARRAY OF OBJECTS --------------------------------------------------------
+const userData = {
+  59715: {
+    firstName: "Alice",
+    lastName: "Bjorkn",
+    email: "Alice@coolemail.com",
+    password: "schoolsout4summer",
+    Owner: "Yes",
+    Coworker: "No"
+  },
+  20967: {
+    firstName: "Bob",
+    lastName: "Johnson",
+    email: "Bob@workmail.com",
+    password: "tH3bEStpA$$w0rD",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  3: {
+    firstName: "Charlie",
+    lastName: "Smith",
+    email: "Charlie@company.com",
+    password: "Charlie7890",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  4: {
+    firstName: "Diana",
+    lastName: "Evans",
+    email: "Diana@bestmail.com",
+    password: "diannaBananananna",
+    Owner: "Yes",
+    Coworker: "No"
+  }
+};
 
-Coworker
-  connects to Users
-  connects to Workspaces
-  connects to CurrentLeases
+--------------------------------------------------USERDATA SAMPLE OBJECT OUTPUT--------------------------------------------------------------
 
-Owner
-  connects to Properties
-  connects to Messages
-  connects to Workspaces
+const sampleOutput = {
+  id: 1,  // Assigned ID
+  firstName: "Alice",
+  lastName: "Bjorkn",
+  email: "Alice@coolemail.com",
+  password: "schoolsOutForSummer",
+  owner: true,
+  coworker: false
+};
 
-ContactForm
-  messageId
-  date
-  message
-  connects to coworkers array
-  connects to Owner array
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-  contactForm =[messageID " ", date: " ", message: " ", CoworkerID: " ", OwnerID " "]
+_Coworker_
+connects to Users
+connects to Workspaces
+connects to CurrentLeases
 
-CurrentLeases
-  leaseId (for if coworkers have the option to have multiple leases)
-  startDate
-  endDate
-  bookingTime
-  leaseHistory (stores CurrentLeases info as record)
-  connects to Coworker
-  connects to Owner
-  connects to Workspaces
-  connects to RateAndReview (after endDate passes, prompt user to rate and review their booking, store this info as the rateAndReview data)
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-Properties
-  address
-  postal Code (can be partial? like A1Z)
-  area (min-max value)
-  neighborhood
-  province
-  city
-  parking
-  public Access
-  connects to Workspace
-  connects to Owner
+_Owner_
+connects to Properties
+connects to Messages
+connects to Workspace
 
-Workspaces
-  workspaceName
-  workspaceType
-  meeting room
-  private office
-  desk
-  workspace leaseTerm (does a workspace ever have more than one leaseTerm option?)
-  hourly
-  daily
-  dateRange
-  seatCapacity
-  price
-  priceHourly
-  priceDaily
-  priceDailyTimesDays (price total for a date range)
-  smokingAllowed yes/no
-  Connects to Availability
-  connects to OwnerContactInfo
-  connects to CurrentLeases
-  connects to RateAndReview
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-RateAndReview
-  rating (1-5)
-  reviewComments
-  connects to Workspace
-  connects to Owner
+_ContactForm_
+messageId
+date
+message
+connects to Users
+connects to Owner
 
-Availability
-  openWeekends - yes/no
-  closed (specific dates array that the owner can change)
-  datesBooked (specific dates array that can be changed by a coworker's booking)
-  connects to LeaseTerm (to determine booking form options and search filter)
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_CurrentLeases_
+leaseId  (for if users have the option to have multiple leases)
+startDate
+endDate
+bookingTime
+connects to Coworker
+connects to Owner
+connects to Workspaces
+connects to LeaseHistory (which stores CurrentLeases info as record when the booking date/time ends)?
+connects to RateAndReview 
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_Properties_
+address
+postal Code (can be partial? like A1Z)
+area (min-max value)
+neighborhood
+province
+city
+parking
+public Access
+connects to Workspace
+connects to Owner
+openWeekends
+	yes/no
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_Workspace_
+workspaceName
+workspaceType
+	meeting room
+	private office
+	desk
+workspace leaseTerms (does a workspace ever have more than one leaseTerm option?)
+	hourly
+	daily
+	dateRange
+seatCapacity
+price
+	priceHourly
+	priceDaily
+	priceDailyTimesDays   (price total for a date range)
+datesClosed (specific dates array that the owner can change)
+datesBooked (specific dates array that can be changed by a coworker's booking)
+
+Connects to Availability
+connects to OwnerContactInfo
+connects to CurrentLeases
+connects to RateAndReview
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+after endDate of currentLeases of specific workspace passes: 
+prompt user to rate and review their booking? 
+then store this as rateAndReview data?
+
+_RateAndReview_
+rating (1-5)
+reviewComments
+connects to Workspace
+connects to Owner 
+connnects to LeaseHistory
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+
+
