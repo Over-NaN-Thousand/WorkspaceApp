@@ -18,6 +18,13 @@ User
   Owner-- yes/no -- connects to Owner
   Coworker -- yes/no -- connects to Coworker
 
+  userData = [
+  { id: 59715, firstName: "Alice", lastName: "Bjorkn", email: "Alice@coolemail.com", password: "Alice1234", Owner: "Yes", Coworker: "No" },
+  { id: 20967, firstName: "Bob", lastName: "Johnson", email: "Bob@workmail.com", password: "Bob5678", Owner: "No", Coworker: "Yes" },
+  { id: 3, firstName: "Charlie", lastName: "Smith", email: "Charlie@company.com", password: "Charlie7890", Owner: "No", Coworker: "Yes" },
+  { id: 4, firstName: "Diana", lastName: "Evans", email: "Diana@bestmail.com", password: "Diana4321", Owner: "Yes", Coworker: "No" }
+];
+
 Coworker
   connects to Users
   connects to Workspaces
@@ -32,8 +39,10 @@ ContactForm
   messageId
   date
   message
-  connects to coworkers
-  connects to Owner
+  connects to coworkers array
+  connects to Owner array
+
+  contactForm =[messageID " ", date: " ", message: " ", CoworkerID: " ", OwnerID " "]
 
 CurrentLeases
   leaseId (for if coworkers have the option to have multiple leases)
