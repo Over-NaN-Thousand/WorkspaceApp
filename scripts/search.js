@@ -85,6 +85,6 @@ $(document).ready(function() {
 
 function addOptionsToSection(options, targetclass, name, type) {
     options.forEach(option => {
-          $(`.${targetclass}`).append(`<label><input type="${type}" name="${name}" value="${option}"> ${option}</label>`);
+          $(`.${targetclass}`).find('details').append(`<label><input type="${type}" name="${name}" value="${option}"> ${option}</label>`);
     });
 }
