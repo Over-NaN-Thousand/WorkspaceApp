@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+
+    <base href="/WorkspaceApp/">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script src="scripts/main.js" defer></script>
+    <script src="scripts/search.js" defer></script>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
+</head>
+<body>
+    <header id="header-mainjs"></header>
+    
+    <aside>
+        <h3>
+            Filters
+        </h3>
+
+        <div class="btn-container">
+            <button id="btnReset">Reset</button>
+            <button id="btnApply">Apply</button>
+        </div>
+
+        <section class="types"><h4>Workspace Type</h4></section>
+
+        <section class="price">
+            <h4>Price Range</h4>
+            <label>
+                Min
+                <input type="number" id="minPrice" name="minPrix" min="0" max="10000" step="0.01">
+            </label>
+            <label>
+                Max
+                <input type="number" id="maxPrice" name="maxPrice" min="0" max="10000" step="0.01">
+            </label>
+        </section>
+
+        <section class="term"><h4>Lease Term</h4></section>
+
+        <section class="capacity">
+            <h4>Seat Capacity</h4>
+            <label>
+                Min
+                <input type="number" id="minCapacity" name="minCapacity" min="0" max="10000" step="0.01">
+            </label>
+            <label>
+                Max
+                <input type="number" id="maxCapacity" name="maxCapacity" min="0" max="10000" step="0.01">
+            </label>
+        </section>
+
+        <section class="amenities"><h4>Amenities</h4></section>
+
+    </aside>
+    
+    <main>
+        <article class="title">
+            <h3>Results</h3>
+        </article>
+
+        <div id="workspaces-container">
+
+        </div>
+        
+    </main>
+
+    <footer id="footer-mainjs"></footer>
+</body>
+
+</html>
