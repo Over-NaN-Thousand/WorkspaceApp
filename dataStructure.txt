@@ -35,7 +35,7 @@ Owner
   connects to Messages
   connects to Workspaces
 
-ContactForm
+ContactForm (AL: MVP does not require a messaging module, we can just add phone to user then display email/phone of the owner and let them talk outside of the app)
   messageId
   date
   message
@@ -44,7 +44,7 @@ ContactForm
 
   contactForm =[messageID " ", date: " ", message: " ", CoworkerID: " ", OwnerID " "]
 
-CurrentLeases
+CurrentLeases (AL: we don't need to keep track of lease, let the owner turn off their listing if someone rented it - like fb market / rentfaster)
   leaseId (for if coworkers have the option to have multiple leases)
   startDate
   endDate
@@ -55,9 +55,9 @@ CurrentLeases
   connects to Workspaces
   connects to RateAndReview (after endDate passes, prompt user to rate and review their booking, store this info as the rateAndReview data)
 
-Properties
-  address
-  postal Code (can be partial? like A1Z)
+Properties (AL: good to create samples!)
+  address (AL: should we break this into Add1, Add2?)
+  postal Code (can be partial? like A1Z) (AL: sounds good)
   area (min-max value)
   neighborhood
   province
@@ -67,18 +67,18 @@ Properties
   connects to Workspace
   connects to Owner
 
-Workspaces
+Workspaces (AL: good to create samples!)
   workspaceName
   workspaceType
   meeting room
   private office
   desk
-  workspace leaseTerm (does a workspace ever have more than one leaseTerm option?)
+  workspace leaseTerm (does a workspace ever have more than one leaseTerm option?) AL: one option only (k.i.s.)
   hourly
   daily
   dateRange
   seatCapacity
-  price
+  price (AL: this is what we need, depends on lease term, we can leave out the rest below)
   priceHourly
   priceDaily
   priceDailyTimesDays (price total for a date range)
@@ -88,13 +88,13 @@ Workspaces
   connects to CurrentLeases
   connects to RateAndReview
 
-RateAndReview
+RateAndReview (AL: let's do this later :)
   rating (1-5)
   reviewComments
   connects to Workspace
   connects to Owner
 
-Availability
+Availability (AL we could remove and just add AvailableByDate field to Workspace, we can let renters see if they want to wait)
   openWeekends - yes/no
   closed (specific dates array that the owner can change)
   datesBooked (specific dates array that can be changed by a coworker's booking)
