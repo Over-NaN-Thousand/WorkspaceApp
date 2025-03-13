@@ -1,12 +1,10 @@
 :root {
+    --prim: #275158;
 
     --cl-CityName: #0e0e0e;
-
+    --item-border: #d8d8d8;
+    --item-bg: #ffffff;
 }
-
-/* article {
-    border: 1px solid red;
-} */
 
 /********SEARCH SCREEN********/
 article.search {
@@ -20,7 +18,19 @@ article.search {
     background-size: cover;
 
     color: black;
-    text-shadow: 2px 2px 4px #275158;
+    /* text-shadow: 2px 2px 4px #275158; */
+}
+
+article.search h2{
+    padding: .35rem 1.5rem;
+    background: radial-gradient(
+        circle, 
+        rgba(196, 191, 191, 0.2) 5%,
+        rgba(228, 224, 224, 0.1) 100%
+    ); /*just testing if this helps with contrast/readability*/
+    border-radius: 15px;
+
+    font-size: clamp(24px, 5vw, 42px);
 }
 
 form {
@@ -36,14 +46,14 @@ input#searchtext {
     width: 50%;
     padding: 10px;
     font-size: 1.2rem;
-    border: 1px solid #275158;
+    border: 1px solid var(--prim);
     border-radius: 5px;
 }
 
 button#searchbtn {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #275158;
+    background-color: var(--prim);
     color: white;
     border: none;
     border-radius: 5px;
@@ -81,14 +91,14 @@ button#searchbtn {
 .item {
     padding: 16px;
 
-    border: 1px solid #d8d8d8;
+    border: 1px solid var(--item-border);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgb(39, 81, 88, .25);
 
     width: 100%;
     text-align: center;
 
-    background-color: #ffffff;
+    background-color: var(--item-bg);
 }
 
 .item img {

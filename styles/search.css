@@ -1,0 +1,163 @@
+:root {
+    --prim: #275158;
+
+    --aside-bg: #ceba92ae;
+    --filter-bg:#f1ede8;
+
+    --item-text: #0e0e0e;
+    --item-border: rgba(169, 169, 169, 0.5);
+    --item-bg: #ffffff;
+    
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header, content, footer */
+    grid-template-columns: 20% auto; /* percentage for aside, rest for main */
+    grid-template-areas:
+        "header header"
+        "aside main"
+        "footer footer";
+    min-height: 100vh;
+}
+
+header {
+    grid-area: header;
+}
+
+aside {
+    grid-area: aside;
+    background-color: var(--aside-bg);
+}
+
+main {
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
+
+
+/********FILTERS********/
+aside section{
+    margin: .5rem;
+    padding: .5rem;
+
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+
+    background-color: var(--filter-bg);
+}
+
+aside section:last-child{
+    margin-bottom: 5rem;
+}
+
+aside h3{
+    padding: .8rem .2rem;
+}
+
+aside h4,summary{
+    margin: .8rem .2rem .2rem;
+    font-size: clamp(12px, 3vw, 16px);
+    font-weight: bold;
+}
+
+aside label{
+    display:block;
+    margin-left: 25px;
+    text-indent: -18px;
+    font-size: 1em;
+    font-size: clamp(9px, 3vw, 12px);
+}
+
+aside input[type="number"] {
+    width: 50px;
+  }
+
+aside .btn-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    gap: .2rem;
+}
+aside button {
+    padding: .3rem 1.5rem;
+    font-size: clamp(12px, 3vw, 16px);
+    background-color: var(--prim);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/********RESULTS********/
+
+.workspace-item {
+    display: flex;
+    flex-direction: row;
+    
+    margin: 1rem;
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .25);
+}
+.workspace-picture{
+    flex: 1;
+}
+.workspace-picture img{
+   width:100%;
+   aspect-ratio: initial;
+}
+.workspace-details{
+    flex: 3; 
+    padding: 20px;
+}
+.workspace-details h2{
+    font-size: clamp(12px, 3vw, 16px);
+}
+.workspace-details p{
+    font-size: clamp(9px, 3vw, 12px);
+}
+
+
+
+
+
+@media screen and (max-width: 768px) {
+    body {
+        grid-template-rows: auto auto auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "aside"
+            "main"
+            "footer";
+    }
+
+    /*stack them vertically instead*/
+
+    aside {
+        width: 100%;
+    }
+
+
+
+    .workspace-item {
+        flex-direction: column;
+    }
+
+    .workspace-details, .workspace-picture {
+        width: 100%;
+    }
+
+    
+    .workspace-picture img {
+        width: 100%;
+        height: auto;
+    }
+}
