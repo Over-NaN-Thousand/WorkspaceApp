@@ -21,24 +21,22 @@
     <header id="header-mainjs"></header>
     <div class="main">
         <div class="informationForm">
-            <form>
-                <input type="text" id="firstName" placeholder="First Name" required>
-                <input type="text" id="lastName" placeholder="Last Name" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-
-                <label for="purpose">I want to:</label>
-                <select id="purpose">
-                    <option>Rent Workspaces</option>
-                    <option>List Workspaces</option>
-                </select>
-
-                <button type="submit" class="signup-btn">Sign-up <i class="fas fa-arrow-right"></i></button>
+            <div class="title"><span>Login Form</span></div>
+            <form action="#">
+              <div class="row">
+                <i class="fas fa-user"></i>
+                <input type="text" placeholder="Email or Phone" required />
+              </div>
+              <div class="row">
+                <i class="fas fa-lock"></i>
+                <input type="password" placeholder="Password" required />
+              </div>
+              <div class="pass"><a href="#">Forgot password?</a></div>
+              <div class="row button">
+                <input type="submit" value="Login" />
+              </div>
+              <div class="signup-link">Not a member? <a href="#">Signup now</a></div>
             </form>
-        </div>
-
-        <div class="information2">
-            <p>123213</p>
         </div>
     </div>
     <footer id="footer-mainjs"></footer>
