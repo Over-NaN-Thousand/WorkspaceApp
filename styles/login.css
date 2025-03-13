@@ -36,16 +36,16 @@ body {
 
 .main .informationForm {
     max-width: 500px;
-    width: 100%;
+    width: 100vw;
     background: #fff;
     border-radius: 5px;
     box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
-
+    
 }
 
 .main .informationForm .title {
     height: 120px;
-    background:rgb(59, 45, 38);
+    background:#4f4a41;
     border-radius: 5px 5px 0 0;
     color: #fff;
     font-size: 30px;
@@ -57,7 +57,7 @@ body {
 
 .main .informationForm form {
     padding: 25px 35px;
-    background-color: #3d3434;
+    background-color: #6e6658;
 }
 
 .main .informationForm form .row {
@@ -104,7 +104,7 @@ form .row input::placeholder {
 }
 
 .informationForm form .pass a {
-    color:var(--form-bg);
+    color:white;
     font-size: 17px;
     text-decoration: none;
 }
@@ -132,7 +132,7 @@ form .row input::placeholder {
 }
 
 .informationForm form .signup-link a {
-    color:var(--form-bg);
+    color:white;
     text-decoration: none;
 }
 
