@@ -8,7 +8,9 @@
     --prim: #1f7a8a;
     --sec: #88bdbc;
     --light: #f6feff;
-    --dark:#07272d; 
+    --dark:#07272d;
+
+    --body-bg:#f1ede8;
 }
 
 
@@ -21,8 +23,7 @@
 
     body{
         font-family: Arial, sans-serif;
-        background-color: #f1ede8;
-        /* background-color: #f6feff; */
+        background-color: var(--body-bg);
         color: #030303;
         font-size: clamp(12px, 3vw, 24px);
     }
