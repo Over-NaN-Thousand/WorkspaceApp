@@ -1,92 +1,314 @@
-Save data in objects or arrays in JS file
+Data breakdown
 
-******TO DO*********** 
-object - manipulate it and assign actions to it
-array - set of data
+-define an object or an array in the JS file
+-update it each time new data is collected from the form
 
-  
-***** work in progress, please discuss and edit as necessary****** 
 
-Data breakdown:
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-User
-  userId
-  firstName
-  lastName
-  email
-  password
-  Owner-- yes/no -- connects to Owner
-  Coworker -- yes/no -- connects to Coworker
+-------------------------------------------user data----------------------------------------------------------------------
+_Users_
+userId
+firstName
+lastName
+email
+password
+Owner-- yes/no -- connects to Owner
+Coworker -- yes/no -- connects to Coworker
 
-Coworker
-  connects to Users
-  connects to Workspaces
-  connects to CurrentLeases
+----------------------------------userData ARRAY-----------------------------------------------------------------
 
-Owner
-  connects to Properties
-  connects to Messages
-  connects to Workspaces
+const userData = [
+  { id: 59715, firstName: "Alice", lastName: "Bjorkn", email: "Alice@coolemail.com", password: "schoolsout4summer", Owner: "Yes", Coworker: "No" },
+  { id: 20967, firstName: "Bob", lastName: "Johnson", email: "Bob@workmail.com", password: "tH3bEStpA$$w0rD", Owner: "No", Coworker: "Yes" },
+  { id: 3, firstName: "Charlie", lastName: "Smith", email: "Charlie@company.com", password: "Charlie7890", Owner: "No", Coworker: "Yes" },
+  { id: 4, firstName: "Diana", lastName: "Evans", email: "Diana@bestmail.com", password: "diannaBananananna", Owner: "Yes", Coworker: "No" }
+];
+---------------------------------------userData ARRAY OF OBJECTS --------------------------------------------------------
+const userData = {
+  59715: {
+    firstName: "Alice",
+    lastName: "Bjorkn",
+    email: "Alice@coolemail.com",
+    password: "schoolsout4summer",
+    Owner: "Yes",
+    Coworker: "No"
+  },
+  20967: {
+    firstName: "Bob",
+    lastName: "Johnson",
+    email: "Bob@workmail.com",
+    password: "tH3bEStpA$$w0rD",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  3: {
+    firstName: "Charlie",
+    lastName: "Smith",
+    email: "Charlie@company.com",
+    password: "Charlie7890",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  4: {
+    firstName: "Diana",
+    lastName: "Evans",
+    email: "Diana@bestmail.com",
+    password: "diannaBananananna",
+    Owner: "Yes",
+    Coworker: "No"
+  }
+};
 
-ContactForm
-  messageId
-  date
-  message
-  connects to coworkers
-  connects to Owner
+--------------------------------------------------USERDATA SAMPLE OBJECT OUTPUT--------------------------------------------------------------
 
-CurrentLeases
-  leaseId (for if coworkers have the option to have multiple leases)
-  startDate
-  endDate
-  bookingTime
-  leaseHistory (stores CurrentLeases info as record)
-  connects to Coworker
-  connects to Owner
-  connects to Workspaces
-  connects to RateAndReview (after endDate passes, prompt user to rate and review their booking, store this info as the rateAndReview data)
+const sampleOutput = {
+  id: 1,  // Assigned ID
+  firstName: "Alice",
+  lastName: "Bjorkn",
+  email: "Alice@coolemail.com",
+  password: "schoolsOutForSummer",
+  owner: true,
+  coworker: false
+};
 
-Properties
-  address
-  postal Code (can be partial? like A1Z)
-  area (min-max value)
-  neighborhood
-  province
-  city
-  parking
-  public Access
-  connects to Workspace
-  connects to Owner
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-Workspaces
-  workspaceName
-  workspaceType
-  meeting room
-  private office
-  desk
-  workspace leaseTerm (does a workspace ever have more than one leaseTerm option?)
-  hourly
-  daily
-  dateRange
-  seatCapacity
-  price
-  priceHourly
-  priceDaily
-  priceDailyTimesDays (price total for a date range)
-  smokingAllowed yes/no
-  Connects to Availability
-  connects to OwnerContactInfo
-  connects to CurrentLeases
-  connects to RateAndReview
+_Coworker_
+connects to Users
+connects to Workspaces
+connects to CurrentLeases
 
-RateAndReview
-  rating (1-5)
-  reviewComments
-  connects to Workspace
-  connects to Owner
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
 
-Availability
-  openWeekends - yes/no
-  closed (specific dates array that the owner can change)
-  datesBooked (specific dates array that can be changed by a coworker's booking)
-  connects to LeaseTerm (to determine booking form options and search filter)
+_Owner_
+connects to Properties
+connects to Messages
+connects to Workspaces
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_ContactForm_
+messageId
+date
+message
+
+connects to Users
+connects to Owner
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_CurrentLeases_
+leaseId  (for if users have the option to have multiple leases)
+startDate
+endDate
+bookingTime
+
+connects to Coworker
+connects to Owner
+connects to Workspaces
+conneccts to LeaseHistory (which stores CurrentLeases info as record)?
+connects to RateAndReview (after endDate passes: prompt user to rate and review their booking? then store this as rateAndReview data?)
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_Properties_
+name
+address1
+adddress2
+postalcode
+areaSqM
+neighborhood
+province
+country
+city
+imgFileName
+
+connects to Workspace
+connects to Owner                     
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+may need more fields/arrays for multiple prices for different terms, multiple term options, 
+
+_Workspace_
+workspaceName
+workspaceID
+imgFileName
+workspaceType 
+	meeting room
+	private office
+	desk
+workspace leaseTerms 
+	hourly
+	daily
+	dateRange
+seatCapacity
+price
+imgFileName
+	priceHourly
+	priceDaily
+	priceDailyTimesDays   (price total for a date range)
+
+Connects to Property
+Connects to Amenities
+Connects to Availability
+connects to OwnerContactInfo
+connects to CurrentLeases
+connects to RateAndReview
+                             
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+after endDate of currentLeases of specific workspace passes: 
+prompt user to rate and review their booking? 
+then store this as rateAndReview data?
+
+_RateAndReview_
+rating (1-5)
+reviewComments
+connects to Workspace
+connects to Owner 
+connnects to LeaseHistory
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_Amenities_ 
+
+Full Kitchen 
+microwave
+coffee maker
+Copy/Print Equipment
+Projector
+High-Speed Wi-Fi
+Whiteboards
+Conference Phones
+Adjustable Desks
+Ergonomic Chairs
+Secure Storage/Lockers
+Mail and Package Handling
+Outdoor Seating/Patio
+Receptionist/Front Desk Service
+Soundproofing
+Lounge Areas
+Casual Seating
+Tech Support
+Security Cameras
+Snack Bar
+Vending machines
+Fitness Room
+Gym Access
+Natural Lighting
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+const amenities = [
+  "Full Kitchen",
+  "Microwave",
+  "Coffee Maker",
+  "Copy/Print Equipment",
+  "Projector",
+  "High-Speed Wi-Fi",
+  "Whiteboards",
+  "Conference Phones",
+  "Adjustable Desks",
+  "Ergonomic Chairs",
+  "Secure Storage/Lockers",
+  "Mail and Package Handling",
+  "Outdoor Seating/Patio",
+  "Receptionist/Front Desk Service",
+  "Soundproofing",
+  "Lounge Areas",
+  "Casual Seating",
+  "Tech Support",
+  "Security Cameras",
+  "Snack Bar",
+  "Vending Machines",
+  "Fitness Room",
+  "Gym Access",
+  "Natural Lighting"
+];
+------------------------------------------------------------------------------------------------------------------------------------
+Array of Objects
+
+const amenities = [
+  { name: "Full Kitchen", value: false },
+  { name: "Microwave", value: false },
+  { name: "Coffee Maker", value: false },
+  { name: "Copy/Print Equipment", value: false },
+  { name: "Projector", value: false },
+  { name: "High-Speed Wi-Fi", value: false },
+  { name: "Whiteboards", value: false },
+  { name: "Conference Phones", value: false },
+  { name: "Adjustable Desks", value: false },
+  { name: "Ergonomic Chairs", value: false },
+  { name: "Secure Storage/Lockers", value: false },
+  { name: "Mail and Package Handling", value: false },
+  { name: "Outdoor Seating/Patio", value: false },
+  { name: "Receptionist/Front Desk Service", value: false },
+  { name: "Soundproofing", value: false },
+  { name: "Lounge Areas", value: false },
+  { name: "Casual Seating", value: false },
+  { name: "Tech Support", value: false },
+  { name: "Security Cameras", value: false },
+  { name: "Snack Bar", value: false },
+  { name: "Vending Machines", value: false },
+  { name: "Fitness Room", value: false },
+  { name: "Gym Access", value: false },
+  { name: "Natural Lighting", value: false }
+
+------------------------------------------------------------------------------------------------------------------------------------
+Sample Object
+
+const kitchenAmenity = {
+  name: "Full Kitchen",
+  value: true // User selected this amenity
+};
+------------------------------------------------------------------------------------------------------------------------------------
+Sample Input:
+
+const sampleInput = {
+  "Full Kitchen": true,
+  "Microwave": true,
+  "Coffee Maker": false,
+  "Copy/Print Equipment": true,
+  "Projector": false
+};
+------------------------------------------------------------------------------------------------------------------------------------
+Sample Output:
+
+const sampleOutput = [
+  { name: "Full Kitchen", value: true },
+  { name: "Microwave", value: true },
+  { name: "Coffee Maker", value: false },
+  { name: "Copy/Print Equipment", value: true },
+  { name: "Projector", value: false }
+];
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_RateAndReview_
+rating (1-5)
+reviewComments
+connects to Workspace
+connects to Owner 
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+
+_Availability_
+Weekends
+	yes/no bool
+datesClosed (specific dates array that the owner can change)
+datesBooked (specific dates array that can be changed by a coworker's booking)
+connects to LeaseTerm 
+
+
