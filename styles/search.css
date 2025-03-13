@@ -59,9 +59,10 @@ aside h3{
     padding: .8rem .2rem;
 }
 
-aside h4{
+aside h4,summary{
     margin: .8rem .2rem .2rem;
     font-size: clamp(12px, 3vw, 16px);
+    font-weight: bold;
 }
 
 aside label{
