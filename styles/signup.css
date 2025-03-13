@@ -127,12 +127,12 @@ form .signup-link a:hover {
 }
 
 select-container {
-    width: 220px; /* 讓 select 比較好看 */
+    width: 220px; 
   }
   
-  /* 自訂下拉式選單的外觀 */
+
   .custom-select {
-    /* 大小與內距 */
+
     width: 100%;
     padding: 10px 12px;
   
@@ -140,8 +140,8 @@ select-container {
     font-size: 16px;
     color: #000;
     
-    /* 背景顏色可依需求更改 */
-    background-color: #96c7c1; /* 範例：淡綠色/藍綠色 */
+
+    background-color: #96c7c1;
     border: 1px solid #444;
     border-radius: 4px;
   
@@ -150,5 +150,5 @@ select-container {
   .custom-select:hover,
 .custom-select:focus {
   background-color: #78ada7;
-  outline: none; /* 移除預設 focus 外框，可依需求保留 */
+  outline: none;
 }
