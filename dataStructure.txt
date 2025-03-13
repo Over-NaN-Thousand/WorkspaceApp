@@ -38,11 +38,10 @@ Owner
 ContactForm (AL: MVP does not require a messaging module, we can just add phone to user then display email/phone of the owner and let them talk outside of the app)
   messageId
   date
-  message
-  connects to coworkers array
-  connects to Owner array
+  connects to coworkers 
+  connects to Owner 
 
-  contactForm =[messageID " ", date: " ", message: " ", CoworkerID: " ", OwnerID " "]
+  contactForm =[messageID " ", date: " ", email: " ", CoworkerID: " ", OwnerID " "]
 
 CurrentLeases (AL: we don't need to keep track of lease, let the owner turn off their listing if someone rented it - like fb market / rentfaster)
   leaseId (for if coworkers have the option to have multiple leases)
