@@ -61,7 +61,7 @@ body {
 }
 
 .main .informationForm form .row {
-    height: 5vh;
+    height: 60px;
     margin-top: 15px;
     position: relative;
 }
@@ -83,6 +83,20 @@ form .row input:focus {
 
 form .row input::placeholder {
     color: #999;
+}
+
+.informationForm form .row i {
+    position: absolute;
+    width: 55px;
+    height: 100%;
+    color: #fff;
+    font-size: 22px;
+    background-color:var(--form-bg);
+    border: 1px solid var(--form-bg);
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .informationForm form .pass {
@@ -124,31 +138,4 @@ form .row input::placeholder {
 
 form .signup-link a:hover {
     text-decoration: underline;
-}
-
-select-container {
-    width: 220px; 
-  }
-  
-
-  .custom-select {
-
-    width: 100%;
-    padding: 10px 12px;
-  
-    /* 文字外觀 */
-    font-size: 16px;
-    color: #000;
-    
-
-    background-color: #96c7c1;
-    border: 1px solid #444;
-    border-radius: 4px;
-  
-    cursor: pointer;
-  }
-  .custom-select:hover,
-.custom-select:focus {
-  background-color: #78ada7;
-  outline: none;
 }

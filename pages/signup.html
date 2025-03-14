@@ -4,41 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Search</title>
 
     <base href="/">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
 
 
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/signup.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/signup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
 </head>
-
-
+  
 <body>
     <header id="header-mainjs"></header>
+
+
     <div class="main">
         <div class="informationForm">
-            <form>
-                <input type="text" id="firstName" placeholder="First Name" required>
-                <input type="text" id="lastName" placeholder="Last Name" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
+            <div class="title"><span>Join QoWork!</span></div>
+            <form action="#">
 
-                <label for="purpose">I want to:</label>
-                <select id="purpose">
-                    <option>Rent Workspaces</option>
-                    <option>List Workspaces</option>
-                </select>
+              <div class="row">
+                <input type="text" placeholder="First Name" required />
+              </div>
 
-                <button type="submit" class="signup-btn">Sign-up <i class="fas fa-arrow-right"></i></button>
+              <div class="row">
+                <input type="text" placeholder="Last Name" required />
+              </div>
+
+                <div class="row">
+                    <input type="email" placeholder="Email" required />
+                  </div>
+
+                  <div class="row">
+                    <input type="password" placeholder="Password" required />
+                  </div>
+
+                  <div class="select-container row">
+                    <select class="custom-select">
+                        <option>Please select one of the options</option>
+                      <option value="rent">Renting Workspaces</option>
+                      <option value="list">Listing Workspaces</option>
+                      <option value="both">Both Renting and Listing</option>
+                    </select>
+                  </div>
+
+              <div class="row button">
+                <input type="submit" value="Sign-up" />
+              </div>
+
+
+            </div>
             </form>
-        </div>
-
-        <div class="information2">
-            <p>123213</p>
         </div>
     </div>
     <footer id="footer-mainjs"></footer>
