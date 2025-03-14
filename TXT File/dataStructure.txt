@@ -3,7 +3,6 @@ Data breakdown
 -define an object or an array in the JS file
 -update it each time new data is collected from the form
 
-
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,7 +78,6 @@ const sampleOutput = {
 _Coworker_
 connects to Users
 connects to Workspaces
-connects to CurrentLeases
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -92,33 +90,7 @@ connects to Workspaces
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
-_ContactForm_
-messageId
-date
-message
-
-connects to Users
-connects to Owner
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_CurrentLeases_
-leaseId  (for if users have the option to have multiple leases)
-startDate
-endDate
-bookingTime
-
-connects to Coworker
-connects to Owner
-connects to Workspaces
-conneccts to LeaseHistory (which stores CurrentLeases info as record)?
-connects to RateAndReview (after endDate passes: prompt user to rate and review their booking? then store this as rateAndReview data?)
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_Properties_
+_Properties_ (AL: good to create samples!)
 name
 address1
 adddress2
@@ -137,7 +109,7 @@ connects to Owner
 ------------------------------------------------------------------------------------------------------------------------------------
 may need more fields/arrays for multiple prices for different terms, multiple term options, 
 
-_Workspace_
+_Workspace_ (AL: good to create samples!)
 workspaceName
 workspaceID
 imgFileName
@@ -146,21 +118,14 @@ workspaceType
 	private office
 	desk
 workspace leaseTerms 
-	hourly
-	daily
-	dateRange
 seatCapacity
 price
 imgFileName
-	priceHourly
-	priceDaily
-	priceDailyTimesDays   (price total for a date range)
 
 Connects to Property
 Connects to Amenities
 Connects to Availability
 connects to OwnerContactInfo
-connects to CurrentLeases
 connects to RateAndReview
                              
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -169,12 +134,13 @@ after endDate of currentLeases of specific workspace passes:
 prompt user to rate and review their booking? 
 then store this as rateAndReview data?
 
+(AL: let's do this later :)
+
 _RateAndReview_
 rating (1-5)
 reviewComments
 connects to Workspace
 connects to Owner 
-connnects to LeaseHistory
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -291,24 +257,12 @@ const sampleOutput = [
   { name: "Projector", value: false }
 ];
 
-
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
-_RateAndReview_
-rating (1-5)
-reviewComments
-connects to Workspace
-connects to Owner 
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_Availability_
+_Availability_ ------------------To be discussed--------------------------------------------------------------
 Weekends
 	yes/no bool
 datesClosed (specific dates array that the owner can change)
 datesBooked (specific dates array that can be changed by a coworker's booking)
 connects to LeaseTerm 
-
-
