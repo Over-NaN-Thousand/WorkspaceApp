@@ -737,8 +737,3 @@ _Availability_ to discuss
 
 datesBooked
 	userId
-	
-
-
-
-
