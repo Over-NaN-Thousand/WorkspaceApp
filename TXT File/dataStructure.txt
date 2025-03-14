@@ -1,13 +1,10 @@
 Data breakdown
 
--define an object or an array in the JS file
--update it each time new data is collected from the form
 
 
 ------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------user data----------------------------------------------------------------------
+-------------------------------------------users----------------------------------------------------------------------
 _Users_
 userId
 firstName
@@ -17,129 +14,276 @@ password
 Owner-- yes/no -- connects to Owner
 Coworker -- yes/no -- connects to Coworker
 
-----------------------------------userData ARRAY-----------------------------------------------------------------
+---------------------------------------users ARRAY OF OBJECTS --------------------------------------------------------
 
 const userData = [
-  { id: 59715, firstName: "Alice", lastName: "Bjorkn", email: "Alice@coolemail.com", password: "schoolsout4summer", Owner: "Yes", Coworker: "No" },
-  { id: 20967, firstName: "Bob", lastName: "Johnson", email: "Bob@workmail.com", password: "tH3bEStpA$$w0rD", Owner: "No", Coworker: "Yes" },
-  { id: 3, firstName: "Charlie", lastName: "Smith", email: "Charlie@company.com", password: "Charlie7890", Owner: "No", Coworker: "Yes" },
-  { id: 4, firstName: "Diana", lastName: "Evans", email: "Diana@bestmail.com", password: "diannaBananananna", Owner: "Yes", Coworker: "No" }
-];
----------------------------------------userData ARRAY OF OBJECTS --------------------------------------------------------
-const userData = {
-  59715: {
+  {
+    id: 59715,
     firstName: "Alice",
     lastName: "Bjorkn",
     email: "Alice@coolemail.com",
-    password: "schoolsout4summer",
+    password: "lol123",
     Owner: "Yes",
     Coworker: "No"
   },
-  20967: {
+  {
+    id: 20967,
     firstName: "Bob",
     lastName: "Johnson",
     email: "Bob@workmail.com",
-    password: "tH3bEStpA$$w0rD",
+    password: "im303",
     Owner: "No",
     Coworker: "Yes"
   },
-  3: {
+  {  
+    id: 3,
     firstName: "Charlie",
     lastName: "Smith",
     email: "Charlie@company.com",
-    password: "Charlie7890",
+    password: "foxxtrotunicornkilo"
     Owner: "No",
     Coworker: "Yes"
   },
-  4: {
+  {
+    id: 4,
     firstName: "Diana",
     lastName: "Evans",
     email: "Diana@bestmail.com",
     password: "diannaBananananna",
     Owner: "Yes",
     Coworker: "No"
-  }
-};
-
---------------------------------------------------USERDATA SAMPLE OBJECT OUTPUT--------------------------------------------------------------
-
-const sampleOutput = {
-  id: 1,  // Assigned ID
-  firstName: "Alice",
-  lastName: "Bjorkn",
-  email: "Alice@coolemail.com",
-  password: "schoolsOutForSummer",
-  owner: true,
-  coworker: false
-};
+  },
+  {
+    id: 72345,
+    firstName: "Evelyn",
+    lastName: "Clark",
+    email: "Evelyn@business.com",
+    password: "Ev3lynRocks!",
+    Owner: "Yes",
+    Coworker: "No"
+  },
+  {
+    id: 89012,
+    firstName: "Frank",
+    lastName: "Harrison",
+    email: "Frank@jobmail.com",
+    password: "Frankie!2025",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  {
+    id: 67890,
+    firstName: "George",
+    lastName: "Andrews",
+    email: "George@workmail.com",
+    password: "GeorgeyBoy2024",
+    Owner: "Yes",
+    Coworker: "No"
+  },
+  {
+    id: 45678,
+    firstName: "Hannah",
+    lastName: "Miller",
+    email: "Hannah@company.com",
+    password: "HannahBear123",
+    Owner: "No",
+    Coworker: "Yes"
+  },
+  {
+    id: 34567,
+    firstName: "Ian",
+    lastName: "Dawson",
+    email: "Ian@jobmail.com",
+    password: "Ian4TheWin!",
+    Owner: "Yes",
+    Coworker: "No"
+  },
+  {
+    id: 12345,
+    firstName: "Julia",
+    lastName: "Thompson",
+    email: "Julia@company.com",
+    password: "Jules123!",
+    Owner: "No",
+    Coworker: "Yes"
+  };
+];
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
 _Coworker_
-connects to Users
+
 connects to Workspaces
-connects to CurrentLeases
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
 _Owner_
+
 connects to Properties
-connects to Messages
 connects to Workspaces
 
 ------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_ContactForm_
-messageId
-date
-message
-
-connects to Users
-connects to Owner
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_CurrentLeases_
-leaseId  (for if users have the option to have multiple leases)
-startDate
-endDate
-bookingTime
-
-connects to Coworker
-connects to Owner
-connects to Workspaces
-conneccts to LeaseHistory (which stores CurrentLeases info as record)?
-connects to RateAndReview (after endDate passes: prompt user to rate and review their booking? then store this as rateAndReview data?)
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------Properties----------------------------------------------------------------
 
 _Properties_
+propertyId
 name
 address1
 adddress2
 postalcode
-areaSqM
-neighborhood
+city
 province
 country
-city
+neighbourhood 
 imgFileName
+ownerId
 
 connects to Workspace
-connects to Owner                     
+
+-----------------------------------------------------------Properties array of objects--------------------------------------------------
+
+const properties = [
+  {
+    propertyId: 1,
+    name: "Acme Corp",
+    address1: "123 Main St",
+    address2: "Suite 400",
+    postalcode: "T3G 1A1",
+    city: "Calgary",
+    province: "AB",
+    country: "Canada",
+    neighbourhood: "Downtown",
+    imgFileName: "Acmeimg.jpg",
+    ownerId: 59715 // Alice
+  },
+  {
+    propertyId: 2,
+    name: "Bayview Properties",
+    address1: "555 Bay St",
+    address2: "Floor 8",
+    postalcode: "M5J 2L3",
+    city: "Toronto",
+    province: "ON",
+    country: "Canada",
+    neighbourhood: "Financial District",
+    imgFileName: "BayviewProperties.jpg",
+    ownerId: 59715 // Alice
+  },
+  {
+    propertyId: 3,
+    name: "Rocky Mountain Ventures",
+    address1: "321 Summit Way",
+    address2: "Suite 450",
+    postalcode: "T1W 1P5",
+    city: "Banff",
+    province: "AB",
+    country: "Canada",
+    neighbourhood: "Tunnel Mountain",
+    imgFileName: "RockyMountainVentures.jpg",
+    ownerId: 4 // Diana
+  },
+  {
+    propertyId: 4,
+    name: "Atlantic Enterprises",
+    address1: "876 Ocean Rd",
+    address2: "Unit 101",
+    postalcode: "B3K 5T7",
+    city: "Halifax",
+    province: "NS",
+    country: "Canada",
+    neighbourhood: "North End",
+    imgFileName: "AtlanticEnterprises.jpg",
+    ownerId: 4 // Diana
+  },
+  {
+    propertyId: 5,
+    name: "Sunrise Developments",
+    address1: "222 Sunrise Ave",
+    address2: "Penthouse",
+    postalcode: "H3Z 2Y7",
+    city: "Montreal",
+    province: "QC",
+    country: "Canada",
+    neighbourhood: "Westmount",
+    imgFileName: "SunriseDevelopments.jpg",
+    ownerId: 72345 // Evelyn
+  },
+  {
+    propertyId: 6,
+    name: "Maple Holdings",
+    address1: "456 Oak Ave",
+    address2: "Unit 12",
+    postalcode: "V5K 0A1",
+    city: "Vancouver",
+    province: "BC",
+    country: "Canada",
+    neighbourhood: "Hastings-Sunrise",
+    imgFileName: "MapleHoldings.jpg",
+    ownerId: 72345 // Evelyn
+  },
+  {
+    propertyId: 7,
+    name: "Prairie Investments",
+    address1: "789 Prairie Dr",
+    address2: "Building 3",
+    postalcode: "S7K 3J6",
+    city: "Saskatoon",
+    province: "SK",
+    country: "Canada",
+    neighbourhood: "River Heights",
+    imgFileName: "PrairieInvestments.jpg",
+    ownerId: 67890 // George
+  },
+  {
+    propertyId: 8,
+    name: "Northern Lights Realty",
+    address1: "101 Polar Bear Ln",
+    address2: "Suite 200",
+    postalcode: "X0A 0H0",
+    city: "Iqaluit",
+    province: "NU",
+    country: "Canada",
+    neighbourhood: "Apex",
+    imgFileName: "NorthernLightsRealty.jpg",
+    ownerId: 67890 // George
+  },
+  {
+    propertyId: 9,
+    name: "Capital Hill Properties",
+    address1: "111 Parliament St",
+    address2: "Office 30",
+    postalcode: "K1A 0A9",
+    city: "Ottawa",
+    province: "ON",
+    country: "Canada",
+    neighbourhood: "Centretown",
+    imgFileName: "CapitalHillProperties.jpg",
+    ownerId: 34567 // Ian
+  },
+  {
+    propertyId: 10,
+    name: "Forest View Holdings",
+    address1: "890 Cedar Dr",
+    address2: "Cabin 2",
+    postalcode: "E2K 4J8",
+    city: "Saint John",
+    province: "NB",
+    country: "Canada",
+    neighbourhood: "Millidgeville",
+    imgFileName: "ForestViewHoldings.jpg",
+    ownerId: 34567 // Ian
+  }
+];
+
 
 ------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-may need more fields/arrays for multiple prices for different terms, multiple term options, 
+------------------------------------------------------------Workspaces------------------------------------------------------------------------
 
 _Workspace_
-workspaceName
 workspaceID
+workspaceName
 imgFileName
 workspaceType 
 	meeting room
@@ -148,65 +292,378 @@ workspaceType
 workspace leaseTerms 
 	hourly
 	daily
-	dateRange
+  dateRange ---------can this just be daily multiplied by price or do we need a distinct multi day only option?
+
 seatCapacity
 price
 imgFileName
-	priceHourly
-	priceDaily
-	priceDailyTimesDays   (price total for a date range)
+propertyID
+ownerId
+rating
 
 Connects to Property
-Connects to Amenities
-Connects to Availability
-connects to OwnerContactInfo
-connects to CurrentLeases
+connects to Owner
 connects to RateAndReview
                              
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-after endDate of currentLeases of specific workspace passes: 
-prompt user to rate and review their booking? 
-then store this as rateAndReview data?
+----------------------------------------------------------Workspace Array of Objects------------------------------------------------
 
-_RateAndReview_
-rating (1-5)
-reviewComments
-connects to Workspace
-connects to Owner 
-connnects to LeaseHistory
+const workspaces = [
+  {
+    workspaceID: 1,
+    workspaceName: "Large Office #40",
+    imgFileName: "LargeOffice40.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 500,
+    seatCapacity: 4,
+    price: 150,
+    amenities: [
+      { "Full Kitchen": true },
+      { "High-Speed Wi-Fi": true },
+      { "Coffee Maker": true },
+      { "Ergonomic Chairs": true }
+    ],
+    propertyId: 1,
+    ownerId: 59715, // Alice
+    rating: 4
+  },
+  {
+    workspaceID: 2,
+    workspaceName: "Sunny Main Floor, Office #12",
+    imgFileName: "SunnyOffice12.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 250,
+    seatCapacity: 2,
+    price: 120,
+    amenities: [
+      { "Whiteboards": true },
+      { "Coffee Maker": true },
+      { "Ergonomic Chairs": true }
+    ],
+    propertyId: 1,
+    ownerId: 59715, // Alice
+    rating: 3
+  },
+  {
+    workspaceID: 3,
+    workspaceName: "East Conservatory, Second floor",
+    imgFileName: "EastConservatory.jpg",
+    workspaceType: "Meeting Room",
+    leaseTerm: "daily",
+    sqFt: 750,
+    seatCapacity: 10,
+    price: 200,
+    amenities: [
+      { "Projector": true },
+      { "High-Speed Wi-Fi": true },
+      { "Whiteboards": true },
+      { "Conference Phones": true }
+    ],
+    propertyId: 2,
+    ownerId: 59715, // Alice
+    rating: 5
+  },
+  {
+    workspaceID: 4,
+    workspaceName: "Penthouse Lounge",
+    imgFileName: "PenthouseLounge.jpg",
+    workspaceType: "Meeting Room",
+    leaseTerm: "daily",
+    sqFt: 1200,
+    seatCapacity: 25,
+    price: 300,
+    amenities: [
+      { "Projector": true },
+      { "Conference Phones": true },
+      { "High-Speed Wi-Fi": true },
+      { "Lounge Areas": true }
+    ],
+    propertyId: 2,
+    ownerId: 59715, // Alice
+    rating: 4
+  },
+  {
+    workspaceID: 5,
+    workspaceName: "Cubicle #145",
+    imgFileName: "Cubicle145.jpg",
+    workspaceType: "Desk",
+    leaseTerm: "hourly",
+    sqFt: 50,
+    seatCapacity: 1,
+    price: 15,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true }
+    ],
+    propertyId: 3,
+    ownerId: 4, // Diana
+    rating: 3
+  },
+  {
+    workspaceID: 6,
+    workspaceName: "North Window Desk, #6",
+    imgFileName: "NorthWindowDesk.jpg",
+    workspaceType: "Desk",
+    leaseTerm: "hourly",
+    sqFt: 60,
+    seatCapacity: 1,
+    price: 10,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Coffee Maker": true }
+    ],
+    propertyId: 3,
+    ownerId: 4, // Diana
+    rating: 4
+  },
+  {
+    workspaceID: 7,
+    workspaceName: "Sunny Office #3",
+    imgFileName: "SunnyOffice3.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 300,
+    seatCapacity: 2,
+    price: 130,
+    amenities: [
+      { "Copy/Print Equipment": true },
+      { "Ergonomic Chairs": true }
+    ],
+    propertyId: 4,
+    ownerId: 4, // Diana
+    rating: 5
+  },
+  {
+    workspaceID: 8,
+    workspaceName: "Private Office #15",
+    imgFileName: "PrivateOffice15.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 180,
+    seatCapacity: 1,
+    price: 100,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true },
+      { "Secure Storage/Lockers": true }
+    ],
+    propertyId: 4,
+    ownerId: 4, // Diana
+    rating: 4
+  },
+  {
+    workspaceID: 9,
+    workspaceName: "Open-concept Desk #10",
+    imgFileName: "OpenConceptDesk10.jpg",
+    workspaceType: "Desk",
+    leaseTerm: "hourly",
+    sqFt: 50,
+    seatCapacity: 1,
+    price: 12,
+    amenities: [
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 5,
+    ownerId: 72345, // Evelyn
+    rating: 3
+  },
+  {
+    workspaceID: 10,
+    workspaceName: "Conference Room #5",
+    imgFileName: "ConferenceRoom5.jpg",
+    workspaceType: "Meeting Room",
+    leaseTerm: "daily",
+    sqFt: 500,
+    seatCapacity: 10,
+    price: 250,
+    amenities: [
+      { "Projector": true },
+      { "Conference Phones": true },
+      { "Whiteboards": true }
+    ],
+    propertyId: 5,
+    ownerId: 72345, // Evelyn
+    rating: 4
+  },
+  {
+    workspaceID: 11,
+    workspaceName: "Penthouse View Office #8",
+    imgFileName: "PenthouseViewOffice8.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 300,
+    seatCapacity: 2,
+    price: 140,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Coffee Maker": true }
+    ],
+    propertyId: 6,
+    ownerId: 72345, // Evelyn
+    rating: 4
+  },
+  {
+    workspaceID: 12,
+    workspaceName: "Large Office #2",
+    imgFileName: "LargeOffice2.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 600,
+    seatCapacity: 4,
+    price: 160,
+    amenities: [
+      { "Full Kitchen": true },
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 6,
+    ownerId: 72345, // Evelyn
+    rating: 5
+  },
+  {
+    workspaceID: 13,
+    workspaceName: "Shared Desk #7",
+    imgFileName: "SharedDesk7.jpg",
+    workspaceType: "Desk",
+    leaseTerm: "daily",
+    sqFt: 40,
+    seatCapacity: 1,
+    price: 12,
+    amenities: [
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 7,
+    ownerId: 67890, // George
+    rating: 3
+  },
+  {
+    workspaceID: 14,
+    workspaceName: "Meeting Room #15",
+    imgFileName: "MeetingRoom15.jpg",
+    workspaceType: "Meeting Room",
+    leaseTerm: "daily",
+    sqFt: 400,
+    seatCapacity: 5,
+    price: 175,
+    amenities: [
+      { "Conference Phones": true },
+      { "Whiteboards": true },
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 7,
+    ownerId: 67890, // George
+    rating: 4
+  },
+  {
+    workspaceID: 15,
+    workspaceName: "Ocean View Office #12",
+    imgFileName: "OceanViewOffice12.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 350,
+    seatCapacity: 2,
+    price: 180,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true }
+    ],
+    propertyId: 8,
+    ownerId: 67890, // George
+    rating: 5
+  },
+  {
+    workspaceID: 16,
+    workspaceName: "Seaside Meeting Room #10",
+    imgFileName: "SeasideMeetingRoom10.jpg",
+    workspaceType: "Meeting Room",
+    leaseTerm: "daily",
+    sqFt: 800,
+    seatCapacity: 10,
+    price: 230,
+    amenities: [
+      { "Projector": true },
+      { "Conference Phones": true }
+    ],
+    propertyId: 8,
+    ownerId: 67890, // George
+    rating: 4
+  },
+  {
+    workspaceID: 17,
+    workspaceName: "Desks #20-22",
+    imgFileName: "Desks2022.jpg",
+    workspaceType: "Desk",
+    leaseTerm: "hourly",
+    sqFt: 50,
+    seatCapacity: 1,
+    price: 14,
+    amenities: [
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 9,
+    ownerId: 34567, // Ian
+    rating: 3
+  },
+  {
+    workspaceID: 18,
+    workspaceName: "Creative Office #8",
+    imgFileName: "CreativeOffice8.jpg",
+    workspaceType: "Private Office",
+    leaseTerm: "daily",
+    sqFt: 280,
+    seatCapacity: 2,
+    price: 150,
+    amenities: [
+      { "Coffee Maker": true },
+      { "High-Speed Wi-Fi": true }
+    ],
+    propertyId: 9,
+    ownerId: 34567, // Ian
+    rating: 4
+  },
+  {
+    workspaceID: 19,
+    workspaceName: "Team Workstation #6",
+    imgFileName: "TeamWorkstation6.jpg",
+    workspaceType: "Team Desk",
+    leaseTerm: "daily",
+    sqFt: 500,
+    seatCapacity: 4,
+    price: 180,
+    amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Whiteboards": true }
+    ],
+    propertyId: 10,
+    ownerId: 34567, // Ian
+    rating: 5
+  },
+  {
+    workspaceID: 20,
+    workspaceName: "Studio Space #11",
+    imgFileName: "StudioSpace11.jpg",
+    workspaceType: "Creative Studio",
+    leaseTerm: "daily",
+    sqFt: 450,
+    seatCapacity: 3,
+    price: 210,
+    amenities: [
+      { "Projector": true },
+      { "High-Speed Wi-Fi": true },
+      { "Coffee Maker": true }
+    ],
+    propertyId: 10,
+    ownerId: 34567, // Ian
+    rating: 4
+  }
+];
+
 
 ------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------Amenities-------------------------------------------------------------------
+sample amenity objects are in the sample workspaces for easy searching
 ------------------------------------------------------------------------------------------------------------------------------------
-
-_Amenities_ 
-
-Full Kitchen 
-microwave
-coffee maker
-Copy/Print Equipment
-Projector
-High-Speed Wi-Fi
-Whiteboards
-Conference Phones
-Adjustable Desks
-Ergonomic Chairs
-Secure Storage/Lockers
-Mail and Package Handling
-Outdoor Seating/Patio
-Receptionist/Front Desk Service
-Soundproofing
-Lounge Areas
-Casual Seating
-Tech Support
-Security Cameras
-Snack Bar
-Vending machines
-Fitness Room
-Gym Access
-Natural Lighting
-
-------------------------------------------------------------------------------------------------------------------------------------
+amenities array: 
 
 const amenities = [
   "Full Kitchen",
@@ -235,7 +692,7 @@ const amenities = [
   "Natural Lighting"
 ];
 ------------------------------------------------------------------------------------------------------------------------------------
-Array of Objects
+amenity Array of Objects
 
 const amenities = [
   { name: "Full Kitchen", value: false },
@@ -262,35 +719,7 @@ const amenities = [
   { name: "Fitness Room", value: false },
   { name: "Gym Access", value: false },
   { name: "Natural Lighting", value: false }
-
-------------------------------------------------------------------------------------------------------------------------------------
-Sample Object
-
-const kitchenAmenity = {
-  name: "Full Kitchen",
-  value: true // User selected this amenity
-};
-------------------------------------------------------------------------------------------------------------------------------------
-Sample Input:
-
-const sampleInput = {
-  "Full Kitchen": true,
-  "Microwave": true,
-  "Coffee Maker": false,
-  "Copy/Print Equipment": true,
-  "Projector": false
-};
-------------------------------------------------------------------------------------------------------------------------------------
-Sample Output:
-
-const sampleOutput = [
-  { name: "Full Kitchen", value: true },
-  { name: "Microwave", value: true },
-  { name: "Coffee Maker", value: false },
-  { name: "Copy/Print Equipment", value: true },
-  { name: "Projector", value: false }
 ];
-
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -304,11 +733,12 @@ connects to Owner
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
 
-_Availability_
-Weekends
-	yes/no bool
-datesClosed (specific dates array that the owner can change)
-datesBooked (specific dates array that can be changed by a coworker's booking)
-connects to LeaseTerm 
+_Availability_ to discuss
+
+datesBooked
+	userId
+	
+
+
 
 
