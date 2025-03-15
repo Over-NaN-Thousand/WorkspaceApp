@@ -1,0 +1,113 @@
+/* Main Content */
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-wrapper {
+    display: flex;
+    flex: 1;
+}
+/* Main Content */
+main {
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.content-section {
+    display: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    display:none;
+}
+
+.content-section#edit-profile {
+    display: block;
+}
+
+.content-section .header-bar {
+    background-color: #666;
+    color: var(--light);
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.content-section .content-body {
+    padding: 20px;
+}
+
+.profile-picture {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+}
+
+.profile-picture button {
+    background-color: var(--prim);
+    color: var(--light);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.user-info {
+    margin-bottom: 20px;
+}
+
+.user-info p {
+    margin: 10px 0;
+    font-size: 1rem;
+}
+
+.change-password {
+    margin-top: 20px;
+}
+
+.change-password h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.change-password input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.change-password button {
+    background-color: var(--prim);
+    color: var(--light);
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.change-password button:hover {
+    background-color: #3bb3ab;
+}
+
+#password-message {
+    margin-top: 10px;
+    color: #e74c3c;
+    font-size: 0.9rem;
+}
