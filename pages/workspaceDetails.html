@@ -22,30 +22,46 @@
     <header id="header-mainjs"></header>
 
     <div class="main">
-        <div class="detailsBox">
-            <div class="title"><span>Workspace Details</span></div>
-                    <div id="workspace-display"></div>
+        <div class="detailsBoxL">
+            <div class="title" id="workspaceTitle"></div>
+            <!--Left box-->
+            <div id="workspace-display-left"></div>
+        </div>
+        
+        <div class="detailsBoxR">
+            <div class="title"><span></span></div>
+            <!--Right box-->
+            <div id="workspace-display-right"></div>
             
-                    <div class="row button">
-                    <input type="submit" value="View Owner Details"/>
+                    <div class="imageContainer">
+                <img id="workspaceImg" />
                     </div>
 
-                    <div class="row button">
-                    <input type="submit" value="Book Workspace" />
-                    </div>
 
-                <div class="signup-link">Not signed-in? <a href="#">Log-in now</a></div>
-                <div class="signup-link">Not a member? <a href="#">Sign-up now</a></div>
+                <div class="reviewContainer">
+                    <div class="subHeading"><span>Reviews</span></div><!--edit css: centered and bordered-->
 
-                
+                    <!--reviews--elements should be sidebyside-->
+                    <form>
+
+                        <div class="leftButton"><!--15% of container wdth, padding top and botton 20px-->
+                        <input type="button" value="prev"/>
+                        </div>
+
+                            <div class="reviewBody">review goes here</div><!--edit: 70% of container width, padding left right 10px-->
+
+                        <div class="rightButton" ><!--15% of container wdth, padding top and botton 20px-->
+                        <input type="button" value="next"/>
+                        </div>
+                        
+                    </form>
+                </div>
             </div>
         </div>
-
+    </div>
     <footer id="footer-mainjs"></footer>
+    
 </body>
 
 </html>
 
-
-<!--link to this page
-<a href="workspaceDetails.html?id=2">Workspace Details</a>-->

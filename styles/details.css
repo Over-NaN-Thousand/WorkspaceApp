@@ -24,48 +24,59 @@ body {
     height: auto;
 }
 
-#workspace-display {
-    padding: 20px;
+#workspace-display-left, #workspace-display-right {
+    padding: 0px;
   }
 
-.main {
+  .main {
     display: flex;
-    align-items: center;
-    
-    height: 100%;
+    gap: 100px; /* Space between the boxes */
     padding: 15px;
-    overflow: hidden;
+  }
 
-}
 
-.main .detailsBox {
-    max-width: 500px;
-    width: 100vw;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
-    margin-left: 100px;
-    
-}
+  .main .detailsBoxL,
+  .main .detailsBoxR {
+     flex:1;
+      max-width: 500px;
+      background: #6e6658;
+      border-radius: 5px;
+      box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
+  }
 
-.main .detailsBox .title {
+  .main .detailsBoxL .title {
+
+      height: 120px;
+      background: #4f4a41;
+      border-radius: 5px 5px 0 0;
+      color: #fff;
+      font-size: 30px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+  }
+
+  .main .detailsBoxR .title {
     height: 120px;
-    background:#4f4a41;
+    background: #4f4a41;
     border-radius: 5px 5px 0 0;
-    color: #fff;
+    color:  #fff;
     font-size: 30px;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
-.main .detailsBox form {
+.main .detailsBoxL form {
     padding: 25px 35px;
     background-color: #6e6658;
 }
 
-.main .detailsBox form .row {
+.main .detailsBoxL form .row {
     height: 60px;
     margin-top: 15px;
     position: relative;
@@ -76,18 +87,16 @@ body {
 
 
 
-.detailsBox form .row input {
-    height: 100%;
+
+.detailsBoxL form .row input,
+.detailsBoxR form .row input {
     width: 100%;
-    outline: none;
-    padding-left: 70px;
-    border-radius: 5px;
-    border: 1px solid lightgrey;
-    font-size: 18px;
-    transition: all 0.3s ease;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
     
-
 form .row input:focus {
     border-color:var(--form-bg);
 }
@@ -96,23 +105,21 @@ form .row input::placeholder {
     color: #999;
 }
 
-
-
-.detailsBox form .pass {
+.detailsBoxL form .pass {
     margin-top: 12px;
 }
 
-.detailsBox form .pass a {
+.detailsBoxL form .pass a {
     color:white;
     font-size: 17px;
     text-decoration: none;
 }
 
-.detailsBox form .pass a:hover {
+.detailsBoxL form .pass a:hover {
     text-decoration: underline;
 }
 
-.detailsBox form .button input {
+.detailsBoxL form .button input {
     margin-top: 20px;
     color: #fff;
     font-size: 20px;
@@ -123,14 +130,13 @@ form .row input::placeholder {
     cursor: pointer;
 }
 
-
-.detailsBox form .signup-link {
+.detailsBoxL form .signup-link {
     text-align: center;
     margin-top: 45px;
     font-size: 17px;
 }
 
-.detailsBox form .signup-link a {
+.detailsBoxL form .signup-link a {
     color:white;
     text-decoration: none;
 }
@@ -142,7 +148,7 @@ form .signup-link a:hover {
 
 
 
-.section {
+.sectionL {
     margin-bottom: 20px;
     padding: 15px;
     background-color: #f4f4f4;
@@ -157,14 +163,42 @@ form .signup-link a:hover {
   
   ul {
     list-style: none;
-    padding: 0;
+    padding: 20px;;
   }
   
   li {
     padding: 5px 0;
-    border-bottom: 1px solid #ddd;
   }
   
   li:last-child {
     border-bottom: none;
   }
+
+
+
+
+  .imgContainer {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #ccc;
+    background-color: #6e6658;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#workspaceImg {
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+    display: block;
+}

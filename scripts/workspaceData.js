@@ -316,7 +316,7 @@ const workspaces = [
       workspaceID: 19,
       workspaceName: "Team Workstation #6",
       imgFileName: "TeamWorkstation6.jpg",
-      workspaceType: "Team Desk",
+      workspaceType: "Desk",
       leaseTerm: "daily",
       sqFt: 500,
       seatCapacity: 4,
