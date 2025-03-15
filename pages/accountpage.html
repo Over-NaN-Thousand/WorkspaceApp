@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+
+    <base href="/">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script src="scripts/main.js" defer></script>
+
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/leftsidebar.css">
+    <link rel="stylesheet" href="styles/accountpage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
+</head>
+<body>
+    <div class="container">
+        <header id="header-mainjs"></header>
+        <div class="main-wrapper">
+            <aside id="leftSideBar-mainjs"></aside>
+            <main id="main-content">
+                <div class="content-section" id="edit-profile">
+                    <div class="header-bar">Profile</div>
+                    <div class="content-body">
+                        <div class="profile-picture">
+                            <!--For temporary-->
+                            <img src="resources/images/office.png" alt="Profile Picture">
+                            <button>Edit Profile Picture</button>
+                        </div>
+                        <div class="user-info">
+                            <p><strong>First Name:</strong> <span id="first-name">Chloe</span></p>
+                            <p><strong>Last Name:</strong> <span id="last-name">Bean</span></p>
+                            <p><strong>Email:</strong> <span id="email">chloe.bean@example.com</span></p>
+                        </div>
+                        <div class="change-password">
+                            <h3>Change Password</h3>
+                            <input type="password" id="current-password" placeholder="Current Password">
+                            <input type="password" id="new-password" placeholder="New Password">
+                            <input type="password" id="confirm-password" placeholder="Confirm New Password">
+                            <button id="save-password">Save Changes</button>
+                            <p id="password-message"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-section" id="my-properties">
+                    <div class="header-bar">My Properties</div>
+                    <div class="content-body">
+                        <p>Content for My Properties will go here.</p>
+                    </div>
+                </div>
+                <div class="content-section" id="workspaces">
+                    <div class="header-bar">Workspaces</div>
+                    <div class="content-body">
+                        <p>Content for Workspaces will go here.</p>
+                    </div>
+                </div>
+                <div class="content-section" id="reviews">
+                    <div class="header-bar">Reviews</div>
+                    <div class="content-body">
+                        <p>Content for Reviews will go here.</p>
+                    </div>
+                </div>
+                <div class="content-section" id="logout">
+                    <div class="header-bar">Log Out</div>
+                    <div class="content-body">
+                        <p>Content for Log Out will go here.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <footer id="footer-mainjs"></footer>
+    </div>
+</body>
+</html>

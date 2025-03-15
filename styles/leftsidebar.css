@@ -1,0 +1,121 @@
+aside{
+    height:86vh;
+}
+.sidebar {
+    position: sticky;
+    top: 0;
+    width: 15vw;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+
+}
+
+/*Upper seesion, user information*/
+#leftSideBar-mainjs .sidebar-top {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background-color: #4f4a41;
+    color: var(--light);
+    height:20%;
+
+}
+
+#leftSideBar-mainjs .profile-pic img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+#leftSideBar-mainjs .user-name {
+    margin-top: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+#leftSideBar-mainjs .account-type {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--sec);
+}
+
+/*Fro the menu session*/
+#leftSideBar-mainjs .sidebar-menu {
+    flex: 1;
+    padding: 1rem;
+    background-color: #6e6658;
+    color: var(--light);
+}
+
+#leftSideBar-mainjs .sidebar-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+#leftSideBar-mainjs .sidebar-menu li {
+    margin-bottom: 1rem;
+}
+
+#leftSideBar-mainjs .sidebar-menu a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--light);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+#leftSideBar-mainjs .sidebar-menu a:hover {
+    background-color: var(--prim);
+}
+#leftSideBar-mainjs .sidebar-menu .sidebar-btn.active {
+    background-color: var(--prim);
+}
+/* Mobile sizing session
+@media screen and (max-width: 768px) {
+    #leftSideBar-mainjs {
+        min-width: 100px;
+
+    }
+
+    #leftSideBar-mainjs .user-name {
+        font-size: 1rem;
+    }
+
+    #leftSideBar-mainjs .account-type {
+        font-size: 0.8rem;
+    }
+
+    #leftSideBar-mainjs .sidebar-menu input {
+        padding: 0.4rem 0.6rem;
+        font-size: inherit;
+    }
+
+
+}*/
+
+/*Button*/
+.sidebar-menu .button input{
+    margin-top: 40px;
+    color: black;
+    display: block;      
+    font-size: inherit;        
+    line-height: normal;        
+    background:red;
+
+    height: 3rem;
+    width: 100%;
+    outline: none;
+    padding-left: 10px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+
+}
+.sidebar-menu .button input:hover {
+    background-color: var(--prim);
+}
