@@ -52,17 +52,56 @@ $(document).ready(function() {
     const optWStypes = ["Conference Room", "Private Office", "Desk"];
     const optTerm = ["Daily", "Weekly", "Monthly", "Quarterly"];
     const optAmenities = ["Covered Parking","Kitchen","Copy/Print Equipment","Projector", "Yoga Room"];
-
     addOptionsToSection(optWStypes,"types", "optWStypes", "checkbox");
     addOptionsToSection(optTerm,"term", "optTerm", "radio");
     addOptionsToSection(optAmenities,"amenities", "optAmenities", "checkbox");
 
+    loadFiltersFromSession();
+
+    const currUrl = new URL(window.location.href);
+    const params = new URLSearchParams(currUrl.search);
+    const searchText = params.get('searchtext');
+    if (searchText !== "")
+        $("#searchtext").val(searchText);
+    
+    ClickApplyBtn();
+
 });
+
+
 
 function addOptionsToSection(options, targetclass, name, type) {
     options.forEach(option => {
           $(`.${targetclass}`).find('details').append(`<label><input type="${type}" name="${name}" value="${option}"> ${option}</label>`);
     });
+}
+
+function loadFiltersFromSession() {
+    const filters = JSON.parse(sessionStorage.getItem('filters'));
+
+    if (filters) {
+        $('input[name="optWStypes"]').each(function () {
+            $(this).prop('checked', filters.workspaceTypes.includes($(this).val()));
+        });
+
+        // Load price range inputs
+        $("#minPrice").val(filters.minPrice || '');
+        $("#maxPrice").val(filters.maxPrice || '');
+
+        // Load Lease Term
+        $('input[name="optTerm"]').each(function () {
+            $(this).prop('checked', $(this).val() === filters.leaseTerm);
+        });
+
+    // Load seat capacity inputs
+        $("#minCapacity").val(filters.minCapacity || '');
+        $("#maxCapacity").val(filters.maxCapacity || '');
+
+        // Load Amenities
+        $('input[name="optAmenities"]').each(function () {
+            $(this).prop('checked', filters.amenities.includes($(this).val()));
+        });
+    }
 }
 
 function DisplayWorkspaces(workspaceList){
@@ -79,7 +118,8 @@ function DisplayWorkspaces(workspaceList){
                     <p><strong>Lease Term:</strong> ${workspace.leaseTerm}</p>
                     <p><strong>Price:</strong> $${workspace.price} per term</p>
                     <p><strong>Capacity:</strong> ${workspace.seatCapacity} seats</p>
-                     <p><strong>Location:</strong> ${workspace.address1}, ${workspace.city}, ${workspace.province}, ${workspace.country}</p>
+                    <p><strong>Neighborhood:</strong> ${workspace.neighborhood}</p>
+                    <p><strong>Location:</strong> ${workspace.address1}, ${workspace.city}, ${workspace.province}, ${workspace.country}</p>
                     <p><strong>Amenities:</strong> ${workspace.amenities.join(", ")}</p>
                 </div>
             </section>`;
@@ -115,9 +155,9 @@ function ApplyFilters(workspaceList){
 
 
     //FILTER BY LEASE TERM
-    const selectedTerm = $('input[name="optTerm"]:checked').val(); // AL - get value of the selected radio button
-    if (selectedTerm) {                 // AL - only filter if a term is selected
-        returnList = returnList.filter(workspace => workspace.leaseTerm === selectedTerm);
+    const pickedTerm = $('input[name="optTerm"]:checked').val(); // AL - get value of the selected radio button
+    if (pickedTerm) {                 // AL - only filter if a term is selected
+        returnList = returnList.filter(workspace => workspace.leaseTerm === pickedTerm);
     }
 
 
@@ -146,28 +186,50 @@ function ApplyFilters(workspaceList){
         );
     }
 
+    
+    // FILTER BY SEARCH TEXT
+    const searchText = $("#searchtext").val();
+    if (searchText.length != 0) { // AL - only apply filter if searchText is not blank
+        const lowerSearchText = searchText.toLowerCase();   // convert to lowercase
+        returnList = returnList.filter(workspace =>
+            workspace.workspaceName.toLowerCase().includes(lowerSearchText) ||      //check in workspaceName
+            workspace.city.toLowerCase().includes(lowerSearchText) ||               //check in city
+            workspace.neighborhood.toLowerCase().includes(lowerSearchText)          //check in neighborhood
+        );
+    }
+
+
+    //SAVE FILTERS TO SESSION STORAGE 
+    const filters = {
+        workspaceTypes: pickedTypes,
+        minPrice: priceMin,
+        maxPrice: priceMax,
+        leaseTerm: pickedTerm,
+        minCapacity: capacityMin,
+        maxCapacity: capacityMax,
+        amenities: pickedAmenities
+    };
+    sessionStorage.setItem('filters', JSON.stringify(filters));
+
+
     //FINALLY! What remains from all these filtering is returned
     return returnList;
 }
 
-$('#btnApply').on('click', function () {
-    
+function ClickApplyBtn() {
     const filteredWorkspaces = ApplyFilters(allWorkspaces);
-
     DisplayWorkspaces(filteredWorkspaces);
-
 
     $('html, body').animate({
         scrollTop: $('main').offset().top
     }, 500); //AL - scroll view to results; got this from Copilot AI
+}
 
-});
-
-$("#btnReset").on('click', function() {
-    
+function ClickResetBtn() {
     $('input[type="checkbox"]').prop('checked', false); // Reset checkboxes
     $('input[type="radio"]').prop('checked', false); 
     $('input[type="number"]').val(''); // reset price range and seat capacity
-
+    $("#searchtext").val(''); //reset even the search box
+    sessionStorage.removeItem('filters'); //clear session
     DisplayWorkspaces(allWorkspaces);
-});
+}

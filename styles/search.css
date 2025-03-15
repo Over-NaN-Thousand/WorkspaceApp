@@ -38,6 +38,15 @@ footer {
     grid-area: footer;
 }
 
+h1{
+    margin: 3rem 1.1rem .1em;
+    font-size: clamp(16px, 3vw, 20px);
+}
+#display-count{
+    margin: .1rem 1.1rem .5em;
+    font-size: clamp(9px, 1.8vw, 14px);
+}
+
 
 /********FILTERS********/
 aside section{
@@ -84,6 +93,7 @@ aside .btn-container{
     justify-content: center;
     gap: .2rem;
 }
+
 aside button {
     padding: .3rem 1.5rem;
     font-size: clamp(12px, 3vw, 16px);
@@ -94,14 +104,44 @@ aside button {
     cursor: pointer;
 }
 
+article{
+    margin : .5rem;
+}
+
 
 /********RESULTS********/
+
+.searchbar{
+    margin: .5rem;
+    padding: .5rem;
+
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+
+    background-color: var(--filter-bg);
+}
+
+.searchbar h4{
+    font-size: clamp(12px, 3vw, 20px);
+    font-weight: bold;
+}
+
+.searchbar button {
+    padding: .2rem .75rem;
+    font-size: clamp(12px, 3vw, 16px);
+    background-color: var(--prim);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 .workspace-item {
     display: flex;
     flex-direction: row;
     
-    margin: 1rem;
+    margin: .5rem;
     border: 1px solid var(--item-border);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgb(39, 81, 88, .25);
