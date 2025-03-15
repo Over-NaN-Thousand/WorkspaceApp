@@ -41,13 +41,25 @@ $(document).ready(function() {
     if (searchText !== "")
         $("#searchtext").val(searchText);
     
-    //add event handler, onclick="ClickResetBtn()" stopped working because this js is now type=module
+    //add event handlers, onclick="ClickResetBtn()" stopped working because this js is now type=module
     $('#btnApply').on('click',  ClickApplyBtn);
     $('#btnReset').on('click',  ClickResetBtn);
+    $('#selSort').on('change',  ClickApplyBtn);
+
+    $("form").on("submit", function(event) {
+        event.preventDefault(); // stop submitting, we'll do that later
+        ClickApplyBtn(); //filter and sort saved
+        this.submit(); //now we can submit
+    });
 
     //run Apply to initialize list
     ClickApplyBtn();
 });
+
+
+
+   
+
 
 
 
@@ -75,6 +87,8 @@ function loadFiltersFromSession() {
         $("#maxPrice").val(filters.maxPrice || '');
         $("#minCapacity").val(filters.minCapacity || '');
         $("#maxCapacity").val(filters.maxCapacity || '');
+
+            $("#selSort").val(filters.sortField || "workspaceName"); //load sort field
     }
 }
 
@@ -206,6 +220,19 @@ function ApplyFilters(workspaceList){
         );
     }
 
+    // SORTING
+    const sortField = $("#selSort").val();
+    returnList.sort((a, b) => {
+        if (sortField === "price" || sortField === "seatCapacity") {
+            // low to high for numeric
+            return a[sortField] - b[sortField];
+        } else {
+            // alphabetic for string
+            const fieldA = a[sortField].toString().toLowerCase();
+            const fieldB = b[sortField].toString().toLowerCase();
+            return fieldA.localeCompare(fieldB);
+        }
+    });
 
     //SAVE FILTERS TO SESSION STORAGE 
     const filters = {
@@ -215,7 +242,8 @@ function ApplyFilters(workspaceList){
         leaseTerm: pickedTerm,
         minCapacity: capacityMin,
         maxCapacity: capacityMax,
-        amenities: pickedAmenities
+        amenities: pickedAmenities,
+        sortField: sortField    //tuck sort field with filters instead of creating a new one
     };
     sessionStorage.setItem('filters', JSON.stringify(filters));
 

@@ -79,23 +79,31 @@
     </aside>
     
     <main>
-        <article  class="searchbar">
-                <h4>Search in Workspaces, Cities, and Neighborhoods</h4>
-                <form action="pages/search.html" method="GET">
-                    <input type="text" id="searchtext" name="searchtext" placeholder="Search for workspace">
-                    <button type="submit" id="searchbtn">Search</button>
-                </form>
+        <article class="searchbar">
+            <h4>Search in Workspaces, Cities, and Neighborhoods</h4>
+            <form action="pages/search.html" method="GET">
+                <input type="text" id="searchtext" name="searchtext" placeholder="Search for workspace">
+                <button type="submit" id="searchbtn">Search</button>
+            </form>
         </article>
-        
-        
-        
+    
         <h1>Search Results</h1>
-        <p id="display-count"></p>
-
-        <article id="workspaces-container">
-
+        <article class="results-title">
+            <p id="display-count"></p>
+            <label for="selSort">Sort By:</label>
+            <select id="selSort" name="selSort" title="Please select criteria to sort">
+                <option value="workspaceName" selected>Name</option>
+                <option value="workspaceType">Type</option>
+                <option value="price">Price</option>
+                <option value="leaseTerm">Lease Term</option>
+            </select>
         </article>
         
+    
+        <article id="workspaces-container">
+    
+        </article>
+    
     </main>
 
     <footer id="footer-mainjs"></footer>
