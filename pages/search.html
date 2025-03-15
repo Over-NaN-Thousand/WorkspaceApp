@@ -10,7 +10,7 @@
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script src="scripts/search.js" defer></script>
+    <script type="module" src="scripts/search.js"></script> <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/search.css">
@@ -72,19 +72,29 @@
         <section class="amenities">
             <details>
                 <summary>Amenities</summary>
-            </details></section>
+            </details>
+        </section>
+
 
     </aside>
     
     <main>
-        <article class="title">
-            <h3>Results</h3>
-            <p id="display-count"></p>
+        <article  class="searchbar">
+                <h4>Search in Workspaces, Cities, and Neighborhoods</h4>
+                <form action="pages/search.html" method="GET">
+                    <input type="text" id="searchtext" name="searchtext" placeholder="Search for workspace">
+                    <button type="submit" id="searchbtn">Search</button>
+                </form>
         </article>
+        
+        
+        
+        <h1>Search Results</h1>
+        <p id="display-count"></p>
 
-        <div id="workspaces-container">
+        <article id="workspaces-container">
 
-        </div>
+        </article>
         
     </main>
 

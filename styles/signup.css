@@ -39,9 +39,9 @@ body {
     width: 100vw;
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
-        
+    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1); 
 }
+
 
 .main .informationForm .title {
     height: 15vh;
@@ -109,7 +109,6 @@ form .row input::placeholder {
     background:var(--form-bg);
     border: 1px solid var(--form-bg);
     cursor: pointer;
-
 }
 
 
@@ -133,8 +132,7 @@ select-container {
   }
   
 
-  .custom-select {
-
+.custom-select {
     width: 100%;
     padding: 10px 12px;
     font-weight: bold;
@@ -154,6 +152,7 @@ select-container {
     background-color: #b7cbb3;
  }
  
+
   .custom-select:hover,
 .custom-select:focus {
   background-color: #78ada7;
