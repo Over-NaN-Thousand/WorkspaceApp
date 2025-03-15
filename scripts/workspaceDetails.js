@@ -8,53 +8,86 @@ $(document).ready(function () {
     // testing with manualky set Id
     const targetId = 19; 
     const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === targetId);
+    let sectionDivR;
 
     if (targetWorkspace) {
 
         // Left section
         const sectionDivL = $("<div>").addClass("detailsBoxL");
-        $("<span>").text(`${targetWorkspace.workspaceName}`).appendTo("workspaceTitle");
-
-         // Set workspace name in the existing div
+        
          $("#workspaceTitle").text(targetWorkspace.workspaceName).appendTo(sectionDivL);
 
-    //Left section
-    const ulL = $("<ul>").addClass("detailsList");
+        //Left section
+        const ulL = $("<ul>").addClass("detailsList");
         //propertyId: 1//needs to give address and maybe other details from property array
         $("<li>").text(`Type: ${targetWorkspace.workspaceType}`).appendTo(ulL);
         $("<li>").text(`Lease Term: ${targetWorkspace.leaseTerm}`).appendTo(ulL);
         $("<li>").text(`Square Footage: ${targetWorkspace.sqFt} sq ft`).appendTo(ulL);
         $("<li>").text(`Seat Capacity: ${targetWorkspace.seatCapacity}`).appendTo(ulL);
-        $("<li>").text(`Price: ${targetWorkspace.price}' /'${(targetWorkspace.leaseTerm)}`).appendTo(ulL);
-
+        $("<li>").text(`Price: $${targetWorkspace.price} /${(targetWorkspace.leaseTerm)}`).appendTo(ulL);
 
         // Display amenities
-        $("<li>").text("Amenities:").appendTo(ulL);
-        targetWorkspace.amenities.forEach(amenity => {
-            const [key, value] = Object.entries(amenity)[0];
-            if (value) {
+        $("<li>").addClass("detailBoxHeading").text("Amenities:").appendTo(ulL);
+
+        targetWorkspace.amenities.forEach((element, key) =>{
+            
+            if (element) {
                 $("<li>").text(`- ${key}`).appendTo(ulL);
+            }
+            else{
+                $("<li>").text(`N/A`).appendTo(ulL);
             }
         });
 
-    sectionDivL.append(ulL);
-    leftContainer.append(sectionDivL);
-    
-    //right section
-    const sectionDivR = $("<div>").addClass("detailsBoxR");
-    
+        sectionDivL.append(ulL);
+        leftContainer.append(sectionDivL);
+        
+        //right-hand section
+        sectionDivR = $("<div>").addClass("detailsBoxR");
 
-    //plan to move this to the review container, above the review
-    const ulR = $("<ul>").addClass("detailsList");
-    $("<li>").text(`Rating: ${targetWorkspace.rating} `).appendTo(ulR);
+        //image
+        $("<img>").attr('src',targetWorkspace.imgFileName.href).appendTo(sectionDivR);
 
-    sectionDivR.append(ulR);
-        rightContainer.append(sectionDivR);
-    } else {
-        rightContainer.html("<p>Workspace not found.</p>");
+        //rating section
+        $("<div>").addClass("ratingBox").appendTo(sectionDivR);
+        //rating title
+        $("<div>").text("Rating").appendTo(sectionDivR.find(".ratingBox"));
+        //star rating
+        //plan to move this to the review container, above the review
+        var count = 0;
+        var sum = 0; 
+        $("<div>").addClass("stars").appendTo("ratingBox");
+
+      
+        targetWorkspace.rating.forEach((value, index)=> {
+            if(value){
+               { count += 1;
+                sum += value;
+               };
+            }
+            else{
+                $("<p>").text(`N/A`).appendTo(".stars");
+            }  
+        });
+
+        const avgStarRating = sum/count;
+
+        //add star symbols
+        if (avgStarRating){
+            for(let i=0; i<Math.round(avgStarRating); i++){
+                $("<span>").addClass("fa fa-star checked").appendTo($(".stars"));
+        }
+    }else{
+            $("<span>").addClass("fa fa star").appendTo(".stars");
+        }
+    
     }
-    });
-
-
+    else 
+    {
+        rightContainer.html("<p>Workspace not found.</p>");
+    };
+ });
+ 
+ rightContainer.append(sectionDivR);
 
   // imgFileName: "LargeOffice40.jpg"
