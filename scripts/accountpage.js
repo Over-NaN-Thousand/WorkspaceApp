@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    $("#header-mainjs").load("header.html");
     $("#leftSideBar-mainjs").load("leftsidebar.html", function () {
 
         const sidebarButtons = $('.sidebar-btn');
@@ -8,7 +7,6 @@ $(document).ready(function () {
 
         sidebarButtons.on('click', function (e) {
             e.preventDefault(); 
-
 
             sidebarButtons.removeClass('active');
 
