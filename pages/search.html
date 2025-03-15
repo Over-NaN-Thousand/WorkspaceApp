@@ -10,7 +10,7 @@
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script src="scripts/search.js" defer></script>
+    <script type="module" src="scripts/search.js"></script> <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/search.css">
@@ -25,8 +25,8 @@
         </h3>
 
         <div class="btn-container">
-            <button id="btnReset" onclick="ClickResetBtn()">Reset</button>
-            <button id="btnApply" onclick="ClickApplyBtn()">Apply</button>
+            <button id="btnReset">Reset</button>
+            <button id="btnApply">Apply</button>
         </div>
 
         <section class="types">
