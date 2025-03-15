@@ -1,4 +1,5 @@
 
+
 import { Property, properties } from './data/propertydata.js';
 import { Workspace, workspaces } from './data/workspacedata.js';
 
@@ -21,13 +22,13 @@ const allWorkspaces = workspaces.map(workspace => {                             
 });
 
 
-
 $(document).ready(function() {
 
     //Create the filters in the page
     const optWStypes = [...new Set(allWorkspaces.map(workspace => workspace.workspaceType))]; //dynamic by using map // new Set() goes through the list and only adds unique values, but the result is not yet an array, that's what you need the dots before it ...new Set() to make it an array
     const optTerm = ["Daily", "Weekly", "Monthly", "Quarterly"];
     const optAmenities = ["Full Kitchen","Microwave","Coffee Maker","Copy/Print Equipment","Projector","High-Speed Wi-Fi","Whiteboards","Conference Phones","Adjustable Desks","Ergonomic Chairs","Secure Storage/Lockers","Mail and Package Handling","Outdoor Seating/Patio","Receptionist/Front Desk Service","Soundproofing","Lounge Areas","Casual Seating","Tech Support","Security Cameras","Snack Bar","Vending Machines","Fitness Room","Gym Access","Natural Lighting"];
+
     addOptionsToSection(optWStypes,"types", "optWStypes", "checkbox");
     addOptionsToSection(optTerm,"term", "optTerm", "radio");
     addOptionsToSection(optAmenities,"amenities", "optAmenities", "checkbox");
@@ -47,6 +48,7 @@ $(document).ready(function() {
     //run Apply to initialize list
     ClickApplyBtn();
 });
+
 
 
 
@@ -160,6 +162,7 @@ function ApplyFilters(workspaceList){
 
 
     //FILTER BY LEASE TERM
+
     const pickedTerm = $('input[name="optTerm"]:checked').val(); // AL - get value of the selected radio button
     if (pickedTerm) {                 // AL - only filter if a term is selected
         returnList = returnList.filter(workspace => workspace.leaseTerm === pickedTerm);
@@ -238,3 +241,4 @@ function ClickResetBtn() {
     sessionStorage.removeItem('filters');           //clear session
     DisplayWorkspaces(allWorkspaces);
 }
+
