@@ -81,36 +81,30 @@ function loadFiltersFromSession() {
 
     if (filters) {
         $('input[name="optWStypes"]').each(function () {
-            $(this).prop('checked', filters.workspaceTypes.includes($(this).val()));
+            $(this).prop('checked', filters.workspaceTypes.includes($(this).val())); //mark optWStypes checked if the opt's value is in the list in the filter
         });
-
-        // Load price range inputs
-        $("#minPrice").val(filters.minPrice || '');
-        $("#maxPrice").val(filters.maxPrice || '');
-
-        // Load Lease Term
+        $('input[name="optAmenities"]').each(function () {
+            $(this).prop('checked', filters.amenities.includes($(this).val())); //same as above
+        });
         $('input[name="optTerm"]').each(function () {
-            $(this).prop('checked', $(this).val() === filters.leaseTerm);
+            $(this).prop('checked', $(this).val() === filters.leaseTerm); //mark option if its val is equal to what is saved in filter
         });
-
-    // Load seat capacity inputs
+        $("#minPrice").val(filters.minPrice || ''); //write string stored in filters but if undefined use blank
+        $("#maxPrice").val(filters.maxPrice || '');
         $("#minCapacity").val(filters.minCapacity || '');
         $("#maxCapacity").val(filters.maxCapacity || '');
-
-        // Load Amenities
-        $('input[name="optAmenities"]').each(function () {
-            $(this).prop('checked', filters.amenities.includes($(this).val()));
-        });
     }
 }
 
 function DisplayWorkspaces(workspaceList){
     $("#workspaces-container").empty();
+    
     workspaceList.forEach(workspace => {
+        const defaultPic = setDefaultPic(workspace.workspaceType);
         const section = `
             <section class="workspace-item" >
                 <div class="workspace-picture">
-                    <img src="${workspace.imgFileName}" alt="${workspace.workspaceName}" onerror="this.src='resources/images/pexels-fotios-photos-1957478.jpg';">
+                    <img src="${workspace.imgFileName}" alt="${workspace.workspaceName}" onerror="this.src='resources/images/${defaultPic}';">
                 </div>
                 <div class="workspace-details">
                     <h2 style="margin-top: 0;">${workspace.workspaceName}</h2>
@@ -128,13 +122,31 @@ function DisplayWorkspaces(workspaceList){
     $("#display-count").text(`${workspaceList.length} records found.`);
 }
 
+function setDefaultPic(type){
+    let defaultPic;
+    switch (type) {
+        case "Conference Room":
+            defaultPic = "default conference room.png";
+            break;
+        case "Private Office":
+            defaultPic = "default private office.png";
+            break;
+        case "Desk":
+            defaultPic = "default desk.png";
+            break;
+        default:
+            defaultPic = "desk.png";
+    }
+    return defaultPic;
+}
+
 function ApplyFilters(workspaceList){
     let returnList = workspaceList; //AL - create a shallow copy, all filters shall be applied to this
 
     //FILTER BY WORKSPACE TYPE
     const pickedTypes = $('input[name="optWStypes"]:checked').map( function(){
-        return $(this).val(); //AL -  get all inputs with name optWStypes using jQ, go through them one by one
-    }).get();           //!discovery! jQ object not automatically an array, must use get() to convert
+        return $(this).val();   //AL -  get all inputs with name optWStypes using jQ, go through them one by one
+    }).get();                   //!discovery! jQ object not automatically an array, must use get() to convert
     
     if (pickedTypes.length>0) //AL - only apply filter if one or more was picked
         returnList = workspaceList.filter(workspace => pickedTypes.includes(workspace.workspaceType));
@@ -226,10 +238,10 @@ function ClickApplyBtn() {
 }
 
 function ClickResetBtn() {
-    $('input[type="checkbox"]').prop('checked', false); // Reset checkboxes
-    $('input[type="radio"]').prop('checked', false); 
-    $('input[type="number"]').val(''); // reset price range and seat capacity
-    $("#searchtext").val(''); //reset even the search box
-    sessionStorage.removeItem('filters'); //clear session
+    $('input[type="checkbox"]').prop('checked', false); //type, amenities
+    $('input[type="radio"]').prop('checked', false);//least tearm
+    $('input[type="number"]').val('');              //price range, seat capacity
+    $("#searchtext").val('');                       //search box
+    sessionStorage.removeItem('filters');           //clear session
     DisplayWorkspaces(allWorkspaces);
 }
