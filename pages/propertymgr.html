@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Manager</title>
+
+    <base href="/WorkspaceApp/">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script src="scripts/main.js" defer></script>
+    <script type="module" src="scripts/propertymgr.js"></script> <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/propertymgr.css">
+    <link rel="stylesheet" href="styles/editpop.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
+</head>
+<body>
+    <header id="header-mainjs"></header>
+    
+    <aside>
+        <h3>
+            Filters
+        </h3>
+
+        <div class="btn-container">
+            <button id="btnReset">Reset</button>
+            <button id="btnApply">Apply</button>
+        </div>
+
+        <div class="sort-container">
+            <label for="selSort">Sort By:</label>
+            <select id="selSort" name="selSort" title="Please select criteria to sort">
+                <option value="workspaceName" selected>Name</option>
+                <option value="workspaceType">Type</option>
+                <option value="price">Price</option>
+                <option value="leaseTerm">Lease Term</option>
+            </select>
+        </div>
+
+        <section class="types">
+            <details open>
+                <summary>Workspace Type</summary>
+            </details>
+        </section>
+
+        <section class="price">
+            <details open>
+                <summary>Price Range</summary> <!--remembered this tip while scrolling instagram lol-->
+                <label>
+                    Min
+                    <input type="number" id="minPrice" name="minPrix" min="0" max="10000" step="0.01">
+                </label>
+                <label>
+                    Max
+                    <input type="number" id="maxPrice" name="maxPrice" min="0" max="10000" step="0.01">
+                </label>
+            </details>
+        </section>
+
+        <section class="term">
+            <details open>
+                <summary>Lease Term</summary>
+            </details>
+        </section>
+
+        <section class="capacity">
+            <details>
+            <summary>Seat Capacity</summary>
+            <label>
+                Min
+                <input type="number" id="minCapacity" name="minCapacity" min="1" max="10000">
+            </label>
+            <label>
+                Max
+                <input type="number" id="maxCapacity" name="maxCapacity" min="1" max="10000">
+            </label>
+            </details>
+        </section>
+
+        <section class="amenities">
+            <details>
+                <summary>Amenities</summary>
+            </details>
+        </section>
+
+
+    </aside>
+    
+    <main>
+    
+        <h1>My Properties</h1>
+        <article class="results-title">
+            <p id="display-count"></p>
+            
+        </article>
+        
+    
+        <article id="properties-container">
+    
+        </article>
+
+
+        <div id="workspacePopup" class="popup-container">
+            <div class="popup-content">
+                <h2>Edit Workspace</h2>
+                <form id="workspaceForm">
+                    <p>
+                        <label for="workspaceName">Workspace Name:</label>
+                        <input type="text" id="workspaceName" name="workspaceName">
+                    </p>
+                    <p>
+                        <label for="workspaceType">Workspace Type:</label>
+                        <select id="workspaceType" name="workspaceType" class="editWS-types"></select>
+                    </p>
+                    <p>
+                        <label for="leaseTerm">Lease Term:</label>
+                        <select id="leaseTerm" name="leaseTerm" class="editWS-term"></select>
+                    </p>
+                    <p>
+                        <label for="seatCapacity">Seat Capacity:</label>
+                        <input type="number" id="seatCapacity" name="seatCapacity">
+                    </p>
+                    <p>
+                        <label for="seatCapacity">Floor Area (Sq Ft):</label>
+                        <input type="number" id="sqFt" name="sqFt">
+                    </p>
+                    <p>
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price">
+                    </p>
+                    <p>
+                        <details>
+                            <summary>Amenities:</summary>
+                            <div id="amenities-container"></div>
+                        </details>
+                    </p>
+                    <div class="popup-buttons">
+                        <button type="button" id="saveWorkspace">Save</button>
+                        <button type="button" id="deleteWorkspace">Delete</button>
+                        <button type="button" id="closePopup">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+    </main>
+
+    <footer id="footer-mainjs"></footer>
+</body>
+
+</html>
