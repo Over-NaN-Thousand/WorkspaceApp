@@ -22,5 +22,5 @@ function handleLogin(event) {
 
     alert('Login successful!');
     // Redirect user to account page
-    window.location.href = '/pages/accountpage.html';
+    window.location.href = '/WorkspaceApp/pages/accountpage.html';
 }
