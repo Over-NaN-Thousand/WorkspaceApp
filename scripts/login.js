@@ -3,7 +3,7 @@ document.querySelector('.informationForm form').addEventListener('submit', handl
 function handleLogin(event) {
     event.preventDefault();
 
-    const email = document.querySelector('input[placeholder="Email or Phone"]').value;
+    const email = document.querySelector('input[placeholder="Email"]').value;
     const password = document.querySelector('input[type="password"]').value;
 
     // Get users from localStorage
