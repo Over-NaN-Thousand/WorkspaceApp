@@ -31,12 +31,12 @@
                 <!-- workspaceDetails populate here from .js-->
                 </div>
 
-                <!--buttons-->
+                <!--button for Owner contact-->
                 <div class="button-container">
                     <button class="ownerBtn">
                         Owner Info
                     </button>
-
+                <!--button for booking-->
                     <button class="bookingButton">
                         Book
                     </button>
@@ -86,30 +86,23 @@
             <!--Pop-up window owner details-->
             <div id="overlay" class="Overlay">
                 <div class="popup" id="popup">
-                    <span class="close">&times;</span>
+                    <span class="close">&times;</span><!--close with X in corner-->
                     <div class="content">
                         <h1 class="title">Owner Information</h1>
-                        <h2 class="OwnerName"></h2>
-                        <ul class="WorkspacesList"></ul>
-                        <div class="ContactInfo"></div>
-                        <input type="text" placeholder="Message..." id="messageInput">
+                        <h2 class="OwnerName">Owner Name</h2>
+                        
+                        <ul class="WorkspacesList">Workspaces</ul>
+
+                        <div class="ContactInfo">Contact Info</div>
+
                         <button class="closeBtn">Close</button>
                     </div>
                 </div>
             </div>
-            <!--Pop-up window booking
-            <div id="overlay" class="Overlay">
-                <div class="popup" id="BookingPopup">
-                    <span class="close">&times;</span>
-                    <div class="content">
-                        <h1 class="title">Booking</h1>
-                        <h2 class="BookingTitle"></h2>
-                        <div class="BookingInfo"></div>
-                        <input type="text" placeholder="Message..." id="messageInput">
-                        <button class="closeBtn">Close</button>
-                    </div>
-                </div>
-            </div>-->
+            
+
+
+
 
         </div>
     <footer id="footer-mainjs"></footer>
