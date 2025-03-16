@@ -1,0 +1,79 @@
+
+.popup-container {
+    /*covers whole screen*/
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    /*actual pop-up window*/
+    background-color: #f1ede8;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 50vw;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+
+.popup-content h2{
+    margin: .5rem auto 1rem;
+    font-size: clamp(14px, 2.8vw, 20px);
+    text-align: center;
+}
+
+.popup-content label{
+    font-size: clamp(9px, 2vw, 14px);
+}
+
+.popup-content summary{
+    font-size: clamp(8px, 1.7vw, 12px);
+}
+
+#amenities-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .1rem;
+}
+
+#amenities-container label{
+    font-size: clamp(8px, 10px, 12px);
+}
+
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1.5rem;
+}
+
+.popup-buttons button {
+    padding: .5rem 1rem;
+    border: none;
+    background-color: #275158;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.popup-buttons button#deleteWorkspace {
+    background-color: #7c1717;
+}
+
+.popup-buttons button#closePopup {
+    background-color: #5e6a6c;
+}
+
+@media screen and (max-width: 768px) {
+    .popup-content {
+        width: 90vw;
+    }
+}
