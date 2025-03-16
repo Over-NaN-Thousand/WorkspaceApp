@@ -36,6 +36,17 @@ $(document).ready(function () {
                 window.location.href = '/pages/login.html';
                 return; 
             }
+
+            if (sectionId === 'my-properties') {
+                window.location.href = '/pages/propertymgr.html';
+                return; 
+            }
+
+            
+            if (sectionId === 'workspaces') {
+                window.location.href = '/pages/search.html';
+                return; 
+            }
             $(`#${sectionId}`).show();
         });
 
