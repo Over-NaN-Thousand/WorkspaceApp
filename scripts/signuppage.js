@@ -41,7 +41,7 @@ function handleSignup(event) {
     alert('Registration successful! You can now log in.');
 
     // Redirect to login page
-    window.location.href = '/pages/login.html';
+    window.location.href = '/WorkspaceApp/pages/login.html';
     
     //For testing
     console.log(newUser);
