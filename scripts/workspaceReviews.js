@@ -64,3 +64,5 @@ const reviews = [
     // No reviews for workspaceID: 20
   ];
   
+  
+  export default reviews;

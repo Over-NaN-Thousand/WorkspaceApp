@@ -26,57 +26,91 @@
                 
             <div class="detailsBoxL">
                 <div class="title" id="workspaceTitle"></div>
-                    <!--Left box-->
+                <!--Left box-->
                 <div id="workspace-display-left">
                 <!-- workspaceDetails populate here from .js-->
                 </div>
-                    <!--Pop-up window owner details-->
-                    <div id="popupOverlay" class="overlayContainer">
 
-                        <!--buttons at bottom-->
-                        <div class="button-container">
-                            <button class="ownerDetailsButton">
-                                Owner Details
-                            </button>
+                <!--buttons-->
+                <div class="button-container">
+                    <button class="ownerBtn">
+                        Owner Info
+                    </button>
 
-                            <button class="bookingButton">
-                                Book
-                            </button>
-                        </div>
-                    </div>
+                    <button class="bookingButton">
+                        Book
+                    </button>
+
+
+            
+                </div>
             </div>
+            
             
                 
             <div class="detailsBoxR">
                 <div class="title" id="workspaceTitle2"></div>
-                <!--Right box-->
+                    <!--Right box-->
                     <div id="workspace-display-right">
                         <div class="imageContainer">
-                        <img class="workspaceImg" src="/resources//images/desk.png"/>
+                        <img class="workspaceImg" src="/resources/images/pexels-kindelmedia-7651627.jpg"/>
                         </div>
                     
-                        <div class="reviewContainer">
+                        <div class="detailBoxHeading">Average Rating</div>
+                        <div class="starRating"></div>
 
-                            <div class="starRating"></div>
+                        <div class="reviewContainer">
                             <div class="subHeading"><span>Reviews</span></div>
-                            <!--reviews--elements should be sidebyside-->
+            
                             <form>
                                 <div class="reviewRow">
-                                        <div class="leftButton">
-                                        <input type="button" value="&#10096"/>
-                                        </div>
-                                            <div class="reviewBody">review goes here</div>
-                                        <div class="rightButton">
-                                        <input type="button" value="&#10097"/>
-                                        </div>
+
+                                <button class="leftButton">
+                                    Previous
+                                </button>
+
+                                <div class="reviewBody">review goes here</div>
+                                    
+                                <button class="rightButton">
+                                    Next
+                                </button>
+                                    
                                 </div>
-                                
                             </form>
 
                     </div>
                 </div> 
             </div>
             
+
+            <!--Pop-up window owner details-->
+            <div id="overlay" class="Overlay">
+                <div class="popup" id="popup">
+                    <span class="close">&times;</span>
+                    <div class="content">
+                        <h1 class="title">Owner Information</h1>
+                        <h2 class="OwnerName"></h2>
+                        <ul class="WorkspacesList"></ul>
+                        <div class="ContactInfo"></div>
+                        <input type="text" placeholder="Message..." id="messageInput">
+                        <button class="closeBtn">Close</button>
+                    </div>
+                </div>
+            </div>
+            <!--Pop-up window booking
+            <div id="overlay" class="Overlay">
+                <div class="popup" id="BookingPopup">
+                    <span class="close">&times;</span>
+                    <div class="content">
+                        <h1 class="title">Booking</h1>
+                        <h2 class="BookingTitle"></h2>
+                        <div class="BookingInfo"></div>
+                        <input type="text" placeholder="Message..." id="messageInput">
+                        <button class="closeBtn">Close</button>
+                    </div>
+                </div>
+            </div>-->
+
         </div>
     <footer id="footer-mainjs"></footer>
 </body>
