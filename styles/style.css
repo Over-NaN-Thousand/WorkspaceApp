@@ -26,6 +26,9 @@
         background-color: var(--body-bg);
         color: #030303;
         font-size: clamp(12px, 3vw, 24px);
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     li{
