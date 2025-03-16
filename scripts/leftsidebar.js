@@ -11,6 +11,8 @@ $(document).ready(function () {
         sidebarButtons.on('click', function (e) {
             e.preventDefault(); 
 
+            
+
             //Remove default active class from all button
             sidebarButtons.removeClass('active');
             //Add active class to the button that user clicked
@@ -19,25 +21,18 @@ $(document).ready(function () {
             contentSections.hide();//Hide all contect section
 
             const sectionId = $(this).data('section');//display the section which the user clicked
+
+            // If clicked logout
+            if (sectionId === 'logout') {
+                // Clear currentUser in localStorage
+                localStorage.removeItem('currentUser');
+                alert('You have been successfully logged out.');
+                window.location.href = '/pages/login.html';
+                return; 
+            }
             $(`#${sectionId}`).show();
         });
 
    $('input[data-section="edit-profile"]').addClass('active');//Active "edit-profile".
-    });
-});
-
-// Logout button
-document.addEventListener('DOMContentLoaded', () => {
-    const logoutBtn = document.querySelector('input[data-section="logout"]');
-
-    logoutBtn.addEventListener('click', () => {
-        // Remove the current user from localStorage but keep user which means the user can re-login again.
-        localStorage.removeItem('currentUser');
-
-        // Confirm logout
-        alert('You have been successfully logged out.');
-
-        // Redirect to login page
-        window.location.href = '/pages/login.html';
     });
 });
