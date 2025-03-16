@@ -14,6 +14,8 @@ password
 Owner-- yes/no -- connects to Owner
 Coworker -- yes/no -- connects to Coworker
 
+------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 ---------------------------------------users ARRAY OF OBJECTS --------------------------------------------------------
 
 const userData = [
@@ -24,7 +26,8 @@ const userData = [
     email: "Alice@coolemail.com",
     password: "lol123",
     Owner: "Yes",
-    Coworker: "No"
+    Coworker: "No",
+    properties: [1, 2]  
   },
   {
     id: 20967,
@@ -33,17 +36,19 @@ const userData = [
     email: "Bob@workmail.com",
     password: "im303",
     Owner: "No",
-    Coworker: "Yes"
+    Coworker: "Yes",
+    properties: []  
   },
   {  
     id: 3,
     firstName: "Charlie",
     lastName: "Smith",
     email: "Charlie@company.com",
-    password: "foxxtrotunicornkilo"
+    password: "foxxtrotunicornkilo",
     Owner: "No",
-    Coworker: "Yes"
-  },
+    Coworker: "Yes",
+    properties: []    
+},
   {
     id: 4,
     firstName: "Diana",
@@ -51,8 +56,9 @@ const userData = [
     email: "Diana@bestmail.com",
     password: "diannaBananananna",
     Owner: "Yes",
-    Coworker: "No"
-  },
+    Coworker: "No",
+    properties: [3, 4]    
+},
   {
     id: 72345,
     firstName: "Evelyn",
@@ -60,7 +66,8 @@ const userData = [
     email: "Evelyn@business.com",
     password: "Ev3lynRocks!",
     Owner: "Yes",
-    Coworker: "No"
+    Coworker: "No",
+    properties: [5, 6]  
   },
   {
     id: 89012,
@@ -69,7 +76,8 @@ const userData = [
     email: "Frank@jobmail.com",
     password: "Frankie!2025",
     Owner: "No",
-    Coworker: "Yes"
+    Coworker: "Yes",
+    properties: []  
   },
   {
     id: 67890,
@@ -78,7 +86,8 @@ const userData = [
     email: "George@workmail.com",
     password: "GeorgeyBoy2024",
     Owner: "Yes",
-    Coworker: "No"
+    Coworker: "No",
+    properties: [7, 8]  
   },
   {
     id: 45678,
@@ -87,8 +96,8 @@ const userData = [
     email: "Hannah@company.com",
     password: "HannahBear123",
     Owner: "No",
-    Coworker: "Yes"
-  },
+    Coworker: "Yes",
+    properties: []    },
   {
     id: 34567,
     firstName: "Ian",
@@ -96,33 +105,19 @@ const userData = [
     email: "Ian@jobmail.com",
     password: "Ian4TheWin!",
     Owner: "Yes",
-    Coworker: "No"
-  },
-  {
+    Coworker: "No",
+    properties: [9, 10]   
+ {
     id: 12345,
     firstName: "Julia",
     lastName: "Thompson",
     email: "Julia@company.com",
-    password: "Jules123!",
+    password: "Jules123!",  
     Owner: "No",
     Coworker: "Yes"
-  };
+  }
 ];
 
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_Coworker_
-
-connects to Workspaces
-
-------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------
-
-_Owner_
-
-connects to Properties
-connects to Workspaces
 
 ------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------Properties----------------------------------------------------------------
@@ -141,143 +136,156 @@ imgFileName
 ownerId
 
 connects to Workspace
+---------------------------------------------properties and workspaces data combined------------------------------------------------------------------------------------
+const ownersSpaces = [
+  { propertyId: 1, ownerId: 59715, workspaceIds: [1, 2, 11] },
+  { propertyId: 2, ownerId: 59715, workspaceIds: [3, 4, 12] },
+  { propertyId: 3, ownerId: 4, workspaceIds: [5, 6] },   
+  { propertyId: 4, ownerId: 4, workspaceIds: [7, 8] },    
+  { propertyId: 5, ownerId: 72345, workspaceIds: [9, 10] },
+  { propertyId: 6, ownerId: 72345, workspaceIds: [15, 16] }, 
+  { propertyId: 7, ownerId: 67890, workspaceIds: [13, 14] }, 
+  { propertyId: 8, ownerId: 67890, workspaceIds: [17, 18] }, 
+  { propertyId: 9, ownerId: 34567, workspaceIds: [19] },  
+  { propertyId: 10, ownerId: 34567, workspaceIds: [20] }  
+];
+
 
 -----------------------------------------------------------Properties array of objects--------------------------------------------------
 
 const properties = [
-    {
-      propertyId: 1,
-      name: "Acme Corp",
-      address1: "123 Main St",
-      address2: "Suite 400",
-      postalcode: "T3G 1A1",
-      city: "Calgary",
-      province: "AB",
-      country: "Canada",
-      neighbourhood: "Downtown",
-      imgFileName: "Acmeimg.jpg",
-      ownerId: 59715 // Alice
-    },
-    {
-      propertyId: 2,
-      name: "Bayview Properties",
-      address1: "555 Bay St",
-      address2: "Floor 8",
-      postalcode: "M5J 2L3",
-      city: "Toronto",
-      province: "ON",
-      country: "Canada",
-      neighbourhood: "Financial District",
-      imgFileName: "BayviewProperties.jpg",
-      ownerId: 59715 // Alice
-    },
-    {
-      propertyId: 3,
-      name: "Rocky Mountain Ventures",
-      address1: "321 Summit Way",
-      address2: "Suite 450",
-      postalcode: "T1W 1P5",
-      city: "Banff",
-      province: "AB",
-      country: "Canada",
-      neighbourhood: "Tunnel Mountain",
-      imgFileName: "RockyMountainVentures.jpg",
-      ownerId: 4 // Diana
-    },
-    {
-      propertyId: 4,
-      name: "Atlantic Enterprises",
-      address1: "876 Ocean Rd",
-      address2: "Unit 101",
-      postalcode: "B3K 5T7",
-      city: "Halifax",
-      province: "NS",
-      country: "Canada",
-      neighbourhood: "North End",
-      imgFileName: "AtlanticEnterprises.jpg",
-      ownerId: 4 // Diana
-    },
-    {
-      propertyId: 5,
-      name: "Sunrise Developments",
-      address1: "222 Sunrise Ave",
-      address2: "Penthouse",
-      postalcode: "H3Z 2Y7",
-      city: "Montreal",
-      province: "QC",
-      country: "Canada",
-      neighbourhood: "Westmount",
-      imgFileName: "SunriseDevelopments.jpg",
-      ownerId: 72345 // Evelyn
-    },
-    {
-      propertyId: 6,
-      name: "Maple Holdings",
-      address1: "456 Oak Ave",
-      address2: "Unit 12",
-      postalcode: "V5K 0A1",
-      city: "Vancouver",
-      province: "BC",
-      country: "Canada",
-      neighbourhood: "Hastings-Sunrise",
-      imgFileName: "MapleHoldings.jpg",
-      ownerId: 72345 // Evelyn
-    },
-    {
-      propertyId: 7,
-      name: "Prairie Investments",
-      address1: "789 Prairie Dr",
-      address2: "Building 3",
-      postalcode: "S7K 3J6",
-      city: "Saskatoon",
-      province: "SK",
-      country: "Canada",
-      neighbourhood: "River Heights",
-      imgFileName: "PrairieInvestments.jpg",
-      ownerId: 67890 // George
-    },
-    {
-      propertyId: 8,
-      name: "Northern Lights Realty",
-      address1: "101 Polar Bear Ln",
-      address2: "Suite 200",
-      postalcode: "X0A 0H0",
-      city: "Iqaluit",
-      province: "NU",
-      country: "Canada",
-      neighbourhood: "Apex",
-      imgFileName: "NorthernLightsRealty.jpg",
-      ownerId: 67890 // George
-    },
-    {
-      propertyId: 9,
-      name: "Capital Hill Properties",
-      address1: "111 Parliament St",
-      address2: "Office 30",
-      postalcode: "K1A 0A9",
-      city: "Ottawa",
-      province: "ON",
-      country: "Canada",
-      neighbourhood: "Centretown",
-      imgFileName: "CapitalHillProperties.jpg",
-      ownerId: 34567 // Ian
-    },
-    {
-      propertyId: 10,
-      name: "Forest View Holdings",
-      address1: "890 Cedar Dr",
-      address2: "Cabin 2",
-      postalcode: "E2K 4J8",
-      city: "Saint John",
-      province: "NB",
-      country: "Canada",
-      neighbourhood: "Millidgeville",
-      imgFileName: "ForestViewHoldings.jpg",
-      ownerId: 34567 // Ian
-    }
-  ];
-  
-  export default properties;
+  {
+    propertyId: 1,
+    name: "Acme Corp",
+    address1: "123 Main St",
+    address2: "Suite 400",
+    postalcode: "T3G 1A1",
+    city: "Calgary",
+    province: "AB",
+    country: "Canada",
+    neighbourhood: "Downtown",
+    imgFileName: "Acmeimg.jpg",
+    ownerId: 59715 // Alice
+  },
+  {
+    propertyId: 2,
+    name: "Bayview Properties",
+    address1: "555 Bay St",
+    address2: "Floor 8",
+    postalcode: "M5J 2L3",
+    city: "Toronto",
+    province: "ON",
+    country: "Canada",
+    neighbourhood: "Financial District",
+    imgFileName: "BayviewProperties.jpg",
+    ownerId: 59715 // Alice
+  },
+  {
+    propertyId: 3,
+    name: "Rocky Mountain Ventures",
+    address1: "321 Summit Way",
+    address2: "Suite 450",
+    postalcode: "T1W 1P5",
+    city: "Banff",
+    province: "AB",
+    country: "Canada",
+    neighbourhood: "Tunnel Mountain",
+    imgFileName: "RockyMountainVentures.jpg",
+    ownerId: 4 // Diana
+  },
+  {
+    propertyId: 4,
+    name: "Atlantic Enterprises",
+    address1: "876 Ocean Rd",
+    address2: "Unit 101",
+    postalcode: "B3K 5T7",
+    city: "Halifax",
+    province: "NS",
+    country: "Canada",
+    neighbourhood: "North End",
+    imgFileName: "AtlanticEnterprises.jpg",
+    ownerId: 4 // Diana
+  },
+  {
+    propertyId: 5,
+    name: "Sunrise Developments",
+    address1: "222 Sunrise Ave",
+    address2: "Penthouse",
+    postalcode: "H3Z 2Y7",
+    city: "Montreal",
+    province: "QC",
+    country: "Canada",
+    neighbourhood: "Westmount",
+    imgFileName: "SunriseDevelopments.jpg",
+    ownerId: 72345 // Evelyn
+  },
+  {
+    propertyId: 6,
+    name: "Maple Holdings",
+    address1: "456 Oak Ave",
+    address2: "Unit 12",
+    postalcode: "V5K 0A1",
+    city: "Vancouver",
+    province: "BC",
+    country: "Canada",
+    neighbourhood: "Hastings-Sunrise",
+    imgFileName: "MapleHoldings.jpg",
+    ownerId: 72345 // Evelyn
+  },
+  {
+    propertyId: 7,
+    name: "Prairie Investments",
+    address1: "789 Prairie Dr",
+    address2: "Building 3",
+    postalcode: "S7K 3J6",
+    city: "Saskatoon",
+    province: "SK",
+    country: "Canada",
+    neighbourhood: "River Heights",
+    imgFileName: "PrairieInvestments.jpg",
+    ownerId: 67890 // George
+  },
+  {
+    propertyId: 8,
+    name: "Northern Lights Realty",
+    address1: "101 Polar Bear Ln",
+    address2: "Suite 200",
+    postalcode: "X0A 0H0",
+    city: "Iqaluit",
+    province: "NU",
+    country: "Canada",
+    neighbourhood: "Apex",
+    imgFileName: "NorthernLightsRealty.jpg",
+    ownerId: 67890 // George
+  },
+  {
+    propertyId: 9,
+    name: "Capital Hill Properties",
+    address1: "111 Parliament St",
+    address2: "Office 30",
+    postalcode: "K1A 0A9",
+    city: "Ottawa",
+    province: "ON",
+    country: "Canada",
+    neighbourhood: "Centretown",
+    imgFileName: "CapitalHillProperties.jpg",
+    ownerId: 34567 // Ian
+  },
+  {
+    propertyId: 10,
+    name: "Forest View Holdings",
+    address1: "890 Cedar Dr",
+    address2: "Cabin 2",
+    postalcode: "E2K 4J8",
+    city: "Saint John",
+    province: "NB",
+    country: "Canada",
+    neighbourhood: "Millidgeville",
+    imgFileName: "ForestViewHoldings.jpg",
+    ownerId: 34567 // Ian
+  }
+];
+
 
 
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -294,8 +302,6 @@ workspaceType
 workspace leaseTerms 
 	hourly
 	daily
-  dateRange ---------can this just be daily multiplied by price or do we need a distinct multi day only option?
-
 seatCapacity
 price
 imgFileName
@@ -306,11 +312,41 @@ rating
 Connects to Property
 connects to Owner
 connects to RateAndReview
-                             
+
+
+---------------------------------------------------------------------------------
+const workspaceTypes = [
+  "Private Office", "Meeting Room", "Desk"
+];
+
+------------ratings-----
+const ratings = [
+  { workspaceID: 1, ratings: [4, 5, 3, 4, 4, 5, 4, 3, 4] },
+  { workspaceID: 2, ratings: [3, 4, 2, 3, 3] },
+  { workspaceID: 3, ratings: [5, 4, 5, 4, 5, 5, 4] },
+  { workspaceID: 4, ratings: [4, 3, 4, 5, 4, 4] },
+  { workspaceID: 5, ratings: [3, 2, 3, 3, 3] },
+  { workspaceID: 6, ratings: [4, 3, 4, 4] },
+  { workspaceID: 7, ratings: [5, 5, 5, 4, 5] },
+  { workspaceID: 8, ratings: [4, 4, 3, 4] },
+  { workspaceID: 9, ratings: [3, 3, 3, 2, 3] },
+  { workspaceID: 10, ratings: [4, 5, 4, 3, 4] },
+  { workspaceID: 11, ratings: [4, 3, 4, 4, 3] },
+  { workspaceID: 12, ratings: [5, 4, 5, 4, 4] },
+  { workspaceID: 13, ratings: [3, 4, 3, 4, 4, 3] },
+  { workspaceID: 14, ratings: [4, 4, 5, 4, 4, 4] },
+  { workspaceID: 15, ratings: [3, 3, 3, 2, 4] },
+  { workspaceID: 16, ratings: [5, 5, 4, 5, 4, 5, 5, 4] },
+  { workspaceID: 17, ratings: [4, 3, 4, 4, 4, 4] },
+  { workspaceID: 18, ratings: [3, 2, 3, 3] },
+  { workspaceID: 19, ratings: [5, 5, 5, 4, 5, 5, 4] },
+  { workspaceID: 20, ratings: [4, 4, 4, 4, 3, 4] }
+];
+                        
 ----------------------------------------------------------Workspace Array of Objects------------------------------------------------
 
 const workspaces = [
-  {
+{
     workspaceID: 1,
     workspaceName: "Large Office #40",
     imgFileName: "LargeOffice40.jpg",
@@ -320,16 +356,16 @@ const workspaces = [
     seatCapacity: 4,
     price: 150,
     amenities: [
-      { "Full Kitchen": true },
-      { "High-Speed Wi-Fi": true },
-      { "Coffee Maker": true },
-      { "Ergonomic Chairs": true }
+        { "Full Kitchen": true },
+        { "High-Speed Wi-Fi": true },
+        { "Coffee Maker": true },
+        { "Ergonomic Chairs": true }
     ],
     propertyId: 1,
-    ownerId: 59715, // Alice
-    rating: 4
-  },
-  {
+    ownerId: 59715, 
+    rating: [4, 5, 3, 4, 4, 5, 4, 3, 4]
+},
+{
     workspaceID: 2,
     workspaceName: "Sunny Main Floor, Office #12",
     imgFileName: "SunnyOffice12.jpg",
@@ -339,15 +375,15 @@ const workspaces = [
     seatCapacity: 2,
     price: 120,
     amenities: [
-      { "Whiteboards": true },
-      { "Coffee Maker": true },
-      { "Ergonomic Chairs": true }
+        { "Whiteboards": true },
+        { "Coffee Maker": true },
+        { "Ergonomic Chairs": true }
     ],
     propertyId: 1,
-    ownerId: 59715, // Alice
-    rating: 3
-  },
-  {
+    ownerId: 59715, 
+    rating: [3, 4, 2, 3, 3]
+},
+{
     workspaceID: 3,
     workspaceName: "East Conservatory, Second floor",
     imgFileName: "EastConservatory.jpg",
@@ -357,16 +393,16 @@ const workspaces = [
     seatCapacity: 10,
     price: 200,
     amenities: [
-      { "Projector": true },
-      { "High-Speed Wi-Fi": true },
-      { "Whiteboards": true },
-      { "Conference Phones": true }
+        { "Projector": true },
+        { "High-Speed Wi-Fi": true },
+        { "Whiteboards": true },
+        { "Conference Phones": true }
     ],
     propertyId: 2,
-    ownerId: 59715, // Alice
-    rating: 5
-  },
-  {
+    ownerId: 59715, 
+    rating: [5, 4, 5, 4, 5, 5, 4]
+},
+{
     workspaceID: 4,
     workspaceName: "Penthouse Lounge",
     imgFileName: "PenthouseLounge.jpg",
@@ -376,16 +412,16 @@ const workspaces = [
     seatCapacity: 25,
     price: 300,
     amenities: [
-      { "Projector": true },
-      { "Conference Phones": true },
-      { "High-Speed Wi-Fi": true },
-      { "Lounge Areas": true }
+        { "Projector": true },
+        { "Conference Phones": true },
+        { "High-Speed Wi-Fi": true },
+        { "Lounge Areas": true }
     ],
     propertyId: 2,
-    ownerId: 59715, // Alice
-    rating: 4
-  },
-  {
+    ownerId: 59715, 
+    rating: [4, 3, 4, 5, 4, 4]
+},
+{
     workspaceID: 5,
     workspaceName: "Cubicle #145",
     imgFileName: "Cubicle145.jpg",
@@ -395,14 +431,14 @@ const workspaces = [
     seatCapacity: 1,
     price: 15,
     amenities: [
-      { "High-Speed Wi-Fi": true },
-      { "Ergonomic Chairs": true }
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true }
     ],
     propertyId: 3,
-    ownerId: 4, // Diana
-    rating: 3
-  },
-  {
+    ownerId: 4,
+    rating: [3, 2, 3, 3, 3]
+},
+{
     workspaceID: 6,
     workspaceName: "North Window Desk, #6",
     imgFileName: "NorthWindowDesk.jpg",
@@ -412,14 +448,14 @@ const workspaces = [
     seatCapacity: 1,
     price: 10,
     amenities: [
-      { "High-Speed Wi-Fi": true },
-      { "Coffee Maker": true }
+        { "High-Speed Wi-Fi": true },
+        { "Coffee Maker": true }
     ],
     propertyId: 3,
-    ownerId: 4, // Diana
-    rating: 4
-  },
-  {
+    ownerId: 4, 
+    rating: [4, 3, 4, 4]
+},
+{
     workspaceID: 7,
     workspaceName: "Sunny Office #3",
     imgFileName: "SunnyOffice3.jpg",
@@ -429,14 +465,14 @@ const workspaces = [
     seatCapacity: 2,
     price: 130,
     amenities: [
-      { "Copy/Print Equipment": true },
-      { "Ergonomic Chairs": true }
+        { "Copy/Print Equipment": true },
+        { "Ergonomic Chairs": true }
     ],
     propertyId: 4,
-    ownerId: 4, // Diana
-    rating: 5
-  },
-  {
+    ownerId: 4, 
+    rating: [5, 5, 5, 4, 5]
+},
+{
     workspaceID: 8,
     workspaceName: "Private Office #15",
     imgFileName: "PrivateOffice15.jpg",
@@ -446,15 +482,15 @@ const workspaces = [
     seatCapacity: 1,
     price: 100,
     amenities: [
-      { "High-Speed Wi-Fi": true },
-      { "Ergonomic Chairs": true },
-      { "Secure Storage/Lockers": true }
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true },
+        { "Secure Storage/Lockers": true }
     ],
     propertyId: 4,
-    ownerId: 4, // Diana
-    rating: 4
-  },
-  {
+    ownerId: 4, 
+    rating: [4, 4, 3, 4]
+},
+{
     workspaceID: 9,
     workspaceName: "Open-concept Desk #10",
     imgFileName: "OpenConceptDesk10.jpg",
@@ -464,13 +500,13 @@ const workspaces = [
     seatCapacity: 1,
     price: 12,
     amenities: [
-      { "High-Speed Wi-Fi": true }
+        { "High-Speed Wi-Fi": true }
     ],
     propertyId: 5,
-    ownerId: 72345, // Evelyn
-    rating: 3
-  },
-  {
+    ownerId: 72345, 
+    rating: [3, 3, 3, 2, 3]
+},
+{
     workspaceID: 10,
     workspaceName: "Conference Room #5",
     imgFileName: "ConferenceRoom5.jpg",
@@ -480,187 +516,439 @@ const workspaces = [
     seatCapacity: 10,
     price: 250,
     amenities: [
-      { "Projector": true },
-      { "Conference Phones": true },
-      { "Whiteboards": true }
+        { "Projector": true },
+        { "Conference Phones": true },
+        { "Whiteboards": true }
     ],
     propertyId: 5,
-    ownerId: 72345, // Evelyn
-    rating: 4
-  },
-  {
-    workspaceID: 11,
-    workspaceName: "Penthouse View Office #8",
-    imgFileName: "PenthouseViewOffice8.jpg",
-    workspaceType: "Private Office",
-    leaseTerm: "daily",
-    sqFt: 300,
-    seatCapacity: 2,
-    price: 140,
-    amenities: [
+    ownerId: 72345, 
+    rating: [4, 5, 4, 3, 4]
+},
+{
+  workspaceID: 11,
+  workspaceName: "Quiet Corner Desk #18",
+  imgFileName: "QuietCornerDesk18.jpg",
+  workspaceType: "Desk",
+  leaseTerm: "hourly",
+  sqFt: 40,
+  seatCapacity: 1,
+  price: 8,
+  amenities: [
+      { "High-Speed Wi-Fi": true }
+  ],
+  propertyId: 1,
+  ownerId: 59715, 
+  rating: [4, 3, 4, 4, 3]
+},
+{
+  workspaceID: 12,
+  workspaceName: "Creative Pod #22",
+  imgFileName: "CreativePod22.jpg",
+  workspaceType: "Desk",
+  leaseTerm: "hourly",
+  sqFt: 45,
+  seatCapacity: 1,
+  price: 12,
+  amenities: [
       { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true },
       { "Coffee Maker": true }
-    ],
-    propertyId: 6,
-    ownerId: 72345, // Evelyn
-    rating: 4
-  },
-  {
-    workspaceID: 12,
-    workspaceName: "Large Office #2",
-    imgFileName: "LargeOffice2.jpg",
-    workspaceType: "Private Office",
-    leaseTerm: "daily",
-    sqFt: 600,
-    seatCapacity: 4,
-    price: 160,
-    amenities: [
-      { "Full Kitchen": true },
+  ],
+  propertyId: 2,
+  ownerId: 59715, 
+  rating: [5, 4, 5, 4, 4]
+},
+{
+  workspaceID: 13,
+  workspaceName: "West Wing Office #6",
+  imgFileName: "WestWingOffice6.jpg",
+  workspaceType: "Private Office",
+  leaseTerm: "daily",
+  sqFt: 400,
+  seatCapacity: 3,
+  price: 180,
+  amenities: [
+      { "Projector": true },
       { "High-Speed Wi-Fi": true }
-    ],
-    propertyId: 6,
-    ownerId: 72345, // Evelyn
-    rating: 5
-  },
-  {
-    workspaceID: 13,
-    workspaceName: "Shared Desk #7",
-    imgFileName: "SharedDesk7.jpg",
-    workspaceType: "Desk",
-    leaseTerm: "daily",
-    sqFt: 40,
-    seatCapacity: 1,
-    price: 12,
-    amenities: [
-      { "High-Speed Wi-Fi": true }
-    ],
-    propertyId: 7,
-    ownerId: 67890, // George
-    rating: 3
-  },
-  {
-    workspaceID: 14,
-    workspaceName: "Meeting Room #15",
-    imgFileName: "MeetingRoom15.jpg",
-    workspaceType: "Meeting Room",
-    leaseTerm: "daily",
-    sqFt: 400,
-    seatCapacity: 5,
-    price: 175,
-    amenities: [
-      { "Conference Phones": true },
-      { "Whiteboards": true },
-      { "High-Speed Wi-Fi": true }
-    ],
-    propertyId: 7,
-    ownerId: 67890, // George
-    rating: 4
-  },
-  {
-    workspaceID: 15,
-    workspaceName: "Ocean View Office #12",
-    imgFileName: "OceanViewOffice12.jpg",
-    workspaceType: "Private Office",
-    leaseTerm: "daily",
-    sqFt: 350,
-    seatCapacity: 2,
-    price: 180,
-    amenities: [
+  ],
+  propertyId: 7,
+  ownerId: 67890,
+  rating: [3, 4, 3, 4, 4, 3]
+},
+{
+  workspaceID: 14,
+  workspaceName: "Glass View Lounge",
+  imgFileName: "GlassViewLounge.jpg",
+  workspaceType: "Meeting Room",
+  leaseTerm: "daily",
+  sqFt: 600,
+  seatCapacity: 12,
+  price: 220,
+  amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Lounge Areas": true },
+      { "Conference Phones": true }
+  ],
+  propertyId: 7,
+  ownerId: 67890, 
+  rating: [4, 4, 5, 4, 4, 4]
+},
+{
+  workspaceID: 15,
+  workspaceName: "Open Desk Cluster #5",
+  imgFileName: "OpenDeskCluster5.jpg",
+  workspaceType: "Desk",
+  leaseTerm: "hourly",
+  sqFt: 35,
+  seatCapacity: 1,
+  price: 10,
+  amenities: [
       { "High-Speed Wi-Fi": true },
       { "Ergonomic Chairs": true }
-    ],
-    propertyId: 8,
-    ownerId: 67890, // George
-    rating: 5
-  },
-  {
-    workspaceID: 16,
-    workspaceName: "Seaside Meeting Room #10",
-    imgFileName: "SeasideMeetingRoom10.jpg",
-    workspaceType: "Meeting Room",
-    leaseTerm: "daily",
-    sqFt: 800,
-    seatCapacity: 10,
-    price: 230,
-    amenities: [
+  ],
+  propertyId: 6,
+  ownerId: 72345, 
+  rating: [3, 3, 3, 2, 4]
+},
+{
+  workspaceID: 16,
+  workspaceName: "Executive Suite #1",
+  imgFileName: "ExecutiveSuite1.jpg",
+  workspaceType: "Private Office",
+  leaseTerm: "monthly",
+  sqFt: 800,
+  seatCapacity: 6,
+  price: 1200,
+  amenities: [
       { "Projector": true },
-      { "Conference Phones": true }
-    ],
-    propertyId: 8,
-    ownerId: 67890, // George
-    rating: 4
-  },
-  {
-    workspaceID: 17,
-    workspaceName: "Desks #20-22",
-    imgFileName: "Desks2022.jpg",
-    workspaceType: "Desk",
-    leaseTerm: "hourly",
-    sqFt: 50,
-    seatCapacity: 1,
-    price: 14,
-    amenities: [
-      { "High-Speed Wi-Fi": true }
-    ],
-    propertyId: 9,
-    ownerId: 34567, // Ian
-    rating: 3
-  },
-  {
-    workspaceID: 18,
-    workspaceName: "Creative Office #8",
-    imgFileName: "CreativeOffice8.jpg",
-    workspaceType: "Private Office",
-    leaseTerm: "daily",
-    sqFt: 280,
-    seatCapacity: 2,
-    price: 150,
-    amenities: [
-      { "Coffee Maker": true },
-      { "High-Speed Wi-Fi": true }
-    ],
-    propertyId: 9,
-    ownerId: 34567, // Ian
-    rating: 4
-  },
-  {
-    workspaceID: 19,
-    workspaceName: "Team Workstation #6",
-    imgFileName: "TeamWorkstation6.jpg",
-    workspaceType: "Team Desk",
-    leaseTerm: "daily",
-    sqFt: 500,
-    seatCapacity: 4,
-    price: 180,
-    amenities: [
       { "High-Speed Wi-Fi": true },
-      { "Whiteboards": true }
-    ],
-    propertyId: 10,
-    ownerId: 34567, // Ian
-    rating: 5
-  },
-  {
-    workspaceID: 20,
-    workspaceName: "Studio Space #11",
-    imgFileName: "StudioSpace11.jpg",
-    workspaceType: "Creative Studio",
-    leaseTerm: "daily",
-    sqFt: 450,
-    seatCapacity: 3,
-    price: 210,
-    amenities: [
-      { "Projector": true },
+      { "Conference Phones": true },
+      { "Coffee Maker": true }
+  ],
+  propertyId: 6,
+  ownerId: 72345,
+  rating: [5, 5, 4, 5, 4, 5, 5, 4]
+},
+{
+  workspaceID: 17,
+  workspaceName: "Corner Office #10",
+  imgFileName: "CornerOffice10.jpg",
+  workspaceType: "Private Office",
+  leaseTerm: "weekly",
+  sqFt: 450,
+  seatCapacity: 3,
+  price: 600,
+  amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true }
+  ],
+  propertyId: 8,
+  ownerId: 67890, 
+  rating: [4, 3, 4, 4, 4, 4]
+},
+{
+  workspaceID: 18,
+  workspaceName: "Shared Coworking Space #15",
+  imgFileName: "CoworkingSpace15.jpg",
+  workspaceType: "Desk",
+  leaseTerm: "hourly",
+  sqFt: 30,
+  seatCapacity: 1,
+  price: 7,
+  amenities: [
       { "High-Speed Wi-Fi": true },
       { "Coffee Maker": true }
-    ],
-    propertyId: 10,
-    ownerId: 34567, // Ian
-    rating: 4
-  }
+  ],
+  propertyId: 8,
+  ownerId: 67890,
+  rating: [3, 2, 3, 3]
+},
+{
+  workspaceID: 19,
+  workspaceName: "High-Rise Penthouse #5",
+  imgFileName: "HighRisePenthouse5.jpg",
+  workspaceType: "Meeting Room",
+  leaseTerm: "monthly",
+  sqFt: 1000,
+  seatCapacity: 20,
+  price: 2500,
+  amenities: [
+      { "Projector": true },
+      { "Conference Phones": true },
+      { "Lounge Areas": true },
+      { "High-Speed Wi-Fi": true }
+  ],
+  propertyId: 9,
+  ownerId: 34567, 
+  rating: [5, 5, 5, 4, 5, 5, 4]
+},
+{
+  workspaceID: 20,
+  workspaceName: "Urban Loft Office #7",
+  imgFileName: "UrbanLoftOffice7.jpg",
+  workspaceType: "Private Office",
+  leaseTerm: "weekly",
+  sqFt: 350,
+  seatCapacity: 2,
+  price: 500,
+  amenities: [
+      { "High-Speed Wi-Fi": true },
+      { "Ergonomic Chairs": true },
+      { "Coffee Maker": true }
+  ],
+  propertyId: 10,
+  ownerId:  34567, 
+  rating: [4, 4, 4, 4, 3, 4]
+}
 ];
 
+export default workspaces;
 
+----------------------------cleaner version with no amenities or ratings------------------------------------------
+const workspaces = [
+    {
+        workspaceID: 1,
+        workspaceName: "Large Office #40",
+        imgFileName: "LargeOffice40.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "daily",
+        sqFt: 500,
+        seatCapacity: 4,
+        price: 150,
+        propertyId: 1,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 2,
+        workspaceName: "Sunny Main Floor, Office #12",
+        imgFileName: "SunnyOffice12.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "daily",
+        sqFt: 250,
+        seatCapacity: 2,
+        price: 120,
+        propertyId: 1,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 3,
+        workspaceName: "East Conservatory, Second floor",
+        imgFileName: "EastConservatory.jpg",
+        workspaceType: "Meeting Room",
+        leaseTerm: "daily",
+        sqFt: 750,
+        seatCapacity: 10,
+        price: 200,
+        propertyId: 2,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 4,
+        workspaceName: "Penthouse Lounge",
+        imgFileName: "PenthouseLounge.jpg",
+        workspaceType: "Meeting Room",
+        leaseTerm: "daily",
+        sqFt: 1200,
+        seatCapacity: 25,
+        price: 300,
+        propertyId: 2,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 5,
+        workspaceName: "Cubicle #145",
+        imgFileName: "Cubicle145.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 50,
+        seatCapacity: 1,
+        price: 15,
+        propertyId: 3,
+        ownerId: 4
+    },
+    {
+        workspaceID: 6,
+        workspaceName: "North Window Desk, #6",
+        imgFileName: "NorthWindowDesk.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 60,
+        seatCapacity: 1,
+        price: 10,
+        propertyId: 3,
+        ownerId: 4
+    },
+    {
+        workspaceID: 7,
+        workspaceName: "Sunny Office #3",
+        imgFileName: "SunnyOffice3.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "daily",
+        sqFt: 300,
+        seatCapacity: 2,
+        price: 130,
+        propertyId: 4,
+        ownerId: 4
+    },
+    {
+        workspaceID: 8,
+        workspaceName: "Private Office #15",
+        imgFileName: "PrivateOffice15.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "daily",
+        sqFt: 180,
+        seatCapacity: 1,
+        price: 100,
+        propertyId: 4,
+        ownerId: 4
+    },
+    {
+        workspaceID: 9,
+        workspaceName: "Open-concept Desk #10",
+        imgFileName: "OpenConceptDesk10.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 50,
+        seatCapacity: 1,
+        price: 12,
+        propertyId: 5,
+        ownerId: 72345
+    },
+    {
+        workspaceID: 10,
+        workspaceName: "Conference Room #5",
+        imgFileName: "ConferenceRoom5.jpg",
+        workspaceType: "Meeting Room",
+        leaseTerm: "daily",
+        sqFt: 500,
+        seatCapacity: 10,
+        price: 250,
+        propertyId: 5,
+        ownerId: 72345
+    },
+    {
+        workspaceID: 11,
+        workspaceName: "Quiet Corner Desk #18",
+        imgFileName: "QuietCornerDesk18.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 40,
+        seatCapacity: 1,
+        price: 8,
+        propertyId: 1,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 12,
+        workspaceName: "Creative Pod #22",
+        imgFileName: "CreativePod22.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 45,
+        seatCapacity: 1,
+        price: 12,
+        propertyId: 2,
+        ownerId: 59715
+    },
+    {
+        workspaceID: 13,
+        workspaceName: "West Wing Office #6",
+        imgFileName: "WestWingOffice6.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "daily",
+        sqFt: 400,
+        seatCapacity: 3,
+        price: 180,
+        propertyId: 7,
+        ownerId: 67890
+    },
+    {
+        workspaceID: 14,
+        workspaceName: "Glass View Lounge",
+        imgFileName: "GlassViewLounge.jpg",
+        workspaceType: "Meeting Room",
+        leaseTerm: "daily",
+        sqFt: 600,
+        seatCapacity: 12,
+        price: 220,
+        propertyId: 7,
+        ownerId: 67890
+    },
+    {
+        workspaceID: 15,
+        workspaceName: "Open Desk Cluster #5",
+        imgFileName: "OpenDeskCluster5.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 35,
+        seatCapacity: 1,
+        price: 10,
+        propertyId: 6,
+        ownerId: 72345
+    },
+    {
+        workspaceID: 16,
+        workspaceName: "Executive Suite #1",
+        imgFileName: "ExecutiveSuite1.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "monthly",
+        sqFt: 800,
+        seatCapacity: 6,
+        price: 1200,
+        propertyId: 6,
+        ownerId: 72345
+    },
+    {
+        workspaceID: 17,
+        workspaceName: "Corner Office #10",
+        imgFileName: "CornerOffice10.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "weekly",
+        sqFt: 450,
+        seatCapacity: 3,
+        price: 600,
+        propertyId: 8,
+        ownerId: 67890
+    },
+    {
+        workspaceID: 18,
+        workspaceName: "Shared Coworking Space #15",
+        imgFileName: "CoworkingSpace15.jpg",
+        workspaceType: "Desk",
+        leaseTerm: "hourly",
+        sqFt: 30,
+        seatCapacity: 1,
+        price: 7,
+        propertyId: 8,
+        ownerId: 67890
+    },
+    {
+        workspaceID: 19,
+        workspaceName: "High-Rise Penthouse #5",
+        imgFileName: "HighRisePenthouse5.jpg",
+        workspaceType: "Meeting Room",
+        leaseTerm: "monthly",
+        sqFt: 1000,
+        seatCapacity: 20,
+        price: 2500,
+        propertyId: 9,
+        ownerId: 34567
+    },
+    {
+        workspaceID: 20,
+        workspaceName: "Urban Loft Office #7",
+        imgFileName: "UrbanLoftOffice7.jpg",
+        workspaceType: "Private Office",
+        leaseTerm: "weekly",
+        sqFt: 350,
+        seatCapacity: 2,
+        price: 500,
+        propertyId: 10,
+        ownerId: 34567
+    }
+];
+
+export default workspaces;
 ------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------Amenities-------------------------------------------------------------------
 sample amenity objects are in the sample workspaces for easy searching
@@ -693,35 +981,107 @@ const amenities = [
   "Gym Access",
   "Natural Lighting"
 ];
-------------------------------------------------------------------------------------------------------------------------------------
-amenity Array of Objects
 
-const amenities = [
-  { name: "Full Kitchen", value: false },
-  { name: "Microwave", value: false },
-  { name: "Coffee Maker", value: false },
-  { name: "Copy/Print Equipment", value: false },
-  { name: "Projector", value: false },
-  { name: "High-Speed Wi-Fi", value: false },
-  { name: "Whiteboards", value: false },
-  { name: "Conference Phones", value: false },
-  { name: "Adjustable Desks", value: false },
-  { name: "Ergonomic Chairs", value: false },
-  { name: "Secure Storage/Lockers", value: false },
-  { name: "Mail and Package Handling", value: false },
-  { name: "Outdoor Seating/Patio", value: false },
-  { name: "Receptionist/Front Desk Service", value: false },
-  { name: "Soundproofing", value: false },
-  { name: "Lounge Areas", value: false },
-  { name: "Casual Seating", value: false },
-  { name: "Tech Support", value: false },
-  { name: "Security Cameras", value: false },
-  { name: "Snack Bar", value: false },
-  { name: "Vending Machines", value: false },
-  { name: "Fitness Room", value: false },
-  { name: "Gym Access", value: false },
-  { name: "Natural Lighting", value: false }
+
+// Amenities Array
+const WorkspacesAmenities = [
+    { workspaceID: 1, amenities: [
+        { "Full Kitchen": true },
+        { "High-Speed Wi-Fi": true },
+        { "Coffee Maker": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 2, amenities: [
+        { "Whiteboards": true },
+        { "Coffee Maker": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 3, amenities: [
+        { "Projector": true },
+        { "High-Speed Wi-Fi": true },
+        { "Whiteboards": true },
+        { "Conference Phones": true }
+    ] },
+    { workspaceID: 4, amenities: [
+        { "Projector": true },
+        { "Conference Phones": true },
+        { "High-Speed Wi-Fi": true },
+        { "Lounge Areas": true }
+    ] },
+    { workspaceID: 5, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 6, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Coffee Maker": true }
+    ] },
+    { workspaceID: 7, amenities: [
+        { "Copy/Print Equipment": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 8, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true },
+        { "Secure Storage/Lockers": true }
+    ] },
+    { workspaceID: 9, amenities: [
+        { "High-Speed Wi-Fi": true }
+    ] },
+    { workspaceID: 10, amenities: [
+        { "Projector": true },
+        { "Conference Phones": true },
+        { "Whiteboards": true }
+    ] },
+    { workspaceID: 11, amenities: [
+        { "High-Speed Wi-Fi": true }
+    ] },
+    { workspaceID: 12, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true },
+        { "Coffee Maker": true }
+    ] },
+    { workspaceID: 13, amenities: [
+        { "Projector": true },
+        { "High-Speed Wi-Fi": true }
+    ] },
+    { workspaceID: 14, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Lounge Areas": true },
+        { "Conference Phones": true }
+    ] },
+    { workspaceID: 15, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 16, amenities: [
+        { "Projector": true },
+        { "High-Speed Wi-Fi": true },
+        { "Conference Phones": true },
+        { "Coffee Maker": true }
+    ] },
+    { workspaceID: 17, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true }
+    ] },
+    { workspaceID: 18, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Coffee Maker": true }
+    ] },
+    { workspaceID: 19, amenities: [
+        { "Projector": true },
+        { "Conference Phones": true },
+        { "Lounge Areas": true },
+        { "High-Speed Wi-Fi": true }
+    ] },
+    { workspaceID: 20, amenities: [
+        { "High-Speed Wi-Fi": true },
+        { "Ergonomic Chairs": true },
+        { "Coffee Maker": true }
+    ] }
 ];
+
+export { ratings, amenities };
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -731,6 +1091,49 @@ rating (1-5)
 reviewComments
 connects to Workspace
 connects to Owner 
+------------------------------------------------------------------------------------------------------------------------------------
+
+const reviews = [
+  { workspaceID: 1, date: "2025-03-01", comment: "Spacious and well-equipped office. The full kitchen was a great bonus for long work sessions." },
+  { workspaceID: 1, date: "2025-03-05", comment: "Comfortable and quiet. The ergonomic chairs made a big difference during long meetings." },
+  { workspaceID: 1, date: "2025-03-10", comment: "Clean and professional. The on-site support staff were very helpful." },
+  
+  { workspaceID: 2, date: "2025-02-28", comment: "Great sunlight and cozy atmosphere, but the whiteboard markers were dried out." },
+  
+  { workspaceID: 3, date: "2025-02-20", comment: "The projector and conference phones made this a perfect space for a client meeting." },
+  { workspaceID: 3, date: "2025-03-02", comment: "Good soundproofing. The meeting room was private and distraction-free." },
+  
+  { workspaceID: 5, date: "2025-01-15", comment: "Good view and solid Wi-Fi, but the coffee maker was out of order." },
+  { workspaceID: 5, date: "2025-03-03", comment: "Convenient location and clean facilities. The shared lounge was a nice touch." },
+  
+  { workspaceID: 7, date: "2025-03-02", comment: "Private and quiet. The printing equipment worked perfectly." },
+  
+  { workspaceID: 9, date: "2025-02-10", comment: "The standing desks were a great option. Excellent natural light." },
+  { workspaceID: 9, date: "2025-02-15", comment: "Nice vibe. The shared kitchen was stocked with great snacks." },
+  { workspaceID: 9, date: "2025-02-18", comment: "Reliable Wi-Fi and comfortable seating. A solid choice for remote work." },
+  
+  { workspaceID: 10, date: "2025-03-08", comment: "Spacious conference room with good lighting. The whiteboards were very useful for brainstorming." },
+  
+  { workspaceID: 12, date: "2025-02-25", comment: "The creative pod was inspiring, but the Wi-Fi connection dropped a couple of times." },
+  { workspaceID: 12, date: "2025-03-01", comment: "Cozy and quiet. Great for solo work." },
+  
+  { workspaceID: 14, date: "2025-02-12", comment: "Loved the lounge area. It was a great place to relax between sessions." },
+  { workspaceID: 14, date: "2025-02-18", comment: "The kitchenette was clean and fully stocked. Great for long workdays." },
+  { workspaceID: 14, date: "2025-02-28", comment: "Good sound isolation. The private booths were perfect for focused work." },
+  
+  { workspaceID: 15, date: "2025-03-04", comment: "Very modern and comfortable. The smart lighting was a nice touch." },
+  
+  { workspaceID: 16, date: "2025-02-18", comment: "Absolutely worth the price. Perfect for a week of intensive work sessions." },
+  { workspaceID: 16, date: "2025-03-09", comment: "Fantastic suite! The coffee maker and conference phones were lifesavers." },
+  { workspaceID: 16, date: "2025-03-11", comment: "Reliable high-speed internet. Great value for the price." },
+  
+  { workspaceID: 18, date: "2025-02-22", comment: "Affordable and comfortable. Could use more power outlets." },
+  
+  { workspaceID: 19, date: "2025-03-03", comment: "The view from the penthouse was incredible. Excellent for team retreats." }
+];
+
+export default reviews;
+
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
@@ -739,74 +1142,3 @@ _Availability_ to discuss
 
 datesBooked
 	userId
-
-
-------------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------Reviews---------------------------------------------------------------------------
-
-const reviews = [
-    // Multiple reviews for workspaceID: 1
-    { workspaceID: 1, date: "2025-03-01", comment: "Spacious and well-equipped office. The full kitchen was a great bonus for long work sessions." },
-    { workspaceID: 1, date: "2025-03-05", comment: "Comfortable and quiet. The ergonomic chairs made a big difference during long meetings." },
-    { workspaceID: 1, date: "2025-03-10", comment: "Clean and professional. The on-site support staff were very helpful." },
-  
-    // Single review for workspaceID: 2
-    { workspaceID: 2, date: "2025-02-28", comment: "Great sunlight and cozy atmosphere, but the whiteboard markers were dried out." },
-  
-    // Multiple reviews for workspaceID: 3
-    { workspaceID: 3, date: "2025-02-20", comment: "The projector and conference phones made this a perfect space for a client meeting." },
-    { workspaceID: 3, date: "2025-03-02", comment: "Good soundproofing. The meeting room was private and distraction-free." },
-  
-    // No reviews for workspaceID: 4
-  
-    // Multiple reviews for workspaceID: 5
-    { workspaceID: 5, date: "2025-01-15", comment: "Good view and solid Wi-Fi, but the coffee maker was out of order." },
-    { workspaceID: 5, date: "2025-03-03", comment: "Convenient location and clean facilities. The shared lounge was a nice touch." },
-  
-    // No reviews for workspaceID: 6
-  
-    // Single review for workspaceID: 7
-    { workspaceID: 7, date: "2025-03-02", comment: "Private and quiet. The printing equipment worked perfectly." },
-  
-    // No reviews for workspaceID: 8
-  
-    // Multiple reviews for workspaceID: 9
-    { workspaceID: 9, date: "2025-02-10", comment: "The standing desks were a great option. Excellent natural light." },
-    { workspaceID: 9, date: "2025-02-15", comment: "Nice vibe. The shared kitchen was stocked with great snacks." },
-    { workspaceID: 9, date: "2025-02-18", comment: "Reliable Wi-Fi and comfortable seating. A solid choice for remote work." },
-  
-    // Single review for workspaceID: 10
-    { workspaceID: 10, date: "2025-03-08", comment: "Spacious conference room with good lighting. The whiteboards were very useful for brainstorming." },
-  
-    // No reviews for workspaceID: 11
-  
-    // Multiple reviews for workspaceID: 12
-    { workspaceID: 12, date: "2025-02-25", comment: "The creative pod was inspiring, but the Wi-Fi connection dropped a couple of times." },
-    { workspaceID: 12, date: "2025-03-01", comment: "Cozy and quiet. Great for solo work." },
-  
-    // No reviews for workspaceID: 13
-  
-    // Multiple reviews for workspaceID: 14
-    { workspaceID: 14, date: "2025-02-12", comment: "Loved the lounge area. It was a great place to relax between sessions." },
-    { workspaceID: 14, date: "2025-02-18", comment: "The kitchenette was clean and fully stocked. Great for long workdays." },
-    { workspaceID: 14, date: "2025-02-28", comment: "Good sound isolation. The private booths were perfect for focused work." },
-  
-    // Single review for workspaceID: 15
-    { workspaceID: 15, date: "2025-03-04", comment: "Very modern and comfortable. The smart lighting was a nice touch." },
-  
-    // Multiple reviews for workspaceID: 16
-    { workspaceID: 16, date: "2025-02-18", comment: "Absolutely worth the price. Perfect for a week of intensive work sessions." },
-    { workspaceID: 16, date: "2025-03-09", comment: "Fantastic suite! The coffee maker and conference phones were lifesavers." },
-    { workspaceID: 16, date: "2025-03-11", comment: "Reliable high-speed internet. Great value for the price." },
-  
-    // No reviews for workspaceID: 17
-  
-    // Single review for workspaceID: 18
-    { workspaceID: 18, date: "2025-02-22", comment: "Affordable and comfortable. Could use more power outlets." },
-  
-    // Single review for workspaceID: 19
-    { workspaceID: 19, date: "2025-03-03", comment: "The view from the penthouse was incredible. Excellent for team retreats." },
-  
-    // No reviews for workspaceID: 20
-  ];
-  
