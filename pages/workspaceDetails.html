@@ -21,46 +21,64 @@
 <body>
     <header id="header-mainjs"></header>
 
-    <div class="main">
-        <div class="detailsBoxL">
-            <div class="title" id="workspaceTitle"></div>
-            <!--Left box-->
-            <div id="workspace-display-left"></div>
-        </div>
-        
-        <div class="detailsBoxR">
-            <div class="title"><span></span></div>
-            <!--Right box-->
-            <div id="workspace-display-right"></div>
-            
-                    <div class="imageContainer">
-                <img id="workspaceImg" />
-                    </div>
+        <div class="main">
 
-
-                <div class="reviewContainer">
-                    <div class="subHeading"><span>Reviews</span></div><!--edit css: centered and bordered-->
-
-                    <!--reviews--elements should be sidebyside-->
-                    <form>
-
-                        <div class="leftButton"><!--15% of container wdth, padding top and botton 20px-->
-                        <input type="button" value="prev"/>
-                        </div>
-
-                            <div class="reviewBody">review goes here</div><!--edit: 70% of container width, padding left right 10px-->
-
-                        <div class="rightButton" ><!--15% of container wdth, padding top and botton 20px-->
-                        <input type="button" value="next"/>
-                        </div>
-                        
-                    </form>
+                
+            <div class="detailsBoxL">
+                <div class="title" id="workspaceTitle"></div>
+                    <!--Left box-->
+                <div id="workspace-display-left">
+                <!-- workspaceDetails populate here from .js-->
                 </div>
+                    <!--Pop-up window owner details-->
+                    <div id="popupOverlay" class="overlayContainer">
+
+                        <!--buttons at bottom-->
+                        <div class="button-container">
+                            <button class="ownerDetailsButton">
+                                Owner Details
+                            </button>
+
+                            <button class="bookingButton">
+                                Book
+                            </button>
+                        </div>
+                    </div>
             </div>
+            
+                
+            <div class="detailsBoxR">
+                <div class="title" id="workspaceTitle2"></div>
+                <!--Right box-->
+                    <div id="workspace-display-right">
+                        <div class="imageContainer">
+                        <img class="workspaceImg" src="/resources//images/desk.png"/>
+                        </div>
+                    
+                        <div class="reviewContainer">
+
+                            <div class="starRating"></div>
+                            <div class="subHeading"><span>Reviews</span></div>
+                            <!--reviews--elements should be sidebyside-->
+                            <form>
+                                <div class="reviewRow">
+                                        <div class="leftButton">
+                                        <input type="button" value="&#10096"/>
+                                        </div>
+                                            <div class="reviewBody">review goes here</div>
+                                        <div class="rightButton">
+                                        <input type="button" value="&#10097"/>
+                                        </div>
+                                </div>
+                                
+                            </form>
+
+                    </div>
+                </div> 
+            </div>
+            
         </div>
-    </div>
     <footer id="footer-mainjs"></footer>
-    
 </body>
 
 </html>
