@@ -25,8 +25,8 @@ const userData = [
     lastName: "Bjorkn",
     email: "Alice@coolemail.com",
     password: "lol123",
-    Owner: "Yes",
-    Coworker: "No",
+    owner: "Yes",
+    coworker: "No",
     properties: [1, 2]  
   },
   {
@@ -35,8 +35,8 @@ const userData = [
     lastName: "Johnson",
     email: "Bob@workmail.com",
     password: "im303",
-    Owner: "No",
-    Coworker: "Yes",
+    owner: "No",
+    coworker: "Yes",
     properties: []  
   },
   {  
@@ -45,8 +45,8 @@ const userData = [
     lastName: "Smith",
     email: "Charlie@company.com",
     password: "foxxtrotunicornkilo",
-    Owner: "No",
-    Coworker: "Yes",
+    owner: "No",
+    coworker: "Yes",
     properties: []    
 },
   {
@@ -55,8 +55,8 @@ const userData = [
     lastName: "Evans",
     email: "Diana@bestmail.com",
     password: "diannaBananananna",
-    Owner: "Yes",
-    Coworker: "No",
+    owner: "Yes",
+    coworker: "No",
     properties: [3, 4]    
 },
   {
@@ -65,8 +65,8 @@ const userData = [
     lastName: "Clark",
     email: "Evelyn@business.com",
     password: "Ev3lynRocks!",
-    Owner: "Yes",
-    Coworker: "No",
+    owner: "Yes",
+    coworker: "No",
     properties: [5, 6]  
   },
   {
@@ -75,8 +75,8 @@ const userData = [
     lastName: "Harrison",
     email: "Frank@jobmail.com",
     password: "Frankie!2025",
-    Owner: "No",
-    Coworker: "Yes",
+    owner: "No",
+    coworker: "Yes",
     properties: []  
   },
   {
@@ -85,8 +85,8 @@ const userData = [
     lastName: "Andrews",
     email: "George@workmail.com",
     password: "GeorgeyBoy2024",
-    Owner: "Yes",
-    Coworker: "No",
+    owner: "Yes",
+    coworker: "No",
     properties: [7, 8]  
   },
   {
@@ -95,8 +95,8 @@ const userData = [
     lastName: "Miller",
     email: "Hannah@company.com",
     password: "HannahBear123",
-    Owner: "No",
-    Coworker: "Yes",
+    owner: "No",
+    coworker: "Yes",
     properties: []    },
   {
     id: 34567,
@@ -104,8 +104,8 @@ const userData = [
     lastName: "Dawson",
     email: "Ian@jobmail.com",
     password: "Ian4TheWin!",
-    Owner: "Yes",
-    Coworker: "No",
+    owner: "Yes",
+    coworker: "No",
     properties: [9, 10]   
  {
     id: 12345,
@@ -113,8 +113,8 @@ const userData = [
     lastName: "Thompson",
     email: "Julia@company.com",
     password: "Jules123!",  
-    Owner: "No",
-    Coworker: "Yes"
+    owner: "No",
+    coworker: "Yes"
   }
 ];
 
