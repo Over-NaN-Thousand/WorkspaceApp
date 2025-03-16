@@ -10,6 +10,10 @@
 
 }
 
+.checked {
+    color: orange;
+  }
+
 * {
     box-sizing: none;
     margin: 0;
@@ -55,9 +59,8 @@ body {
   .main .detailsBoxL .title {
 
       height: 120px;
-      background: #4f4a41;
+      max-width: 500px;
       border-radius: 5px 5px 0 0;
-      color: #fff;
       font-size: 30px;
       font-weight: 600;
       display: flex;
