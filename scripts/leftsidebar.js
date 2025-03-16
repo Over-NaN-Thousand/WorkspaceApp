@@ -2,6 +2,12 @@
 $(document).ready(function () {
     //Loading the letf side bar.
     $("#leftSideBar-mainjs").load("leftsidebar.html", function () {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+
+        $('#user').text(currentUser.firstName);
+        $('#owner').text(currentUser.owner);
+        $('#coworker').text(currentUser.coworker);
 
         //Get elements
         const sidebarButtons = $('.sidebar-btn');
