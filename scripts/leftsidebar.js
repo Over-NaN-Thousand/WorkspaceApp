@@ -33,7 +33,18 @@ $(document).ready(function () {
                 // Clear currentUser in localStorage
                 localStorage.removeItem('currentUser');
                 alert('You have been successfully logged out.');
-                window.location.href = '/WorkspaceApp/pages/login.html';
+                window.location.href = '/pages/login.html';
+                return; 
+            }
+
+            if (sectionId === 'my-properties') {
+                window.location.href = '/pages/propertymgr.html';
+                return; 
+            }
+
+            
+            if (sectionId === 'workspaces') {
+                window.location.href = '/pages/search.html';
                 return; 
             }
             $(`#${sectionId}`).show();
