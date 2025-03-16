@@ -53,8 +53,8 @@ const users = [
       lastName: "Clark",
       email: "Evelyn@business.com",
       password: "Ev3lynRocks!",
-      owner: "Yes",
-      coworker: "No"
+      Owner: "Yes",
+      Coworker: "No"
     },
     {
       id: 89012,
