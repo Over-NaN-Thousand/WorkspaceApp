@@ -1,0 +1,248 @@
+:root {
+    --prim: #275158;
+
+    --aside-bg: #ceba92ae;
+    --filter-bg:#f1ede8;
+
+    --item-text: #0e0e0e;
+    --item-border: rgba(169, 169, 169, 0.5);
+    --item-bg: #ffffff;
+    
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* header, content, footer */
+    grid-template-columns: 20% auto; /* percentage for aside, rest for main */
+    grid-template-areas:
+        "header header"
+        "aside main"
+        "footer footer";
+    min-height: 100vh;
+}
+
+header {
+    grid-area: header;
+}
+
+aside {
+    grid-area: aside;
+    background-color: var(--aside-bg);
+}
+
+main {
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
+
+h1{
+    margin: 3rem 1.1rem .1em;
+    font-size: clamp(16px, 3vw, 20px);
+}
+
+
+
+/********FILTERS********/
+aside section{
+    margin: .5rem;
+    padding: .5rem;
+
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+
+    background-color: var(--filter-bg);
+}
+
+aside section:last-child{
+    margin-bottom: 5rem;
+}
+
+aside h3{
+    padding: .8rem .2rem;
+}
+
+aside h4,summary{
+    margin: .8rem .2rem .2rem;
+    font-size: clamp(12px, 3vw, 16px);
+    font-weight: bold;
+}
+
+aside label{
+    display:block;
+    margin-left: 25px;
+    text-indent: -18px;
+    font-size: 1em;
+    font-size: clamp(9px, 3vw, 12px);
+}
+
+aside input[type="number"] {
+    width: 70px;
+  }
+
+aside .btn-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    gap: .2rem;
+}
+
+aside button {
+    padding: .3rem 1.5rem;
+    font-size: clamp(12px, 3vw, 16px);
+    background-color: var(--prim);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+article{
+    margin : .5rem;
+}
+
+
+.searchbar{
+    margin: .5rem;
+    padding: .5rem;
+
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+
+    background-color: var(--filter-bg);
+}
+
+.searchbar h4{
+    font-size: clamp(12px, 3vw, 20px);
+    font-weight: bold;
+}
+
+.searchbar button {
+    padding: .2rem .75rem;
+    font-size: clamp(12px, 3vw, 16px);
+    background-color: var(--prim);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.results-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sort-container{
+    margin-left: auto; /*push to the right*/
+    font-size: clamp(9px, 12px, 18px);
+}
+
+
+
+/********PROPERTY********/
+.property-item {
+    display: flex;
+    flex-direction: row;
+    
+    margin: .5rem;
+    border: 1px solid var(--item-border);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .25);
+}
+.property-picture{
+    flex: 1;
+}
+.property-picture img{
+   width:100%;
+   aspect-ratio: initial;
+}
+.property-details{
+    flex: 2; 
+    padding: 20px;
+}
+.property-details h2{
+    font-size: clamp(12px, 3vw, 16px);
+    margin-bottom: .3rem;
+}
+.property-details p{
+    font-size: clamp(9px, 3vw, 12px);
+}
+.btnProperty{
+    padding: .3rem 1rem;
+    margin: .2rem;
+    font-size: clamp(8px, 10px, 14px);
+    border: 1px solid var(--prim);
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+    cursor: pointer;
+}
+
+
+/********WORKSPACE********/
+
+.workspace-list{
+    flex: 2; 
+    padding: 20px;
+}
+
+.workspace-list h2{
+    font-size: clamp(9px, 12px, 14px);
+    margin-bottom: .3rem;
+}
+
+.workspace-list p{
+    font-size: clamp(9px, 12px, 14px);
+    text-align: center;
+}
+
+.btnWorkspace{
+    padding: .3rem .3rem;
+    margin: .2rem;
+    width: 100%;
+    height: auto;
+    font-size: clamp(8px, 10px, 14px);
+    border: 1px solid var(--prim);
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+    cursor: pointer;
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+    body {
+        grid-template-rows: auto auto auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "aside"
+            "main"
+            "footer";
+    }
+
+    /*stack them vertically instead*/
+
+    aside {
+        width: 100%;
+    }
+
+    .property-item {
+        flex-direction: column;
+    }
+
+    .property-details, .property-picture {
+        width: 100%;
+    }
+    
+    .property-picture img {
+        width: 100%;
+        height: auto;
+    }
+}
