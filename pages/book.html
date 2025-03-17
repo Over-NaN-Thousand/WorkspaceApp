@@ -1,0 +1,82 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Workspace</title>
+
+    <base href="/WorkspaceApp/">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+    <script src="scripts/main.js" defer></script>
+    <script src="scripts/signuppage.js" defer></script>
+    <script src="/styles/book.css" defer></script>
+
+    <link rel="stylesheet" href="/styles/style.css" >
+    <link rel="stylesheet" href="/styles/signup.css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" > <!--fonts for symbols-->
+</head>
+
+  
+<body>
+    <header id="header-mainjs"></header>
+
+    <div class="main">
+       
+        <!--Pop-up window Booking Form!-->
+        <div id="overlay" class="Popup">
+            <div class="popup" id="popup">
+                        
+                        <div class="content">
+
+                            
+                                
+                            <div class="row">
+                                <div class="informationForm">
+                                    <div class="title"><span>Book A Workspace!</span></div>
+                                <form type="booking-form" action="#">
+                                    <i class="fas fa-user"></i>
+                                    <h2 class="userId" aria-placeholder="userId"></h2>
+                                    <p type="text" class="user-info"></p>
+                                    <div class="row">
+                                        <p type="text">
+                                        <p type="email"></p>
+                                    </div>
+                                    <div class="row">
+                                        
+                                    </div>
+                                    <H1 class="workspaceName" text="Workspace: "></h1>
+                                    <ul value="Property">Property Name</ul>
+                                    <li>Price</li>
+                                        
+
+                                        choose date and time
+
+
+                                    <div class="row button">
+                                        <buttom class="closeBtn" value="Cancel" />
+                                    </div>
+                                    
+                                    <div class="row button">
+                                        <input type="submitBtn" value="Confirm Booking"/>
+                                    </div>
+                                                
+                                </form>
+                            </div>
+                        </div>
+                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    </div>
+    <footer id="footer-mainjs"></footer>
+    </div>
+</body>
+</html>
