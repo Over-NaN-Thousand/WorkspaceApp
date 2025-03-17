@@ -40,6 +40,7 @@ $(document).ready(function () {
 
     //bind events
     $(document).on("click", ".btnWorkspace", popWorkspaceManager);
+    $(document).on("click", ".btnWorkspaceDetails", popWorkspaceManager);//Create a new click for workspace details
     $("#saveWorkspace").click(saveWorkspacePop);
     $("#deleteWorkspace").click(deleteWorkspacePop);
     $("#closePopup").click(closeWorkspacePop);
@@ -73,9 +74,6 @@ function createPropertiesHTML(propList) {
                     <p><strong>Province:</strong> ${property.province}</p>
                     <p><strong>Country:</strong> ${property.country}</p>
                     <p><strong>Postal Code:</strong> ${property.postalcode}</p>
-                    <p> <button val="${property.propertyID}" name="Edit" class="btnProperty">Edit</button>
-                        <button val="${property.propertyID}" name="Delete" class="btnProperty">Delete</button>
-                    </p>
                 </div>
                 <div class="workspace-list">
                     <h2>Workspaces in ${property.name}</h2>
@@ -96,7 +94,8 @@ function addWorkspacesToProperties(allWorkspaces) {
 
         if (filteredWorkspaces.length > 0) {
             filteredWorkspaces.forEach(workspace => {   // go through workspaces in array and write html for them
-                const workspaceElement = `<button val="${workspace.workspaceID}" data-propID="${propertyId}" class="btnWorkspace">${workspace.workspaceName}</p>`;
+                const workspaceElement = `
+                <button val="${workspace.workspaceID}" data-propID="${propertyId}" class="btnWorkspace">${workspace.workspaceName} (Edit)</button>`;
                 workspaceListContainer.append(workspaceElement);
             });
         } else {
@@ -122,24 +121,48 @@ function addOptionsToTarget(options, targetID, name, type) {
 function popWorkspaceManager() {
     const workspaceID = $(this).attr("val");
     const propIDFromPropAttr = $(this).data("propid");
+    //To check if user is clicking to see details of workspace.
+    //.hasclass=check the class name if it is = "btnWorkspaceDetails" when user is clicking the button
+    const isDetailsMode = $(this).hasClass("btnWorkspaceDetails");
+    const workspaces = JSON.parse(localStorage.getItem('workspaces')) || [];
+    const workspace = workspaces.find(ws => ws.workspaceID == workspaceID);//Moved out from if-else statement to make it work in the whole function. 
 
-    if (workspaceID === "_new") {
+
+
+    if (workspaceID === "_new") { //If adding details
         $("#workspaceForm")[0].reset(); // clear form for adding a new workspace
+        $("#workspaceForm").removeClass("details-mode").addClass("edit-mode");//Change the class to "edit-mode"
+        $("#workspaceForm h2").text("Add New Workspace");//Change the title
+        //When it's false, means allow input and button.
+        $("#workspaceName").prop("readonly", false);
+        $("#workspaceType").prop("disabled", false);
+        $("#leaseTerm").prop("disabled", false);
+        $("#seatCapacity").prop("readonly", false);
+        $("#sqFt").prop("readonly", false);
+        $("#price").prop("readonly", false);
+        $('input[name="optAmenities"]').prop("disable", false);
+        $("#saveWorkspace").show();//Show save button
+        $("#deleteWorkspace").hide(); // Hide delete button
+        $("#closePopup").text("Close");
     }
     else {
-        const workspace = workspaces.find(ws => ws.workspaceID == workspaceID);
-        if (workspace) {    // load workspace details into the form for editing
-            $("#workspaceName").val(workspace.workspaceName);
-            $("#workspaceType").val(workspace.workspaceType);
-            $("#leaseTerm").val(workspace.leaseTerm);
-            $("#seatCapacity").val(workspace.seatCapacity);
-            $("#sqFt").val(workspace.sqFt);
-            $("#price").val(workspace.price);
-            $('input[name="optAmenities"]').each(function () {
-                $(this).prop('checked', workspace.amenities.includes($(this).val()));
-            });
-        }
+        // load workspace details into the form for editing
+        $("#workspaceForm").removeClass("details-mode").addClass("edit-mode");
+        $("#workspaceForm h2").text("Edit Workspace");
+        $("#workspaceName").val(workspace.workspaceName).prop("readonly", false);
+        $("#workspaceType").val(workspace.workspaceType).prop("disabled", false);
+        $("#leaseTerm").val(workspace.leaseTerm).prop("disabled", false);
+        $("#seatCapacity").val(workspace.seatCapacity).prop("readonly", false);
+        $("#sqFt").val(workspace.sqFt).prop("readonly", false);
+        $("#price").val(workspace.price).prop("readonly", false);
+        $('input[name="optAmenities"]').each(function () {
+            $(this).prop('checked', workspace.amenities.includes($(this).val())).prop("disabled", false);
+        });
+        $("#saveWorkspace").show();
+        $("#deleteWorkspace").show();
+        $("#closePopup").text("Close");
     }
+
 
     $('#workspaceForm').attr('data-property-id', propIDFromPropAttr); //propertyID from data-propID
     $('#saveWorkspace').val(workspaceID); //so Save/Delete knows which ID to save/delete
@@ -166,21 +189,22 @@ function saveWorkspacePop(event) {
             return $(this).val();
         }).get()
     };
-    const propID = $(this).closest('form').data("property-id");
+    const propID = parseInt($(this).closest('form').data("property-id"));//Added parseInt to make sure propID=numebr.
 
 
     if (workspaceID === "_new") {
         // Create a new workspace
         const maxWorkspaceID = Math.max(...workspaces.map(workspace => workspace.workspaceID)); // !discovery! Math.max cannot handle arrays, that's why we use the spread operator to make all the workspaceID as individual arguments
 
+
         const newWorkspace = {
             ...workspaceData,
             workspaceID: maxWorkspaceID + 1,
-            propertyId: propID
-
-            /*to be continue//Adder owner id and imgae file name.
-            ownerId: currentUser.id, // 與當前用戶（Alice）關聯
-            imgFileName: "defaultWorkspace.jpg", // */
+            propertyId: propID,
+            //Adder owner id and imgae file name.
+            ownerId: currentUser.id,
+            imgFileName: "default private office.png",
+            rating: 0
 
         };
         workspaces.push(newWorkspace); //AL - still missing ownerId and imgFileName (to follow)
@@ -191,6 +215,8 @@ function saveWorkspacePop(event) {
             Object.assign(workspace, workspaceData);
         }
     }
+    //Save to localStorage
+    localStorage.setItem('workspaces', JSON.stringify(workspaces));
 
     alert("Workspace saved!");
     addWorkspacesToProperties(workspaces);
@@ -203,10 +229,12 @@ function saveWorkspacePop(event) {
 function deleteWorkspacePop(event) {
     const workspaceID = $(event.currentTarget).val();
     console.log(workspaceID);
+    const workspaces = JSON.parse(localStorage.getItem('workspaces')) || [];
     const index = workspaces.findIndex(ws => ws.workspaceID == workspaceID);
     if (index !== -1) {
         workspaces.splice(index, 1); // remove from the array
         alert("Workspace deleted!");
+        localStorage.setItem('workspaces', JSON.stringify(workspaces));//Save in localStorage
     }
 
     addWorkspacesToProperties(workspaces);
