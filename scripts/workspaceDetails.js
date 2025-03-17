@@ -17,17 +17,19 @@ $(document).ready(function () {
     const targetOwner = userData.find(user => user.id === targetOwnerId);
     const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
     const workspaceRating = targetWorkspace.rating;
+    const targetReviews = reviews.find(review => review.workspaceID === targetId);
     
         console.log("Workspace:", targetWorkspace);
         console.log("Owner:", targetOwner);
         console.log("Property:", targetProperty);
         console.log("Rating:", workspaceRating);
+        console.log("Reviews:", targetReviews);
 
   
         //-------Left section----------------------------------------------
-        const sectionDivL = $("<div>").appendTo("#workspace-display-left");
+        const sectionDivL= $("<div>").appendTo("#workspace-display-left");
          // Set workspace name in the existing div
-         $("#workspaceTitle").text(targetWorkspace.workspaceName).appendTo(sectionDivL);
+        $("#workspaceTitle").text(targetWorkspace.workspaceName).appendTo(sectionDivL);
 
         //Left section list
         const ulL = $("<ul>").addClass("detailsList");
@@ -57,8 +59,8 @@ $(document).ready(function () {
                 else{
                     $("<li>").text(`- ${key}: N/A`).appendTo(ulL);
                 }
-            });
 
+            });
             sectionDivL.append(ulL);
 
 //-------------------------------------------------------------------------//
@@ -76,18 +78,19 @@ $(document).ready(function () {
 
            for(let i=0; i < averageStarRating; i++){
                $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
-              
+           }
             // If no rating, show empty stars
             if (averageStarRating === 0) {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
-           }
+            
 
             //-------------popup---------------------------------------------           
         
     const popupOverlay = document.getElementById('overlay');
     const popup = document.getElementById('popup');
     const closePopup = popup.querySelector('.close');
+    const messageInput = document.getElementById('messageInput');
     const ownerBtn = document.querySelector('.ownerBtn');
     const closeBtn = popup.querySelector('.closeBtn'); 
 
@@ -97,25 +100,28 @@ $(document).ready(function () {
      // Open popup 
      function openPopup() {
         popupOverlay.style.display = 'block';
-
     }
     // Close popup
     function closeFunction() {
         popupOverlay.style.display = 'none';
     }
+    
+    // Set owner contact info
+    // Display owner contact info in popup
+    const ownerName = targetOwner.first
+    const ownerEmail = targetOwner.email;
+    const ownerDetails = `
+        <p><strong>Owner:</strong> ${ownerName}</p>
+        <p><strong>Email:</strong> ${ownerEmail}</p>
+    `;
+    popup.querySelector('.ownerDetails').innerHTML = ownerDetails;    
 
-    // Open popup on button click
-    ownerBtn.addEventListener('click', openPopup);
+    ownerName.textContent = `${targetOwner.firstName} ${targetOwner.lastName}`;
+    ownerEmail.textContent = targetOwner.email;
 
-
-    /*
-    // Add owner contact info------
-    const ownerName = ('Name: {targetOwner.firstName}'); 
-    const ownerLastName = $("<div">).text('Lastname: {targetOwner.lastName}');
-    const email = targetOwner.email;
-    const ownersWorkspaces = workspaces.find(workspace => workspace.ownerId === targetOwnerId);  
+    const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
+    console.log(ownersWorkspaces);
               
-    <h1 class="title">Owner Information</h1>
     $("<li>").text(`Name: ${targettargetOwner.firstName}`).appendTo("OwnerName");
     $("<li>").text(`Last Name: ${targettargetOwner.lastName}`).appendTo("OwnerLastName");
 
@@ -127,20 +133,21 @@ $(document).ready(function () {
     ownersWorkspaces.forEach(ownersWorkspaces => {
     $("<li>").text(ownersWorkspaces.workspaceName).appendTo("WorkspacesList")
     });
-*/
 
-
+    // Open popup on button click
+    ownerBtn.addEventListener('click', openPopup);
     // Close popup with the 'x' button
     closePopup.addEventListener('click', closeFunction);
     // Close popup with close button
     closeBtn.addEventListener('click', closeFunction); 
-    // Close popup when clicking outside of it
-    popupOverlay.addEventListener('click', (event) => {
+    // Close popup by clicking outside the popup
+    popupOverlay.addEventListener('click', function(event) {
         if (event.target === popupOverlay) {
             closeFunction();
         }
-    });
+    });   
 });
+
 
     
 

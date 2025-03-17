@@ -224,7 +224,7 @@ form .signup-link a:hover {
     margin-bottom: 10px;
 }
 
-.bookingButton{
+.bookingBtn{
     padding: .3rem 1.5rem;
     font-size: clamp(20px, 6vw, 25px);
     background-color: var(--prim);
@@ -233,7 +233,18 @@ form .signup-link a:hover {
 }
 
 
+.closeBtn {
+    background-color: #275158;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
+
+/*buttons for ratings*/
 .leftButton, .rightButton{
     padding: .3rem 1.5rem;
     font-size: clamp(12px, 3vw, 16px);
