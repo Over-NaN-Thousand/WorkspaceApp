@@ -7,8 +7,6 @@ $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
 
-
-
 //-------------popup---------------------------------------------   
     const popupOverlay = document.getElementById('overlay');
     const popup = document.getElementById('popup');
@@ -44,16 +42,16 @@ $(document).ready(function () {
     closeBtn.addEventListener('click', closeFunction);
 
     // Close popup by clicking outside
-    popupOverlay.addEventListener('click', (event) => {
+    $('#overlay').on('click', (event) => {
         if (event.target === popupOverlay) {
             closeFunction();
         }
     });
 
-
-     
+    
     // testing with manualky set Id
-    const targetId = 19; 
+    const targetId = 9; 
+
 
     //use worskpaceId to find owner and property data
     const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === targetId);
@@ -62,7 +60,7 @@ $(document).ready(function () {
     const targetOwner = userData.find(user => user.id === targetOwnerId);
     const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
     const workspaceRating = targetWorkspace.rating;
-    const targetReviews = reviews.find(review => review.workspaceID === targetId);
+    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
      
     console.log("Workspace:", targetWorkspace);
     console.log("Owner:", targetOwner);
@@ -70,7 +68,7 @@ $(document).ready(function () {
     console.log("Rating:", workspaceRating);
     console.log("Reviews:", targetReviews);
 
-    
+
 
     // --- Set Owner Contact Info ---
     if (targetOwner) {
@@ -113,7 +111,7 @@ $(document).ready(function () {
             //workspace details
             $("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
             $("<li>").text(`Type: ${targetWorkspace.workspaceType}`).appendTo(ulL);
-            $("<li>").text(`Lease Term: ${targetWorkspace.leaseTerm}`).appendTo(ulL);
+            $("<li>").text(`Price: $${targetWorkspace.price} / ${targetWorkspace.leaseTerm}`).appendTo(ulL);
             $("<li>").text(`Square Footage: ${targetWorkspace.sqFt} sq ft`).appendTo(ulL);
             $("<li>").text(`Seat Capacity: ${targetWorkspace.seatCapacity}`).appendTo(ulL);
             $("<li>").text(`Price: ${targetWorkspace.price}' /'${(targetWorkspace.leaseTerm)}`).appendTo(ulL);
@@ -142,7 +140,7 @@ $(document).ready(function () {
         console.log(averageStarRating);
 
         //add star symbols
-        const starRatingDiv = $(".starRating");
+        const starRatingDiv = $(".starRating").empty(); 
 
            for(let i=0; i < averageStarRating; i++){
                $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
@@ -151,7 +149,57 @@ $(document).ready(function () {
             if (averageStarRating === 0) {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
-        
+
+            const reviewContainer = $(".reviewBody").empty();
+
+            // track review index
+            let currentReviewIndex = 0;
+
+            function displayReview(index) {
+            reviewContainer.empty();
+            if (targetReviews.length > 0) {
+                const review = targetReviews[index];
+                $("<p>").text(`${review.date}`).appendTo(reviewContainer),
+                $("<p>").text(`${review.comment}`).appendTo(reviewContainer);
+                } else {
+                $("<p>").text("No reviews available").appendTo(reviewContainer);
+            }
+            }
+            
+            if (targetReviews.length > 0) {
+                displayReview(currentReviewIndex);
+
+                // Prev/Next buttons
+                const prevButton = $("<button>").text("Prev").addClass("review-btn prev-btn").appendTo(reviewContainer);
+                const nextButton = $("<button>").text("Next").addClass("review-btn next-btn").appendTo(reviewContainer);
+
+                // Event listeners 
+                prevButton.on("click", () => {
+                    currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
+                    displayReview(currentReviewIndex);
+                });
+
+                nextButton.on("click", () => {
+                    currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
+                    displayReview(currentReviewIndex);
+                });
+            } else {
+                displayReview(currentReviewIndex);
+            }
+            /*display first review*/
+            /*
+            if (targetReviews.length > 0) {
+                displayReview(currentReviewIndex);
+
+            /*a loop to display reviews all in one container
+            if (targetReviews.length > 0) {
+                targetReviews.forEach(review => {
+                    $("<p>").text(`${review.date}: ${review.comment}`).appendTo(reviewContainer);
+                });
+            } else {
+                $("<p>").text("No reviews available").appendTo(reviewContainer);
+            }  
+                )};*/
     });
 
 
