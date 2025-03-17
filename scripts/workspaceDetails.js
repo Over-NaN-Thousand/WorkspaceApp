@@ -7,6 +7,51 @@ $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
 
+
+
+//-------------popup---------------------------------------------   
+    const popupOverlay = document.getElementById('overlay');
+    const popup = document.getElementById('popup');
+    const closePopup = popup.querySelector('.close');
+    const ownerBtn = document.querySelector('.ownerBtn');
+    const closeBtn = popup.querySelector('.closeBtn'); 
+  
+
+    // Ensure popup is hidden at start
+    popupOverlay.style.display = 'none';
+
+    // Open popup function
+    function openPopup() {
+        console.log("Opening popup");
+        popupOverlay.style.display = 'block';
+    }
+
+    // Close popup function
+    function closeFunction() {
+        console.log("Closing popup");
+        popupOverlay.style.display = 'none';
+    }
+        
+   
+
+       // Open popup on button click
+    ownerBtn.addEventListener('click', openPopup);
+
+    // Close popup with 'x' button
+    closePopup.addEventListener('click', closeFunction);
+
+    // Close popup with close button
+    closeBtn.addEventListener('click', closeFunction);
+
+    // Close popup by clicking outside
+    popupOverlay.addEventListener('click', (event) => {
+        if (event.target === popupOverlay) {
+            closeFunction();
+        }
+    });
+
+
+     
     // testing with manualky set Id
     const targetId = 19; 
 
@@ -18,14 +63,38 @@ $(document).ready(function () {
     const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
     const workspaceRating = targetWorkspace.rating;
     const targetReviews = reviews.find(review => review.workspaceID === targetId);
-    
-        console.log("Workspace:", targetWorkspace);
-        console.log("Owner:", targetOwner);
-        console.log("Property:", targetProperty);
-        console.log("Rating:", workspaceRating);
-        console.log("Reviews:", targetReviews);
+     
+    console.log("Workspace:", targetWorkspace);
+    console.log("Owner:", targetOwner);
+    console.log("Property:", targetProperty);
+    console.log("Rating:", workspaceRating);
+    console.log("Reviews:", targetReviews);
 
-  
+    
+
+    // --- Set Owner Contact Info ---
+    if (targetOwner) {
+        // Display owner name
+        $('.OwnerName').text(`${targetOwner.firstName} ${targetOwner.lastName}`);
+
+        // Display owner email
+        $('.ContactInfo').html(`<p>Email: <a href="mailto:${targetOwner.email}">${targetOwner.email}</a></p>`);
+
+        // Display other workspaces by the same owner
+        const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
+        const workspaceList = $('.WorkspacesList');
+        workspaceList.empty(); // Clear previous list
+
+        if (ownersWorkspaces.length > 0) {
+            ownersWorkspaces.forEach(workspace => {
+                $('<li>').text(workspace.workspaceName).appendTo(workspaceList);
+            });
+        } else {
+            $('<li>').text('No other workspaces available').appendTo(workspaceList);
+        }
+    }
+
+
         //-------Left section----------------------------------------------
         const sectionDivL= $("<div>").appendTo("#workspace-display-left");
          // Set workspace name in the existing div
@@ -74,7 +143,6 @@ $(document).ready(function () {
 
         //add star symbols
         const starRatingDiv = $(".starRating");
-            starRatingDiv.empty(); // Clear previous content
 
            for(let i=0; i < averageStarRating; i++){
                $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
@@ -83,70 +151,9 @@ $(document).ready(function () {
             if (averageStarRating === 0) {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
-            
-
-            //-------------popup---------------------------------------------           
         
-    const popupOverlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const closePopup = popup.querySelector('.close');
-    const messageInput = document.getElementById('messageInput');
-    const ownerBtn = document.querySelector('.ownerBtn');
-    const closeBtn = popup.querySelector('.closeBtn'); 
-
-    // popup is hidden at start
-    popupOverlay.style.display = 'none';
-
-     // Open popup 
-     function openPopup() {
-        popupOverlay.style.display = 'block';
-    }
-    // Close popup
-    function closeFunction() {
-        popupOverlay.style.display = 'none';
-    }
-    
-    // Set owner contact info
-    // Display owner contact info in popup
-    const ownerName = targetOwner.first
-    const ownerEmail = targetOwner.email;
-    const ownerDetails = `
-        <p><strong>Owner:</strong> ${ownerName}</p>
-        <p><strong>Email:</strong> ${ownerEmail}</p>
-    `;
-    popup.querySelector('.ownerDetails').innerHTML = ownerDetails;    
-
-    ownerName.textContent = `${targetOwner.firstName} ${targetOwner.lastName}`;
-    ownerEmail.textContent = targetOwner.email;
-
-    const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
-    console.log(ownersWorkspaces);
-              
-    $("<li>").text(`Name: ${targettargetOwner.firstName}`).appendTo("OwnerName");
-    $("<li>").text(`Last Name: ${targettargetOwner.lastName}`).appendTo("OwnerLastName");
-
-    $("<h3>").text("Contact ").appendTo("ContactInfo");
-    $("<li>").addClass("email").text('Email: ${email}').appendTo("ContactInfo");
-
-    //Owners other workspaces to view
-    $("<h3>").text("Workspaces").appendTo("WorkspacesList");
-    ownersWorkspaces.forEach(ownersWorkspaces => {
-    $("<li>").text(ownersWorkspaces.workspaceName).appendTo("WorkspacesList")
     });
 
-    // Open popup on button click
-    ownerBtn.addEventListener('click', openPopup);
-    // Close popup with the 'x' button
-    closePopup.addEventListener('click', closeFunction);
-    // Close popup with close button
-    closeBtn.addEventListener('click', closeFunction); 
-    // Close popup by clicking outside the popup
-    popupOverlay.addEventListener('click', function(event) {
-        if (event.target === popupOverlay) {
-            closeFunction();
-        }
-    });   
-});
 
 
     
