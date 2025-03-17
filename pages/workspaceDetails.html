@@ -23,9 +23,27 @@
 
         <div class="main">
 
+            
+            <!--Pop-up window owner details-->
+            <div id="overlay" class="Overlay">
+                <div class="popup" id="popup">
+                    <span class="close">&times;</span><!--close with X in corner-->
+                    <div class="content">
+                        <h1 class="title">Owner Information</h1>
+                        <h2 class="OwnerName"  aria-placeholder="Owner Name"></h2>
+                        
+                        <ul class="WorkspacesList"></ul>Workspaces</ul>
+
+                        <div class="ContactInfo">Email:</div>
+
+                        <button class="closeBtn">Close</button>
+                    </div>
+                </div>
+            </div>
+
                 
             <div class="detailsBoxL">
-                <div class="title" id="workspaceTitle"></div>
+                <div class="title" ></div>
                 <!--Left box-->
                 <div id="workspace-display-left">
                 <!-- workspaceDetails populate here from .js-->
@@ -83,22 +101,6 @@
             </div>
             
 
-            <!--Pop-up window owner details-->
-            <div id="overlay" class="Popup">
-                <div class="popup" id="popup">
-                    <span class="close">&times;</span><!--close with X in corner-->
-                    <div class="content">
-                        <h1 class="title">Owner Information</h1>
-                        <h2 class="OwnerName" aria-placeholder="Owner Name"></h2>
-                        
-                        <ul class="WorkspacesList">Workspaces:</ul>
-
-                        <div class="ContactInfo">Email:</div>
-
-                        <button class="closeBtn">Close</button>
-                    </div>
-                </div>
-            </div>
 
 
 
