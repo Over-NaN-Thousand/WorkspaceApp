@@ -121,9 +121,6 @@ function addOptionsToTarget(options, targetID, name, type) {
 function popWorkspaceManager() {
     const workspaceID = $(this).attr("val");
     const propIDFromPropAttr = $(this).data("propid");
-    //To check if user is clicking to see details of workspace.
-    //.hasclass=check the class name if it is = "btnWorkspaceDetails" when user is clicking the button
-    const isDetailsMode = $(this).hasClass("btnWorkspaceDetails");
     const workspaces = JSON.parse(localStorage.getItem('workspaces')) || [];
     const workspace = workspaces.find(ws => ws.workspaceID == workspaceID);//Moved out from if-else statement to make it work in the whole function. 
 
