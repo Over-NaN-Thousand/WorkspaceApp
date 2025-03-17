@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     if (!currentUser) {
         alert('No user logged in. Redirecting to login page.');
-        window.location.href = '/pages/login.html';
+        window.location.href = '/WorkspaceApp/pages/login.html';
         return;
     }
 
