@@ -1,3 +1,4 @@
+/*****I remove this part because Im going to get current user information from localStorage. Victor
 import { Property, properties } from './data/propertydata.js';
 import { Workspace, workspaces } from './data/workspacedata.js';
 import { User, users } from './data/userdata.js';
@@ -5,44 +6,62 @@ import { User, users } from './data/userdata.js';
 
 
 const currUser = users.find(user => (user.id===67890));     //AL - returns ONE object because find was used instead of filter
-const propertyList = properties.filter(property => (property.ownerId===currUser.id)); //returns an array
+const propertyList = properties.filter(property => (property.ownerId===currUser.id)); //returns an array*******/
 
 
-$(document).ready(function() {
-    
-    
+$(document).ready(function () {
+
+
+    /****To get current user information from localStorage. Victor*************/
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const properties = JSON.parse(localStorage.getItem('properties')) || []; // []=They might not have either properties or workspaces
+    const workspaces = JSON.parse(localStorage.getItem('workspaces')) || [];
+    //If user has not signed in yet they cant access to this page.
+    if (!currentUser) {
+        alert('Please log in to view your properties.');
+        window.location.href = '/pages/login.html';
+        return;
+    }
+    /*******************************************************************************/
+    const propertyList = properties.filter(property => property.ownerId === currentUser.id);
+
     createPropertiesHTML(propertyList);
     addWorkspacesToProperties(workspaces);
 
     //build field html
     const optWStypes = [...new Set(workspaces.map(workspace => workspace.workspaceType))];
     const optTerm = ["Hourly", "Daily", "Weekly", "Monthly", "Quarterly"];
-    const optAmenities = ["Full Kitchen","Microwave","Coffee Maker","Copy/Print Equipment","Projector","High-Speed Wi-Fi","Whiteboards","Conference Phones","Adjustable Desks","Ergonomic Chairs","Secure Storage/Lockers","Mail and Package Handling","Outdoor Seating/Patio","Receptionist/Front Desk Service","Soundproofing","Lounge Areas","Casual Seating","Tech Support","Security Cameras","Snack Bar","Vending Machines","Fitness Room","Gym Access","Natural Lighting"];
-    addOptionsToDropdown(optWStypes,"workspaceType", "optWStype", "option");
-    addOptionsToDropdown(optTerm,"leaseTerm", "optLeaseTerm", "option");
-    addOptionsToTarget(optAmenities,"amenities-container","optAmenities","checkbox");
+    const optAmenities = ["Full Kitchen", "Microwave", "Coffee Maker", "Copy/Print Equipment", "Projector", "High-Speed Wi-Fi", "Whiteboards", "Conference Phones", "Adjustable Desks", "Ergonomic Chairs", "Secure Storage/Lockers", "Mail and Package Handling", "Outdoor Seating/Patio", "Receptionist/Front Desk Service", "Soundproofing", "Lounge Areas", "Casual Seating", "Tech Support", "Security Cameras", "Snack Bar", "Vending Machines", "Fitness Room", "Gym Access", "Natural Lighting"];
+    addOptionsToDropdown(optWStypes, "workspaceType", "optWStype", "option");
+    addOptionsToDropdown(optTerm, "leaseTerm", "optLeaseTerm", "option");
+    addOptionsToTarget(optAmenities, "amenities-container", "optAmenities", "checkbox");
 
-    
+
 
     //bind events
     $(document).on("click", ".btnWorkspace", popWorkspaceManager);
     $("#saveWorkspace").click(saveWorkspacePop);
     $("#deleteWorkspace").click(deleteWorkspacePop);
     $("#closePopup").click(closeWorkspacePop);
-    
+
 
 
 });
 
 
-function createPropertiesHTML(propList){
+function createPropertiesHTML(propList) {
     $("#properties-container").empty();
-    
+
+
+    /*The img code in the html below we can swtich to
+    <img src="resources/images/${property.imgFileName}" alt="${property.name}" onerror="this.src='resources/images/default property.png';">
+    later as we dont have images for now so let it definded as default*/
     propList.forEach(property => {
         //AL - !discovery! you can add a data-___ attribute that you can access later by jQuery
         const section = `
             <section class="property-item" data-property-id="${property.propertyId}">
                 <div class="property-picture">
+
                     <img src="resources/images/default property.png" alt="${property.name}" onerror="this.src='resources/images/default property.png';"> 
                 </div>
                 <div class="property-details">
@@ -90,12 +109,12 @@ function addWorkspacesToProperties(allWorkspaces) {
 
 function addOptionsToDropdown(options, targetID, type) {
     options.forEach(option => {
-          $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
+        $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
     });
 }
 function addOptionsToTarget(options, targetID, name, type) {
     options.forEach(option => {
-          $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
+        $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
     });
 }
 
@@ -106,9 +125,8 @@ function popWorkspaceManager() {
 
     if (workspaceID === "_new") {
         $("#workspaceForm")[0].reset(); // clear form for adding a new workspace
-    } 
-    else 
-    {
+    }
+    else {
         const workspace = workspaces.find(ws => ws.workspaceID == workspaceID);
         if (workspace) {    // load workspace details into the form for editing
             $("#workspaceName").val(workspace.workspaceName);
@@ -122,8 +140,8 @@ function popWorkspaceManager() {
             });
         }
     }
-    
-    $('#workspaceForm').attr('data-property-id',propIDFromPropAttr); //propertyID from data-propID
+
+    $('#workspaceForm').attr('data-property-id', propIDFromPropAttr); //propertyID from data-propID
     $('#saveWorkspace').val(workspaceID); //so Save/Delete knows which ID to save/delete
     $('#deleteWorkspace').val(workspaceID);
 
@@ -133,7 +151,10 @@ function popWorkspaceManager() {
 
 function saveWorkspacePop(event) {
     const workspaceID = $(event.currentTarget).val(); //get id from Save value
-    
+    let workspaces = JSON.parse(localStorage.getItem('workspaces')) || []; //Get workspace from localStorage.
+    const currentUser = JSON.parse(localStorage.getItem('currentUser')); //Get current user.
+
+
     const workspaceData = {
         workspaceName: $("#workspaceName").val(),
         workspaceType: $("#workspaceType").val(),
@@ -141,11 +162,12 @@ function saveWorkspacePop(event) {
         seatCapacity: parseInt($("#seatCapacity").val()),
         sqFt: parseInt($("#sqFt").val()),
         price: parseFloat($("#price").val()),
-        amenities: $('input[name="optAmenities"]:checked').map(function() {
+        amenities: $('input[name="optAmenities"]:checked').map(function () {
             return $(this).val();
         }).get()
     };
-    const propID = $(this).closest('form').data("property-id");  
+    const propID = $(this).closest('form').data("property-id");
+
 
     if (workspaceID === "_new") {
         // Create a new workspace
@@ -155,6 +177,11 @@ function saveWorkspacePop(event) {
             ...workspaceData,
             workspaceID: maxWorkspaceID + 1,
             propertyId: propID
+
+            /*to be continue//Adder owner id and imgae file name.
+            ownerId: currentUser.id, // 與當前用戶（Alice）關聯
+            imgFileName: "defaultWorkspace.jpg", // */
+
         };
         workspaces.push(newWorkspace); //AL - still missing ownerId and imgFileName (to follow)
     } else {
@@ -169,7 +196,7 @@ function saveWorkspacePop(event) {
     addWorkspacesToProperties(workspaces);
     $("#workspacePopup").css("display", "none");
 
-    
+
 }
 
 
