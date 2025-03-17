@@ -1,9 +1,8 @@
+
 /*****I remove this part because Im going to get current user information from localStorage. Victor
 import { Property, properties } from './data/propertydata.js';
 import { Workspace, workspaces } from './data/workspacedata.js';
 import { User, users } from './data/userdata.js';
-
-
 
 const currUser = users.find(user => (user.id===67890));     //AL - returns ONE object because find was used instead of filter
 const propertyList = properties.filter(property => (property.ownerId===currUser.id)); //returns an array*******/
@@ -24,6 +23,7 @@ $(document).ready(function () {
     }
     /*******************************************************************************/
     const propertyList = properties.filter(property => property.ownerId === currentUser.id);
+
 
     createPropertiesHTML(propertyList);
     addWorkspacesToProperties(workspaces);
@@ -62,7 +62,6 @@ function createPropertiesHTML(propList) {
         const section = `
             <section class="property-item" data-property-id="${property.propertyId}">
                 <div class="property-picture">
-
                     <img src="resources/images/default property.png" alt="${property.name}" onerror="this.src='resources/images/default property.png';"> 
                 </div>
                 <div class="property-details">
@@ -108,12 +107,12 @@ function addWorkspacesToProperties(allWorkspaces) {
 
 function addOptionsToDropdown(options, targetID, type) {
     options.forEach(option => {
-        $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
+          $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
     });
 }
 function addOptionsToTarget(options, targetID, name, type) {
     options.forEach(option => {
-        $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
+          $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
     });
 }
 
@@ -174,7 +173,6 @@ function saveWorkspacePop(event) {
     let workspaces = JSON.parse(localStorage.getItem('workspaces')) || []; //Get workspace from localStorage.
     const currentUser = JSON.parse(localStorage.getItem('currentUser')); //Get current user.
 
-
     const workspaceData = {
         workspaceName: $("#workspaceName").val(),
         workspaceType: $("#workspaceType").val(),
@@ -188,12 +186,9 @@ function saveWorkspacePop(event) {
     };
     const propID = parseInt($(this).closest('form').data("property-id"));//Added parseInt to make sure propID=numebr.
 
-
     if (workspaceID === "_new") {
         // Create a new workspace
         const maxWorkspaceID = Math.max(...workspaces.map(workspace => workspace.workspaceID)); // !discovery! Math.max cannot handle arrays, that's why we use the spread operator to make all the workspaceID as individual arguments
-
-
         const newWorkspace = {
             ...workspaceData,
             workspaceID: maxWorkspaceID + 1,
@@ -202,7 +197,6 @@ function saveWorkspacePop(event) {
             ownerId: currentUser.id,
             imgFileName: "default private office.png",
             rating: 0
-
         };
         workspaces.push(newWorkspace); //AL - still missing ownerId and imgFileName (to follow)
     } else {
@@ -212,14 +206,12 @@ function saveWorkspacePop(event) {
             Object.assign(workspace, workspaceData);
         }
     }
+
     //Save to localStorage
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
-
     alert("Workspace saved!");
     addWorkspacesToProperties(workspaces);
     $("#workspacePopup").css("display", "none");
-
-
 }
 
 
