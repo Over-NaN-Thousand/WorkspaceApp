@@ -168,7 +168,9 @@ form .signup-link a:hover {
 }
 
 
-
+.ContactInfo a:link {
+        color: #275158
+}
 
 .sectionL {
     margin-bottom: 20px;
@@ -204,6 +206,10 @@ li:last-child {
     flex-wrap: wrap-reverse;
     justify-content: center;
 }
+
+  #detailBoxHeading {
+    background: #88bdbc;
+  }
 
 
 /*Buttons*/
@@ -247,7 +253,6 @@ n {
     cursor: pointer;
     font-size: 16px;
 }
-
 
 /*buttons for ratings*/
 .leftButton,
@@ -316,7 +321,7 @@ n {
 
 .popup {
     font-family: Arial, sans-serif;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

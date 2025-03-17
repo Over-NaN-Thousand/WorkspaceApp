@@ -106,7 +106,7 @@ const userData = [
     password: "Ian4TheWin!",
     owner: "Yes",
     coworker: "No",
-    properties: [9, 10]   
+    properties: [9, 10] },  
  {
     id: 12345,
     firstName: "Julia",

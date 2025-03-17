@@ -187,6 +187,7 @@ $(document).ready(function () {
             if (targetReviews.length > 0) {
                 displayReview(currentReviewIndex);
 
+<<<<<<< HEAD
                 // Event listeners 
                 prevButton.on("click", () => {
                     currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
@@ -215,6 +216,70 @@ $(document).ready(function () {
             }  
                 )};*/
     });
+
+=======
+            //-------------popup---------------------------------------------           
+
+
+        function openPopup() {
+            console.log("Opening popup");
+            
+            // Lock body width to prevent shift
+            document.body.style.width = `${document.body.clientWidth}px`;
+            document.body.style.overflow = 'hidden';
+            
+            popupOverlay.style.display = 'block';
+        }
+
+
+        function closeFunction() {
+            console.log("Closing popup");
+            
+            // Reset styles
+            document.body.style.width = '';
+            document.body.style.overflow = '';
+            
+            popupOverlay.style.display = 'none';
+        }
+
+        // Open popup on button click
+        ownerBtn.addEventListener('click', openPopup);
+        // Close popup with the 'x' button
+        closePopup.addEventListener('click', closeFunction);
+        // Close popup with close button
+        closeBtn.addEventListener('click', closeFunction); 
+        // Close popup by clicking outside the popup
+        popupOverlay.addEventListener('click', function(event) {
+            if (event.target === popupOverlay) {
+                closeFunction();
+            }
+        });  
+    
+    // --- Set Owner Contact Info for popup---
+    if (targetOwner) {
+
+        // Display owner name
+        $('.OwnerName').text(`${targetOwner.firstName} ${targetOwner.lastName}`).appendTo(`.OwnerName`);
+
+        // Display owner email
+        $('.ContactInfo').html(`<p>Email: <a href="mailto:${targetOwner.email}">${targetOwner.email}</a></p>`);
+
+        // Display other workspaces by the same owner
+        const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
+        const workspaceList = $('.WorkspacesList');
+        
+
+        if (ownersWorkspaces.length > 0) {
+            ownersWorkspaces.forEach(workspace => {
+                $('<li>').text(workspace.workspaceName).appendTo(workspaceList);
+            });
+        } else {
+            $('<li>').text('No other workspaces available').appendTo(workspaceList);
+        }
+        closeBtn.addEventListener('click', workpacesList.empty()); // Clear previous list);
+    }
+});
+>>>>>>> 9551773ca134f7917323c1d7e1b78cbd9a07f467
 
 
 
