@@ -33,14 +33,14 @@ const newestWorkspaceList = [];
 
 topCities.push(
     new City("Calgary", 23, "Calgary-Andrei-Laqui.jpg"),
-    new City("Edmonton", 18, "pexels-kamille-mendoza-2210918-6008580.jpg"),
+    new City("Saint John", 18, "pexels-kamille-mendoza-2210918-6008580.jpg"),
     new City("San Francisco", 8, "pexels-pixabay-315458.jpg"),
 
 );
 
 topWorkspaceList.push(
     new Workspace(1001,
-        "Conference Rm1",
+        "East Conservatory, Second floor",
         "Conference Room",
         "3 months",
         8,
@@ -48,7 +48,7 @@ topWorkspaceList.push(
         false,
         "pexels-pixabay-260689.jpg"),
     new Workspace(1099,
-        "Blue Office",
+        "Large Office #40",
         "Private Office",
         "1 month",
         1,
@@ -56,7 +56,7 @@ topWorkspaceList.push(
         false,
         "pexels-kamo11235-667838.jpg"),
     new Workspace(1001,
-        "Simple Office",
+        "Creative Office #8",
         "Private Office",
         "1 months",
         1,
@@ -67,7 +67,7 @@ topWorkspaceList.push(
 
 newestWorkspaceList.push(
     new Workspace(1001,
-        "Cozy Office",
+        "Ocean View Office #12",
         "Private Office",
         "1 week",
         1,
@@ -75,7 +75,7 @@ newestWorkspaceList.push(
         false,
         "pexels-karlsolano-2883049.jpg"),
     new Workspace(1099,
-        "Blue Office",
+        "Large Office #40",
         "Private Office",
         "1 month",
         1,
@@ -83,7 +83,7 @@ newestWorkspaceList.push(
         false,
         "pexels-kamo11235-667838.jpg"),
     new Workspace(1001,
-        "Desk 1",
+        "Large Office #2",
         "Desk",
         "1 day",
         1,
@@ -113,7 +113,7 @@ function appendCitiesToArticle(myListOfCities, myArticleID){
         //AL - dynamically create the html from city data
         const dynamicHTML = `
           <div class="item">
-            <a name="itemLink" href="javascript:void(0);" val="${city.name}">
+            <a name="itemLink" href="pages/search.html?searchtext=${city.name}" val="${city.name}">
               <img src="resources/images/${city.imgFileName}" alt="${city.name}" title="${city.name}\n There are currently ${city.workspaceCount}\n workspaces in the city.">
               <h3>${city.name}</h3>
             </a>
@@ -129,7 +129,7 @@ function appendWSToArticle(myListOfWorkspaces, myArticleID){
         //AL - dynamically create the html from workspace data
         const dynamicHTML = `
           <div class="item">
-            <a name="itemLink" href="javascript:void(0);" val="${workspace.workspaceID}">
+            <a name="itemLink" href="pages/search.html?searchtext=${encodeURIComponent(workspace.workspaceName)}" val="${workspace.workspaceID}">
               <img src="resources/images/${workspace.imgFileName}" alt="${workspace.workspaceName}" title="${workspace.workspaceName}\nType = ${workspace.workspaceType}\nLease Term = ${workspace.leaseTerm}\nCapacity = ${workspace.seatCapacity}\nPrice = ${workspace.price}\nSmoking is Allowed = ${workspace.smokingAllowed?'Yes':'No'} ">
               <h3>${workspace.workspaceName}</h3>
             </a>
