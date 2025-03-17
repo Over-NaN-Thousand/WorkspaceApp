@@ -130,10 +130,10 @@ $(document).ready(function () {
             });
             sectionDivL.append(ulL);
 
-//-------------------------------------------------------------------------//
+
 // //right section---------------------------------------------------
             const sectionDivR = $("<div>").appendTo(rightContainer);
-
+//Rating section---------------------------------------------------
         //avg rating calculation
         const averageStarRating = workspaceRating.length > 0 
         ? Math.round(workspaceRating.reduce((a, b) => a + b) / workspaceRating.length): 0;
@@ -150,6 +150,10 @@ $(document).ready(function () {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
 
+
+//reviews section-------------------------------------------------------------------------
+
+
             const reviewContainer = $(".reviewBody").empty();
 
             // track review index
@@ -165,13 +169,23 @@ $(document).ready(function () {
                 $("<p>").text("No reviews available").appendTo(reviewContainer);
             }
             }
+
+            /*a loop to display reviews all in one container
+            if (targetReviews.length > 0) {
+                targetReviews.forEach(review => {
+                    $("<p>").text(`${review.date}: ${review.comment}`).appendTo(reviewContainer);
+                });
+            } else {
+                $("<p>").text("No reviews available").appendTo(reviewContainer);
+            }  
+                )};*/
+            
+             // Prev/Next buttons
+             const prevButton = $("<button>").text("Prev").addClass("review-btn prev-btn").appendTo("leftButton");
+             const nextButton = $("<button>").text("Next").addClass("review-btn next-btn").appendTo("rightButton");
             
             if (targetReviews.length > 0) {
                 displayReview(currentReviewIndex);
-
-                // Prev/Next buttons
-                const prevButton = $("<button>").text("Prev").addClass("review-btn prev-btn").appendTo(reviewContainer);
-                const nextButton = $("<button>").text("Next").addClass("review-btn next-btn").appendTo(reviewContainer);
 
                 // Event listeners 
                 prevButton.on("click", () => {
