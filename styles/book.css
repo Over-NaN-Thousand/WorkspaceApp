@@ -1,5 +1,5 @@
 :root {
-    --prim: #275158;
+    --prim: rgb(39, 81, 88);
 
     --form-bg: #ceba92ae;
     --filter-bg: #f1ede8;
@@ -172,11 +172,14 @@ select-container {
 .overlay {
     display: none;
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #275158;
+    overflow: auto;
+    background-color: regb(39, 81, 88); /*fall bacl color*/
+    background-color:rgba( 39, 81, 88, 0.4);
 }
 
 .popup {
