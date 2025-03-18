@@ -64,11 +64,11 @@
     cursor: pointer;
 }
 
-.popup-buttons button#deleteWorkspace {
+.popup-buttons #deleteWorkspace {
     background-color: #7c1717;
 }
 
-.popup-buttons button#closePopup {
+.popup-buttons #closePopup {
     background-color: #5e6a6c;
 }
 
@@ -77,3 +77,5 @@
         width: 90vw;
     }
 }
+
+

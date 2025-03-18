@@ -101,6 +101,8 @@ function receiveSearchString(){
 
 function DisplayWorkspaces(workspaceList){
     $("#workspaces-container").empty();
+
+    
     
     workspaceList.forEach(workspace => {
         const defaultPic = setDefaultPic(workspace.workspaceType);
@@ -118,6 +120,7 @@ function DisplayWorkspaces(workspaceList){
                     <p><strong>Neighborhood:</strong> ${workspace.neighborhood}</p>
                     <p><strong>Location:</strong> ${workspace.address1}, ${workspace.city}, ${workspace.province}, ${workspace.country}</p>
                     <p><strong>Amenities:</strong> ${workspace.amenities.join(", ")}</p>
+                    <a href="pages/workspaceDetails.html?workspaceid=${workspace.workspaceID}" class="btnWSdetail">Details</a>
                 </div>
             </section>`;
         $("#workspaces-container").append(section); // Append created section to the container
@@ -254,6 +257,7 @@ function ApplyFilters(workspaceList){
 
 function ClickApplyBtn() {
     const filteredWorkspaces = ApplyFilters(allWorkspaces);
+    
     DisplayWorkspaces(filteredWorkspaces);
 
     $('html, body').animate({

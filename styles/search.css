@@ -178,6 +178,16 @@ article{
     font-size: clamp(9px, 3vw, 12px);
 }
 
+.btnWSdetail{
+    padding: .2rem .75rem;
+    font-size: clamp(9px, 12px, 14px);
+    background-color: var(--prim);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 
 
