@@ -3,6 +3,8 @@ import userData from './userData.js';//for owner contact info
 import properties from './propertyData.js';
 import reviews from './workspaceReviews.js';
 
+
+
 $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
@@ -12,6 +14,7 @@ $(document).ready(function () {
     const popup = document.getElementById('popup');
     const closePopup = popup.querySelector('.close');
     const ownerBtn = document.querySelector('.ownerBtn');
+    const bookingBtn = document.querySelector('.bookingBtn');
     const closeBtn = popup.querySelector('.closeBtn'); 
   
 
@@ -48,10 +51,54 @@ $(document).ready(function () {
         }
     });
 
-    
-    // testing with manualky set Id
-    const targetId = 9; 
 
+    //booking form -- would like this to be a popup if i can make it work
+    function bookingForm(){
+    // Redirect to book.html page
+    window.location.href = '/WorkspaceApp/pages/accountpage.html';
+    }
+
+    bookingBtn.addEventListener('click', bookingForm);
+   
+    /*
+      // Open popup on button click
+      bookingBtn.addEventListener('click', openPopup);
+
+      // Close popup with 'x' button
+      closePopup.addEventListener('click', closeFunction);
+  
+      // Close popup with close button
+      closeBtn.addEventListener('click', closeFunction);
+  
+      // Close popup by clicking outside
+      $('#overlay').on('click', (event) => {
+          if (event.target === popupOverlay) {
+              closeFunction();
+          }
+      });
+*/
+
+
+
+function receiveSearchString(){
+    const currUrl = new URL(window.location.href);
+    const params = new URLSearchParams(currUrl.search);
+    const searchText = ("workspace.workspaceID");
+    return searchText;
+}
+
+   const workspace = receiveSearchString();
+
+    //const workspace = JSON.parse(localStorage.getItem('Workspace'));
+    //var targetId = workspace;
+
+    //const workspace = JSON.parse(localStorage.getItem('Workspace'));
+    var targetId = workspace;
+
+      // Validate input fields
+      if (!targetId) {
+        targetId = 19; 
+    }
 
     //use worskpaceId to find owner and property data
     const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === targetId);
@@ -62,6 +109,8 @@ $(document).ready(function () {
     const workspaceRating = targetWorkspace.rating;
     const targetReviews = reviews.filter(review => review.workspaceID === targetId);
      
+
+
     console.log("Workspace:", targetWorkspace);
     console.log("Owner:", targetOwner);
     console.log("Property:", targetProperty);
