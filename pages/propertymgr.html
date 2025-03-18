@@ -102,6 +102,8 @@
     
         </article>
 
+        <button type="button" id="addProperty" val="_new">Add Property</button>
+
 
         <div id="workspacePopup" class="popup-container">
             <div class="popup-content">
@@ -141,6 +143,50 @@
                         <button type="button" id="saveWorkspace">Save</button>
                         <button type="button" id="deleteWorkspace">Delete</button>
                         <button type="button" id="closePopup">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="propertyPopup" class="popup-container">
+            <div class="popup-content">
+                <h2>Edit Property</h2>
+                <form id="propertyForm">
+                    <p>
+                        <label for="propertyName">Property Name:</label>
+                        <input type="text" id="propertyName" name="propertyName">
+                    </p>
+                    <p>
+                        <label for="address1">Address 1:</label>
+                        <input type="text" id="address1" name="address1">
+                    </p>
+                    <p>
+                        <label for="address2">Address 2:</label>
+                        <input type="text" id="address2" name="address2">
+                    </p>
+                    <p>
+                        <label for="neighborhood">Neighborhood:</label>
+                        <input type="text" id="neighborhood" name="neighborhood">
+                    </p>
+                    <p>
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city">
+                    </p>
+                    <p>
+                        <label for="province">Province:</label>
+                        <input type="text" id="province" name="province">
+                    </p>
+                    <p>
+                        <label for="country">Country:</label>
+                        <input type="text" id="country" name="country">
+                    </p>
+                    <p>
+                        <label for="postalCode">Postal Code:</label>
+                        <input type="text" id="postalCode" name="postalCode">
+                    </p>
+                    <div class="popup-buttons">
+                        <button type="button" id="saveProperty">Save</button>
+                        <button type="button" id="closePropertyPopup">Close</button>
                     </div>
                 </form>
             </div>
