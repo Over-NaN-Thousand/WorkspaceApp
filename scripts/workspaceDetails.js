@@ -7,8 +7,51 @@ $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
 
+//-------------popup---------------------------------------------   
+    const popupOverlay = document.getElementById('overlay');
+    const popup = document.getElementById('popup');
+    const closePopup = popup.querySelector('.close');
+    const ownerBtn = document.querySelector('.ownerBtn');
+    const closeBtn = popup.querySelector('.closeBtn'); 
+  
+
+    // Ensure popup is hidden at start
+    popupOverlay.style.display = 'none';
+
+    // Open popup function
+    function openPopup() {
+        console.log("Opening popup");
+        popupOverlay.style.display = 'block';
+    }
+
+    // Close popup function
+    function closeFunction() {
+        console.log("Closing popup");
+        popupOverlay.style.display = 'none';
+    }
+        
+   
+
+       // Open popup on button click
+    ownerBtn.addEventListener('click', openPopup);
+
+    // Close popup with 'x' button
+    closePopup.addEventListener('click', closeFunction);
+
+    // Close popup with close button
+    closeBtn.addEventListener('click', closeFunction);
+
+    // Close popup by clicking outside
+    $('#overlay').on('click', (event) => {
+        if (event.target === popupOverlay) {
+            closeFunction();
+        }
+    });
+
+    
     // testing with manualky set Id
-    const targetId = 19; 
+    const targetId = 9; 
+
 
     //use worskpaceId to find owner and property data
     const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === targetId);
@@ -17,15 +60,39 @@ $(document).ready(function () {
     const targetOwner = userData.find(user => user.id === targetOwnerId);
     const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
     const workspaceRating = targetWorkspace.rating;
-    const targetReviews = reviews.find(review => review.workspaceID === targetId);
-    
-        console.log("Workspace:", targetWorkspace);
-        console.log("Owner:", targetOwner);
-        console.log("Property:", targetProperty);
-        console.log("Rating:", workspaceRating);
-        console.log("Reviews:", targetReviews);
+    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
+     
+    console.log("Workspace:", targetWorkspace);
+    console.log("Owner:", targetOwner);
+    console.log("Property:", targetProperty);
+    console.log("Rating:", workspaceRating);
+    console.log("Reviews:", targetReviews);
 
-  
+
+
+    // --- Set Owner Contact Info ---
+    if (targetOwner) {
+        // Display owner name
+        $('.OwnerName').text(`${targetOwner.firstName} ${targetOwner.lastName}`);
+
+        // Display owner email
+        $('.ContactInfo').html(`<p>Email: <a href="mailto:${targetOwner.email}">${targetOwner.email}</a></p>`);
+
+        // Display other workspaces by the same owner
+        const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
+        const workspaceList = $('.WorkspacesList');
+        workspaceList.empty(); // Clear previous list
+
+        if (ownersWorkspaces.length > 0) {
+            ownersWorkspaces.forEach(workspace => {
+                $('<li>').text(workspace.workspaceName).appendTo(workspaceList);
+            });
+        } else {
+            $('<li>').text('No other workspaces available').appendTo(workspaceList);
+        }
+    }
+
+
         //-------Left section----------------------------------------------
         const sectionDivL= $("<div>").appendTo("#workspace-display-left");
          // Set workspace name in the existing div
@@ -44,7 +111,7 @@ $(document).ready(function () {
             //workspace details
             $("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
             $("<li>").text(`Type: ${targetWorkspace.workspaceType}`).appendTo(ulL);
-            $("<li>").text(`Lease Term: ${targetWorkspace.leaseTerm}`).appendTo(ulL);
+            $("<li>").text(`Price: $${targetWorkspace.price} / ${targetWorkspace.leaseTerm}`).appendTo(ulL);
             $("<li>").text(`Square Footage: ${targetWorkspace.sqFt} sq ft`).appendTo(ulL);
             $("<li>").text(`Seat Capacity: ${targetWorkspace.seatCapacity}`).appendTo(ulL);
             $("<li>").text(`Price: ${targetWorkspace.price}' /'${(targetWorkspace.leaseTerm)}`).appendTo(ulL);
@@ -63,7 +130,7 @@ $(document).ready(function () {
             });
             sectionDivL.append(ulL);
 
-//-------------------------------------------------------------------------//
+
 // //right section---------------------------------------------------
             const sectionDivR = $("<div>").appendTo(rightContainer);
 
@@ -73,8 +140,7 @@ $(document).ready(function () {
         console.log(averageStarRating);
 
         //add star symbols
-        const starRatingDiv = $(".starRating");
-            starRatingDiv.empty(); // Clear previous content
+        const starRatingDiv = $(".starRating").empty(); 
 
            for(let i=0; i < averageStarRating; i++){
                $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
@@ -83,70 +149,48 @@ $(document).ready(function () {
             if (averageStarRating === 0) {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
+//---------------------------------review------------------------------------
+
+
+            const reviewContainer = $(".reviewBody").empty();
+
+            // track review index
+            let currentReviewIndex = 0;
+
+            function displayReview(index) {
+            reviewContainer.empty();
+            if (targetReviews.length > 0) {
+                const review = targetReviews[index];
+                $("<p>").text(`${review.date}`).appendTo(".reviewBody"),
+                $("<p>").text(`${review.comment}`).appendTo(".reviewBody");
+                } else {
+                $("<p>").text("No reviews available").appendTo(".reviewBody");
+            }
+            }
             
+            if (targetReviews.length > 0) {
+                displayReview(currentReviewIndex);
 
-            //-------------popup---------------------------------------------           
-        
-    const popupOverlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const closePopup = popup.querySelector('.close');
-    const messageInput = document.getElementById('messageInput');
-    const ownerBtn = document.querySelector('.ownerBtn');
-    const closeBtn = popup.querySelector('.closeBtn'); 
+                // Prev/Next buttons
+                const prevButton = $(`<button>`).text(`Prev`).addClass(`review-btn prev-btn`).appendTo(`.leftBtn`);
+                const nextButton = $(`<button>`).text(`Next`).addClass(`review-btn next-btn`).appendTo(`.rightBtn`);
 
-    // popup is hidden at start
-    popupOverlay.style.display = 'none';
+                // Event listeners 
+                prevButton.on("click", () => {
+                    currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
+                    displayReview(currentReviewIndex);
+                });
 
-     // Open popup 
-     function openPopup() {
-        popupOverlay.style.display = 'block';
-    }
-    // Close popup
-    function closeFunction() {
-        popupOverlay.style.display = 'none';
-    }
-    
-    // Set owner contact info
-    // Display owner contact info in popup
-    const ownerName = targetOwner.first
-    const ownerEmail = targetOwner.email;
-    const ownerDetails = `
-        <p><strong>Owner:</strong> ${ownerName}</p>
-        <p><strong>Email:</strong> ${ownerEmail}</p>
-    `;
-    popup.querySelector('.ownerDetails').innerHTML = ownerDetails;    
-
-    ownerName.textContent = `${targetOwner.firstName} ${targetOwner.lastName}`;
-    ownerEmail.textContent = targetOwner.email;
-
-    const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
-    console.log(ownersWorkspaces);
-              
-    $("<li>").text(`Name: ${targettargetOwner.firstName}`).appendTo("OwnerName");
-    $("<li>").text(`Last Name: ${targettargetOwner.lastName}`).appendTo("OwnerLastName");
-
-    $("<h3>").text("Contact ").appendTo("ContactInfo");
-    $("<li>").addClass("email").text('Email: ${email}').appendTo("ContactInfo");
-
-    //Owners other workspaces to view
-    $("<h3>").text("Workspaces").appendTo("WorkspacesList");
-    ownersWorkspaces.forEach(ownersWorkspaces => {
-    $("<li>").text(ownersWorkspaces.workspaceName).appendTo("WorkspacesList")
+                nextButton.on("click", () => {
+                    currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
+                    displayReview(currentReviewIndex);
+                });
+            } else {
+                displayReview(currentReviewIndex);
+            };
+            
     });
 
-    // Open popup on button click
-    ownerBtn.addEventListener('click', openPopup);
-    // Close popup with the 'x' button
-    closePopup.addEventListener('click', closeFunction);
-    // Close popup with close button
-    closeBtn.addEventListener('click', closeFunction); 
-    // Close popup by clicking outside the popup
-    popupOverlay.addEventListener('click', function(event) {
-        if (event.target === popupOverlay) {
-            closeFunction();
-        }
-    });   
-});
 
 
     

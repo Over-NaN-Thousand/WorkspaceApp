@@ -1,0 +1,226 @@
+:root {
+    --prim: rgb(39, 81, 88);
+
+    --form-bg: #ceba92ae;
+    --filter-bg: #f1ede8;
+
+    --item-text: #0e0e0e;
+    --item-border: rgba(169, 169, 169, 0.5);
+    --item-bg: #ffffff;
+
+}
+
+* {
+    box-sizing: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--body-bg);
+    color: #030303;
+    font-size: clamp(12px, 3vw, 24px);
+    height: 64.9vh;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    padding: 15px;
+    overflow: hidden;
+
+}
+
+.main .informationForm {
+    max-width: 500px;
+    width: 100vw;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1); 
+}
+
+
+.main .informationForm .title {
+    height: 15vh;
+    background:#4f4a41;
+    border-radius: 5px 5px 0 0;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main .informationForm form {
+    padding: 25px 35px;
+    background-color: #6e6658;
+    height:600px;
+}
+
+.main .informationForm form .row {
+    height: 5vh;
+    margin-top: 15px;
+    position: relative;
+}
+
+.informationForm form .row input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding-left: 70px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+form .row input:focus {
+    border-color:var(--form-bg);
+}
+
+form .row input::placeholder {
+    color: #999;
+}
+
+.informationForm form .pass {
+    margin-top: 12px;
+}
+
+.informationForm form .pass a {
+    color:white;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+.informationForm form .pass a:hover {
+    text-decoration: underline;
+}
+
+.informationForm form .button input {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 0px;
+    background:var(--form-bg);
+    border: 1px solid var(--form-bg);
+    cursor: pointer;
+}
+
+
+.informationForm form .signup-link {
+    text-align: center;
+    margin-top: 45px;
+    font-size: 17px;
+}
+
+.informationForm form .signup-link a {
+    color:white;
+    text-decoration: none;
+}
+
+form .signup-link a:hover {
+    text-decoration: underline;
+}
+
+select-container {
+    width: 220px; 
+  }
+  
+
+.custom-select {
+    width: 100%;
+    padding: 10px 12px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #000;
+    height:100%;
+    background-color: #96c7c1;
+    border: 1px solid #444;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+.custom-select option:nth-child(odd) {
+   background-color: #edfcea;
+}
+.custom-select option:nth-child(even) {
+    background-color: #b7cbb3;
+ }
+ 
+
+  .custom-select:hover,
+.custom-select:focus {
+  background-color: #78ada7;
+  outline: none;
+}
+
+.login-link{
+    font-size:25px;
+    text-align: center;
+    padding: 15px 0 0 0 ;
+}
+
+
+
+
+/*popup*/
+.overlay {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: regb(39, 81, 88); /*fall bacl color*/
+    background-color:rgba( 39, 81, 88, 0.4);
+}
+
+.popup {
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content{ 
+    text-align: center;
+}
+
+.popup .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.popup #messageInput {
+    width: 100px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.closeBtn {
+    background-color: #275158;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
