@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workspace Details</title>
 
-    <base href="/WorkspaceApp/">
+    <base href="/">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
@@ -23,7 +23,23 @@
 
         <div class="main">
 
-                
+                <!--Pop-up window owner details-->
+            <div id="overlay" class="Popup">
+                <div class="popup" id="popup">
+                    <span class="close">&times;</span><!--close with X in corner-->
+                    <div class="content">
+                        <h1 class="title">Owner Information</h1>
+                        <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
+                        <h2 class="subHeading">Workspaces:</h2>
+                        <ul class="WorkspacesList"></ul>
+                        <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
+                        <button class="closeBtn">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
+
             <div class="detailsBoxL">
                 <div class="title" id="workspaceTitle"></div>
                 <!--Left box-->
@@ -32,7 +48,7 @@
                 </div>
 
                 <!--button for Owner contact-->
-                <div class="button-container">
+                <div class="row-button">
                     <button class="ownerBtn">
                         Owner Info
                     </button>
@@ -40,14 +56,15 @@
                     <button class="bookingBtn">
                         Book
                     </button>
-
-
-            
                 </div>
+
+                    <div class="login-link">Already a member?<a href="/pages/login.html" style: background-color="#275158";>Log-in now !</a></div>
+                <div class="row button">
+                    <div class="signup-link" value="Sign-up"></div>
+                </div> 
             </div>
             
-            
-                
+      
             <div class="detailsBoxR">
                 <div class="title" id="workspaceTitle2"></div>
                     <!--Right box-->
@@ -60,48 +77,25 @@
                         <div class="starRating"></div>
 
                         <div class="reviewContainer">
-                            <div class="subHeading"><span>Reviews</span></div>
-            
-                            
-                                <div class="reviewRow">
-                                
-                                <button class="leftButton">
-                                    Previous
-                                </button>
+                        <div class="subHeading"><span>Reviews</span></div>
+        
+                        <div class="reviewRow">
 
-                                <div class="reviewBody" aria-placeholder="review goes here"></div>
-                                    
-                                <button class="rightButton">
-                                    Next
-                                </button>
-                                    
-                                </div>
-                            
+                         <div class="leftBtn">
+                            <!---buttonprev--> </div>
+                            <div class="reviewBody" aria-placeholder="review goes here"><!--review text--></div>
+
+                            <div class="rightBtn"> 
+                            <!--button next-->
+                            </div>    
+                            </div>
+                        </div>
+                    
 
                     </div>
                 </div> 
             </div>
-            
-
-            <!--Pop-up window owner details-->
-            <div id="overlay" class="Popup">
-                <div class="popup" id="popup">
-                    <span class="close">&times;</span><!--close with X in corner-->
-                    <div class="content">
-                        <h1 class="title">Owner Information</h1>
-                        <h2 class="OwnerName" aria-placeholder="Owner Name"></h2>
-                        
-                        <ul class="WorkspacesList">Workspaces:</ul>
-
-                        <div class="ContactInfo">Email:</div>
-
-                        <button class="closeBtn">Close</button>
-                    </div>
-                </div>
-            </div>
-
-
-
+    
             
         </div>
     <footer id="footer-mainjs"></footer>
