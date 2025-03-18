@@ -11,15 +11,34 @@ const propertyList = properties.filter(property => (property.ownerId===currUser.
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
 $(document).ready(function () {
-    
-    
+
+
     //If user has not signed in yet they cant access to this page.
     if (!currentUser) {
         alert('Please log in to view your properties.');
         window.location.href = 'pages/login.html';
         return;
     }
-    
+
+    //"Apply" button action 
+    $("#btnApply").click(function () {
+        const propertySortBy = $("#selSortProperty").val();
+        const workspaceSortBy = $("#selSortWorkspace").val();
+
+        sortProperty(propertySortBy);
+        sortWorkspaces(workspaceSortBy);
+        updateScreen();
+    });
+    //"Reset" button action
+    $("#btnReset").click(function () { 
+        //Default reset sort by "name" and "workspaceName"
+        $("#selSortProperty").val("name");
+        $("#selSortWorkspace").val("workspaceName"); 
+        sortProperty("name"); 
+        sortWorkspaces("workspaceName"); 
+        updateScreen();
+    });
+
     updateScreen(); //loads properties owned by user and workspaces inside each property
 
     //build field html
@@ -27,6 +46,8 @@ $(document).ready(function () {
     const optWStypes = [...new Set(workspaces.map(workspace => workspace.workspaceType))];
     const optTerm = ["Hourly", "Daily", "Weekly", "Monthly", "Quarterly"];
     const optAmenities = ["Full Kitchen", "Microwave", "Coffee Maker", "Copy/Print Equipment", "Projector", "High-Speed Wi-Fi", "Whiteboards", "Conference Phones", "Adjustable Desks", "Ergonomic Chairs", "Secure Storage/Lockers", "Mail and Package Handling", "Outdoor Seating/Patio", "Receptionist/Front Desk Service", "Soundproofing", "Lounge Areas", "Casual Seating", "Tech Support", "Security Cameras", "Snack Bar", "Vending Machines", "Fitness Room", "Gym Access", "Natural Lighting"];
+
+
     addOptionsToDropdown(optWStypes, "workspaceType", "optWStype", "option");
     addOptionsToDropdown(optTerm, "leaseTerm", "optLeaseTerm", "option");
     addOptionsToTarget(optAmenities, "amenities-container", "optAmenities", "checkbox");
@@ -40,7 +61,7 @@ $(document).ready(function () {
     $("#deleteWorkspace").click(deleteWorkspacePop);
     $("#closePopup").click(closeWorkspacePop);
 
-    
+
     $(document).on("click", ".btnProperty[name='Edit']", popPropertyManager);
     $(document).on("click", ".btnProperty[name='Delete']", deleteProperty);
     // $('#editProperty').click(popPropertyManager);
@@ -50,7 +71,7 @@ $(document).ready(function () {
 
 });
 
-function updateScreen(){
+function updateScreen() {
     //AL - bundled here and de-parameterized for easy reuse
     createPropertiesHTML();
     addWorkspacesToProperties();
@@ -61,9 +82,9 @@ function createPropertiesHTML() {
     const propList = properties.filter(property => property.ownerId === currentUser.id); //filter to only properties owned by user
 
     $("#properties-container").empty();
-                            /*The img code in the html below we can swtich to
-                            <img src="resources/images/${property.imgFileName}" alt="${property.name}" onerror="this.src='resources/images/default property.png';">
-                            later as we dont have images for now so let it defined as default*/
+    /*The img code in the html below we can swtich to
+    <img src="resources/images/${property.imgFileName}" alt="${property.name}" onerror="this.src='resources/images/default property.png';">
+    later as we dont have images for now so let it defined as default*/
     propList.forEach(property => {
         //AL - !discovery! you can add a data-___ attribute that you can access later by jQuery
         const section = `
@@ -119,12 +140,12 @@ function addWorkspacesToProperties() {
 
 function addOptionsToDropdown(options, targetID, type) {
     options.forEach(option => {
-          $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
+        $(`#${targetID}`).append(`<option value="${option}"> ${option}</option>`);
     });
 }
 function addOptionsToTarget(options, targetID, name, type) {
     options.forEach(option => {
-          $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
+        $(`#${targetID}`).append(`<label><input type="${type}" name="${name}" value="${option}" title="${option}"> ${option}</label>`);
     });
 }
 
@@ -188,7 +209,7 @@ function popWorkspaceManager() {
 function saveWorkspacePop(event) {
     const workspaceID = $(event.currentTarget).val(); //get id from Save value
     let workspaces = JSON.parse(localStorage.getItem('workspaces')) || []; //Get workspace from localStorage.
-    
+
 
     const workspaceData = {
         workspaceName: $("#workspaceName").val(),
@@ -268,8 +289,8 @@ function popPropertyManager() {
     const propertyID = $(this).attr("val");
     const properties = JSON.parse(localStorage.getItem('properties')) || [];
     const property = properties.find(prop => prop.propertyId == propertyID); // Find the property
-   
-    if (propertyID === "_new") { 
+
+    if (propertyID === "_new") {
         // Clear form for adding a new property
         $("#propertyForm")[0].reset();
         $("#propertyForm").removeClass("details-mode").addClass("edit-mode");
@@ -279,7 +300,7 @@ function popPropertyManager() {
         $("#saveProperty").show();
         $("#deleteProperty").hide();
         $("#closePropertyPopup").text("Close");
-    } else { 
+    } else {
         // Load property details into the form for editing
         $("#propertyForm").removeClass("details-mode").addClass("edit-mode");
         $("#propertyForm h2").text("Edit Property");
@@ -339,7 +360,7 @@ function savePropertyPop(event) {
     localStorage.setItem('properties', JSON.stringify(properties));
     alert("Property saved!");
     $("#propertyPopup").css("display", "none"); // close pop-up
-   
+
 
     updateScreen();
 }
@@ -363,4 +384,62 @@ function deleteProperty(event) {
 
 function closePropertyPop() {
     $("#propertyPopup").css("display", "none");
+}
+
+//Sort properties section.
+function sortProperty(sortBy) {
+    let properties = JSON.parse(localStorage.getItem('properties')) || [];
+
+
+    const propertiesList = properties.filter(property => property.ownerId === currentUser.id);
+
+    //Using switch and localeCompare to sort
+    switch (sortBy) {
+        case 'name':
+            propertiesList.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'city':
+            propertiesList.sort((a, b) => a.city.localeCompare(b.city));
+            break;
+        case 'province':
+            propertiesList.sort((a, b) => a.province.localeCompare(b.province));
+            break;
+        case 'country':
+            propertiesList.sort((a, b) => a.country.localeCompare(b.country));
+            break;
+    }
+
+    //Update new sorted array to localStorage, delete the old array
+    properties = [
+        ...properties.filter(p => p.ownerId !== currentUser.id),
+        ...propertiesList
+    ];
+    //Save to localStorage
+    localStorage.setItem('properties', JSON.stringify(properties));
+
+}
+function sortWorkspaces(sortBy) {
+    let workspaces = JSON.parse(localStorage.getItem('workspaces')) || [];
+    const workspaceList = workspaces.filter(workspace => workspace.ownerId === currentUser.id);
+
+
+        switch (sortBy) {
+            case 'workspaceName':
+                workspaceList.sort((a, b) => a.workspaceName.localeCompare(b.workspaceName));
+                break;
+            case 'workspaceType':
+                workspaceList.sort((a, b) => a.workspaceType.localeCompare(b.workspaceType));
+                break;
+            case 'price':
+                workspaceList.sort((a, b) => a.price - b.price);
+                break;
+            case 'leaseTerm':
+                workspaceList.sort((a, b) => a.leaseTerm.localeCompare(b.leaseTerm));
+                break;
+        }
+    workspaces = [
+        ...workspaces.filter(w => w.ownerId !== currentUser.id),
+        ...workspaceList
+    ];
+    localStorage.setItem('workspaces', JSON.stringify(workspaces));
 }

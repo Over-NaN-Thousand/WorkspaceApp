@@ -31,13 +31,25 @@
         </div>
 
         <div class="sort-container">
-            <label for="selSort">Sort By:</label>
-            <select id="selSort" name="selSort" title="Please select criteria to sort">
+            <!--Workspace filter drop down list.-->
+            <label for="selSortWorkspace">Sort By: Wrokspace</label>
+            <select id="selSortWorkspace" name="selSortWorkspace" title="Please select criteria to sort">
                 <option value="workspaceName" selected>Name</option>
                 <option value="workspaceType">Type</option>
                 <option value="price">Price</option>
                 <option value="leaseTerm">Lease Term</option>
             </select>
+
+            <!--Property filter drop down list-->
+            <label for="selSortProperty">Sort By: Property</label>
+            <select id="selSortProperty" name="selSortProperty" title="Please select criteria to sort">
+                <option value="name" selected>Name</option>
+                <option value="city">City</option>
+                <option value="province">Province</option>
+                <option value="country">Country</option>
+            </select>
+
+
         </div>
 
         <section class="types">
