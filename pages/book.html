@@ -13,7 +13,7 @@
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script src="scripts/signuppage.js" defer></script>
+    <script src="scripts/booking.js" defer></script>
     <script src="/styles/book.css" defer></script>
 
     <link rel="stylesheet" href="/styles/style.css" >
@@ -33,37 +33,45 @@
                         
                         <div class="content">
 
+                            <form id="getFormInfo" type="booking-form" action="#">
+
                             
+                                
+                              
                                 
                             <div class="row">
                                 <div class="informationForm">
                                     <div class="title"><span>Book A Workspace!</span></div>
-                                <form type="booking-form" action="#">
+                                    
                                     <i class="fas fa-user"></i>
                                     <h2 class="userId" aria-placeholder="userId"></h2>
                                     <p type="text" class="user-info"></p>
                                     <div class="row">
-                                        <p type="text">
-                                        <p type="email"></p>
+   
                                     </div>
                                     <div class="row">
                                         
                                     </div>
-                                    <H1 class="workspaceName" text="Workspace: "></h1>
-                                    <ul value="Property">Property Name</ul>
-                                    <li>Price</li>
-                                        
+                                    <H1 class="workspaceName" text="Workspace:"></h1>
                                     
-                                    <input type="date" value="Start Date"/>
+                                    <!--if workspace leaseTerm type is hourly-->
+                                    <h2>Choose Start Date</h2>
+                                    <input type="date" value="Start Datee"/>
+                                    <h2>Choose Start Date</h2>
+                                    <input type="date" value="Start Datee"/>
+
+                                    <!--if workspace leaseTerm type is hourly-->
+                                    <h2>Choose Start Time</h2>
+                                    <input type="time" value="Start Time"/>
+                                    <h2>Choose End Time</h2>
                                     <input type="time" value="Start Time"/>
 
-
                                     <div class="row button">
-                                        <buttom class="closeBtn" value="Cancel" />
+                                        <input type="button" class="closeBtn" value="Cancel" />
                                     </div>
                                     
                                     <div class="row button">
-                                        <input type="submitBtn" value="Confirm Booking"/>
+                                    <input type="button" class="book" value="Confirm Booking" />
                                     </div>
                                                 
                                 </form>
