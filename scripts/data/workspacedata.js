@@ -407,7 +407,6 @@ const workspaces = [
     rating: 3
   },
 
-  // Property 12 - 3個 Workspaces
   {
     workspaceID: 24,
     workspaceName: "Sunset Private Office",
