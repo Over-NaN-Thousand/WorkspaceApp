@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workspace Details</title>
-
+ 
     <base href="/WorkspaceApp/">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script type="module" src="/scripts/workspaceDetails.js" defer></script>
-  
+    <script type="module" src="scripts/workspaceDetails.js" defer></script>
+ 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/details.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
 </head>
-  
-
-
+ 
+ 
+ 
 <body>
     <header id="header-mainjs"></header>
-
+ 
         <div class="main">
-
+ 
                 <!--Pop-up window owner details-->
             <div id="overlay" class="Popup">
                 <div class="popup" id="popup">
@@ -39,16 +39,16 @@
                     </div>
                 </div>
             </div>
-
-
-
+ 
+ 
+ 
             <div class="detailsBoxL">
                 <div class="title" id="workspaceTitle"></div>
                 <!--Left box-->
                 <div id="workspace-display-left">
                 <!-- workspaceDetails populate here from .js-->
                 </div>
-
+ 
                 <!--button for Owner contact-->
                 <div class="row-button">
                     <button class="ownerBtn">
@@ -59,48 +59,47 @@
                         Book
                     </button>
                 </div>
-                    
+                   
                 <div class="row button">
                     <div class="signup-link" value="Sign-up"></div>
-                </div> 
+                </div>
             </div>
-            
-      
+           
+     
             <div class="detailsBoxR">
                 <div class="title" id="workspaceTitle2"></div>
                     <!--Right box-->
                     <div id="workspace-display-right">
                         <div class="imageContainer">
-                        <img class="workspaceImg" src="/resources/images/pexels-kindelmedia-7651627.jpg"/>
+                        <img class="workspaceImg" src="resources/images/pexels-kindelmedia-7651627.jpg"/>
                         </div>
-                    
+                   
                         <div class="detailBoxHeading">Average Rating</div>
                         <div class="starRating"></div>
-
+ 
                         <div class="reviewContainer">
                         <div class="subHeading"><span>Reviews</span></div>
-        
+       
                         <div class="reviewRow">
-
+ 
                          <div class="leftBtn">
                             <!---buttonprev--> </div>
                             <div class="reviewBody" aria-placeholder="review goes here"><!--review text--></div>
-
-                            <div class="rightBtn"> 
+ 
+                            <div class="rightBtn">
                             <!--button next-->
                             </div>    
                             </div>
                         </div>
-                    
-
+                   
+ 
                     </div>
-                </div> 
+                </div>
             </div>
-    
-            
+   
+           
         </div>
     <footer id="footer-mainjs"></footer>
 </body>
-
+ 
 </html>
-

@@ -55,7 +55,7 @@ $(document).ready(function () {
     //booking form -- would like this to be a popup if i can make it work
     function bookingForm(){
     // Redirect to book.html page
-    window.location.href = '/WorkspaceApp/pages/accountpage.html';
+    window.location.href = '/WorkspaceApp/pages/bookingtemp.html';
     }
 
     bookingBtn.addEventListener('click', bookingForm);
