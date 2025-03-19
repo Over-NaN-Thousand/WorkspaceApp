@@ -78,14 +78,13 @@ $(document).ready(function () {
       });
 */
 
-
-
 function receiveSearchString(){
     const currUrl = new URL(window.location.href);
     const params = new URLSearchParams(currUrl.search);
     const searchText = ("workspace.workspaceID");
     return searchText;
 }
+
 
 var targetId = Number(receiveSearchString());
 
@@ -94,6 +93,7 @@ var targetId = Number(receiveSearchString());
     //var targetId = workspace;
 
     //const workspace = JSON.parse(localStorage.getItem('Workspace'));
+
     //var targetId = 19;
 
       // Validate input fields
@@ -102,6 +102,7 @@ var targetId = Number(receiveSearchString());
     }
 
     const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
+
     const targetOwnerId = targetWorkspace.ownerId;
     const targetPropertyId = targetWorkspace.propertyId;
     const targetOwner = userData.find(user => user.id === targetOwnerId);
@@ -109,7 +110,6 @@ var targetId = Number(receiveSearchString());
     const workspaceRating = targetWorkspace.rating;
     const targetReviews = reviews.filter(review => review.workspaceID === targetId);
 
-    
     console.log("Workspace:", targetWorkspace);
     console.log("Owner:", targetOwner);
     console.log("Property:", targetProperty);
