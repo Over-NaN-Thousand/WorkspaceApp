@@ -9,8 +9,6 @@ $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
 
-    
-
 //-------------popup---------------------------------------------   
     const popupOverlay = document.getElementById('overlay');
     const popup = document.getElementById('popup');
@@ -52,6 +50,7 @@ $(document).ready(function () {
             closeFunction();
         }
     });
+
 
     //booking form -- would like this to be a popup if i can make it work
     function bookingForm(){

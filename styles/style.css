@@ -34,6 +34,7 @@
     li{
         list-style: none;
         min-width: fit-content;
+        position:relative;
     }
 
     a{
@@ -65,6 +66,35 @@
         text-decoration: underline;
     }
 
+
+ /********CITIES********/
+#navMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--prim);
+    padding: .5rem;
+    z-index: 1000;
+}
+
+#navMenu ul {
+    list-style: none;
+    display: block;
+    font-size: clamp(10px, 16px, 18px);
+}
+
+#navMenu li {
+    margin: 10px 0;
+}
+
+#navMenu a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.hidden {
+    display: none;
+}
 
  /********FOOTER********/
     footer{

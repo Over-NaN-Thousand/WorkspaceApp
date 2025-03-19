@@ -184,6 +184,17 @@ article{
 }
 
 
+#addProperty{
+    margin : .5rem 1.2rem;
+    padding: .3rem 1.5rem;
+    font-size: clamp(12px, 14px, 16px);
+    border: 1px solid var(--prim);
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgb(39, 81, 88, .1);
+    cursor: pointer;
+}
+
+
 /********WORKSPACE********/
 
 .workspace-list{
