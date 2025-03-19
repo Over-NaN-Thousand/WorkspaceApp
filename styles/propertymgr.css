@@ -13,7 +13,7 @@
 body {
     display: grid;
     grid-template-rows: auto 1fr auto; /* header, content, footer */
-    grid-template-columns: 20% auto; /* percentage for aside, rest for main */
+    grid-template-columns: 1% auto; /* percentage for aside, rest for main */
     grid-template-areas:
         "header header"
         "aside main"
@@ -26,8 +26,9 @@ header {
 }
 
 aside {
-    grid-area: aside;
-    background-color: var(--aside-bg);
+    display: none; /*debating if list should have filters*/
+    /* grid-area: aside;
+    background-color: var(--aside-bg); */
 }
 
 main {
