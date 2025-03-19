@@ -88,36 +88,34 @@ function receiveSearchString(){
     return searchText;
 }
 
-   const workspace = receiveSearchString();
+var targetId = Number(receiveSearchString());
+
 
     //const workspace = JSON.parse(localStorage.getItem('Workspace'));
     //var targetId = workspace;
 
     //const workspace = JSON.parse(localStorage.getItem('Workspace'));
-    var targetId = workspace;
+    //var targetId = 19;
 
       // Validate input fields
       if (!targetId) {
         targetId = 19; 
     }
 
-    //use worskpaceId to find owner and property data
-    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === targetId);
+    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
     const targetOwnerId = targetWorkspace.ownerId;
     const targetPropertyId = targetWorkspace.propertyId;
     const targetOwner = userData.find(user => user.id === targetOwnerId);
     const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
     const workspaceRating = targetWorkspace.rating;
     const targetReviews = reviews.filter(review => review.workspaceID === targetId);
-     
 
-
+    
     console.log("Workspace:", targetWorkspace);
     console.log("Owner:", targetOwner);
     console.log("Property:", targetProperty);
     console.log("Rating:", workspaceRating);
     console.log("Reviews:", targetReviews);
-
 
 
     // --- Set Owner Contact Info ---
