@@ -4,16 +4,16 @@ const express = require('express');
 const cors = require('cors');
 const {  MongoClient } = require('mongodb');
 
-
-
 // app and settings
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 app.use(cors()); // allow all requests.
 app.use(express.json()); // define middleware to parse json
 
-const DATABASE = "WorkspaceApp"; // Replace with your database name
+const DATABASE = "WorkspaceApp";
+
+
+
 
 
 // CRUD operations for PROPERTY
@@ -22,9 +22,11 @@ app.post("/properties", async (req, res) => {
 
     if (!newProperty.propertyId || !newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
         return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
-    
 
     try {
+        const highestPropertyId = await connectToDatabase(getHighestId,"property","propertyId"); //get current highest propertyId, we'll add 1
+        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
+
         const result = await connectToDatabase(createProperty, newProperty);
             if (result.acknowledged) {
                 res.status(201).json({ message: "Property created successfully.", property: newProperty });
@@ -36,6 +38,8 @@ app.post("/properties", async (req, res) => {
         res.status(500).json({ message: "An error occurred while creating the property." });
     }
 });
+
+        
 
 app.get("/properties", async (req, res) => {
     const filters = {};
@@ -108,8 +112,8 @@ app.delete("/properties/:id", async (req, res) => {
 
 
 
-   
-   
+
+
 
 
 
@@ -129,7 +133,7 @@ app.listen(PORT, () => {
 
 
 
-
+//AL: this wrapper function takes care of connecting to the database, calling the function we want to execute, error handling, and closing the connection afterwards.
 async function connectToDatabase(callback, ...args) {
     const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
     const client = new MongoClient(db_uri);
@@ -150,6 +154,23 @@ async function connectToDatabase(callback, ...args) {
 
 
 
+
+async function getHighestId(client, collection, idField) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection(collection)
+            .find()
+            .sort({ [idField]: -1 })   // sort by propertyId DESC
+            .limit(1)                   // top 1
+            .next();
+
+        return result;
+    } catch (error) {
+        console.error("Error fetching the highest propertyId:", error);
+        throw error;
+    }
+}
 
 async function createProperty(client, property) {
     try {
