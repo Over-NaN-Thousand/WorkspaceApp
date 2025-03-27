@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Booking</title>
+
+    <base href="/WorkspaceApp/">
+    
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+    <script src="/scripts/mybooking.js" defer></script>
+    <link rel="stylesheet" href="/styles/mybooking.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+    <header id="header-mainjs"></header>
+
+    <div class="container">
+        <h1>Book a Workspace</h1>
+
+        <form id="bookingForm" onsubmit="return false;">
+            
+            <label for="workspaceName">Workspace Name:</label>
+            <input type="text" id="workspaceName" placeholder="Enter Workspace Name" required />
+
+            
+            <label for="leaseType">Lease Type:</label>
+            <select id="leaseType">
+                <option value="hourly">Hourly</option>
+                <option value="daily">Daily</option>
+            </select>
+
+            
+            <label for="userId">User ID:</label>
+            <input type="text" id="userId" placeholder="Enter User ID" required />
+
+            
+            <div id="dateTimeSelection"></div>
+
+            
+            <div class="button-container">
+                <button type="submit" id="bookBtn">Book</button>
+                <button type="reset" id="cancelBtn" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+
+        <h2>Booked Workspaces</h2>
+        <div id="bookingList"></div>
+    </div>
+
+    <footer id="footer-mainjs"></footer>
+</body>
+</html>
