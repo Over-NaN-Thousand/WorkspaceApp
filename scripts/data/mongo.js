@@ -19,6 +19,7 @@ async function connectToDatabase(callback, ...args) {
         await callback(client, ...args);
     } catch (e) {
         console.error(e);
+        
     } finally {
         await client.close();
         console.log('Disconnected from database\n');
@@ -31,6 +32,6 @@ async function listDatabases(client){
     console.log('Databases:');
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 }
-
+module.exports = { connectToDatabase, ObjectId };
  connectToDatabase(listDatabases); 
 
