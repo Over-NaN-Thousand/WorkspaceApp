@@ -6,16 +6,19 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const {
     connectToDatabase,
+
     /*getHighestId,
     createProperty,
     readProperties,
     updateProperty,
     deleteProperty*/
+
 } = require('./mongo');//To import connectToDatabase from mongo.js
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Import jsonwebtoken and crypto(For member)
+
 //const jwt = require('jsonwebtoken');
 //const crypto = require('node:crypto');
 
