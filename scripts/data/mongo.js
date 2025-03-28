@@ -2,7 +2,9 @@ require('dotenv').config();
 const {  MongoClient, ObjectId } = require('mongodb');
 const DATABASE = "WorkspaceApp"//Define the Database's name.
 const crypto = require('crypto');
-let users = loadUsers();
+
+//let users = loadUsers();
+
 
 async function connectToDatabase(callback, ...args) {
     /****************Put this code into your .env*****************
@@ -65,11 +67,12 @@ async function listDatabases(client){
 module.exports = { 
     connectToDatabase, 
     ObjectId, 
-    getHighestId, 
+
+    /*getHighestId, 
     createProperty, 
     readProperties, 
     updateProperty, 
-    deleteProperty 
+    deleteProperty */
 };
 
 

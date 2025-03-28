@@ -6,22 +6,25 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const {
     connectToDatabase,
-    getHighestId,
+
+    /*getHighestId,
     createProperty,
     readProperties,
     updateProperty,
-    deleteProperty
+    deleteProperty*/
+
 } = require('./mongo');//To import connectToDatabase from mongo.js
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Import jsonwebtoken and crypto(For member)
-const jwt = require('jsonwebtoken');
-const crypto = require('node:crypto');
+
+//const jwt = require('jsonwebtoken');
+//const crypto = require('node:crypto');
 
 //To get the secret key(64-byte, saltString)(For member)
-const salt = crypto.randomBytes(64);
-const saltString = salt.toString(`hex`);
+//const salt = crypto.randomBytes(64);
+//const saltString = salt.toString(`hex`);
 
 
 
