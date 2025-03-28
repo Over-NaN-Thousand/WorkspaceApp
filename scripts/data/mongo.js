@@ -1,5 +1,8 @@
 require('dotenv').config();
 const {  MongoClient, ObjectId } = require('mongodb');
+const DATABASE = "WorkspaceApp"//Define the Database's name.
+const crypto = require('crypto');
+let users = loadUsers();
 
 async function connectToDatabase(callback, ...args) {
     /****************Put this code into your .env*****************
@@ -8,10 +11,8 @@ async function connectToDatabase(callback, ...args) {
     const db_uri = process.env.MONGO_URI;
     const client = new MongoClient(db_uri);
 
-//=========Please notice everyone if you have edited above code=================
 
-
-
+//=========Please notice everyone if you have edited above code=================//
 
     try {
         await client.connect();
@@ -19,6 +20,7 @@ async function connectToDatabase(callback, ...args) {
         await callback(client, ...args);
     } catch (e) {
         console.error(e);
+
     } finally {
         await client.close();
         console.log('Disconnected from database\n');
@@ -31,6 +33,45 @@ async function listDatabases(client){
     console.log('Databases:');
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 }
+
+//========================The functions of Property=======================//
+
+
+
+
+
+//===================End of the function of Property==========================//
+
+
+//===================The function of user===================================//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//===================End of the function of user==========================//
+module.exports = { 
+    connectToDatabase, 
+    ObjectId, 
+    getHighestId, 
+    createProperty, 
+    readProperties, 
+    updateProperty, 
+    deleteProperty 
+};
+
 
  connectToDatabase(listDatabases); 
 
