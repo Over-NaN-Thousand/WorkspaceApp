@@ -11,8 +11,8 @@ async function connectToDatabase(callback, ...args) {
     const db_uri = process.env.MONGO_URI;
     const client = new MongoClient(db_uri);
 
-//=========Please notice everyone if you have edited above code=================//
 
+//=========Please notice everyone if you have edited above code=================//
 
     try {
         await client.connect();
@@ -20,12 +20,13 @@ async function connectToDatabase(callback, ...args) {
         await callback(client, ...args);
     } catch (e) {
         console.error(e);
-        
+
     } finally {
         await client.close();
         console.log('Disconnected from database\n');
     }
 }
+
 
 async function listDatabases(client){
     const databasesList = await client.db().admin().listDatabases();
@@ -70,6 +71,7 @@ module.exports = {
     updateProperty, 
     deleteProperty 
 };
+
 
  connectToDatabase(listDatabases); 
 
