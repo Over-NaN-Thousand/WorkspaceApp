@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log("MONGO_URI =", process.env.MONGO_URI);
 const {  MongoClient, ObjectId } = require('mongodb');
 const DATABASE = "WorkspaceApp"//Define the Database's name.
 
@@ -34,23 +35,7 @@ async function listDatabases(client){
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 }
 
-//AL: this wrapper function takes care of connecting to the database, calling the function we want to execute, error handling, and closing the connection afterwards.
-async function connectToDatabase(callback, ...args) {
-    const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
-    const client = new MongoClient(db_uri);
 
-    try {
-        await client.connect();
-        console.log('\nConnected to database');
-        return await callback(client, ...args); // call the function with arguments, then return the result
-    } catch (e) {
-        console.error("Database connection error:", e);
-        return res.status(500).json({ message: "Database connection failed." });
-    } finally {
-        await client.close();
-        console.log('Disconnected from database\n');
-    }
-}
 
 
 
