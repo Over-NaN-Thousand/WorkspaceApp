@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log("MONGO_URI =", process.env.MONGO_URI);
+
 const {  MongoClient, ObjectId } = require('mongodb');
 const DATABASE = "WorkspaceApp"//Define the Database's name.
 
@@ -10,9 +10,7 @@ async function connectToDatabase(callback, ...args) {
     const db_uri = process.env.MONGO_URI;
     const client = new MongoClient(db_uri);
 
-//=========Please notice everyone if you have edited above code=================
-
-
+//=========Please notice everyone if you have edited above code=================//
 
 
     try {
@@ -28,17 +26,12 @@ async function connectToDatabase(callback, ...args) {
     }
 }
 
-
+//========================The functions of Property=======================//
 async function listDatabases(client){
     const databasesList = await client.db().admin().listDatabases();
     console.log('Databases:');
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 }
-
-
-
-
-
 
 
 async function getHighestId(client, collection, idField) {
@@ -120,6 +113,8 @@ async function deleteProperty(client, propertyId) {
         throw error;
     }
 }
+//===================End of the function of Property==========================//
+
 module.exports = { 
     connectToDatabase, 
     ObjectId, 
