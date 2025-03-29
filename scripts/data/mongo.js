@@ -2,8 +2,10 @@ require('dotenv').config();
 const { MongoClient, ObjectId } = require('mongodb');
 const DATABASE = "WorkspaceApp"//Define the Database's name.
 const crypto = require('crypto');
+
 //let users = loadUsers();
 const jwt = require('jsonwebtoken');
+
 
 async function connectToDatabase(callback, ...args) {
     /****************Put this code into your .env*****************
