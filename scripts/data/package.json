@@ -19,5 +19,8 @@
     "mongodb": "^6.15.0",
     "nodemon": "^3.1.9"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  }
 }
