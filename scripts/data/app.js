@@ -35,9 +35,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('node:crypto');
 
 //To get the secret key(64-byte, saltString)(For member)
-const salt = crypto.randomBytes(64);
-const saltString = salt.toString(`hex`);
-
+const salt = crypto.randomBytes(64).toString('hex');
+//const saltString = salt.toString(`hex`);
+//console.log("Length:", saltString);
 
 
 // app and settings
@@ -56,7 +56,7 @@ app.use(express.json()); // define middleware to parse json
 //==========================================Keep CRUD below=========================================//
 
 //For testing used
-app.get(`/test-db`, async (req, res) => {
+/*app.get(`/test-db`, async (req, res) => {
     try {
         await connectToDatabase(async (client) => {  //Connect to database first
             const databasesList = await client.db().admin().listDatabases(); //Display all database files
@@ -72,7 +72,7 @@ app.get(`/test-db`, async (req, res) => {
         console.error('Test connection error:', error);
         res.status(500).json({ message: 'Failed to connect to MongoDB', error: error.message });
     }
-});
+});*/
 //======================================================================================================//
 
 //==================================Routes for Property===================================================//
@@ -102,8 +102,6 @@ app.post('/register', async (req, res) => {
 
     // else try to save to "database"
 
-
-    const salt = crypto.randomBytes(16).toString('hex');
     const hashedPassword = hashPassword(password, salt);
     const newUser = {
         salt,
@@ -124,7 +122,30 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.post('/login', async (req, res) => {
+    // just simulating, we already got the user by req.body.email from database
+    const {email, password } = req.body;
+        // check if user exists by email, early return.
+        const existingUser = await findOneField("usersData", { email });
 
+    // If not found, early return.
+    if (!existingUser) return res.status(400).json({ error: "User not found" });
+
+    // else try to authenticate
+    try {
+        const hashedPassword = hashPassword(password, usersData.salt);
+        if (hashedPassword !== usersData.hashedPassword) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        } 
+    } catch {
+        res.status(500).send()
+    }
+    const token = jwt.sign({ email },  
+        process.env.JWT_SECRET_KEY, { 
+            expiresIn: 86400 
+        }); 
+    res.json({ email, token, message: "Login successful" });
+})
 
 
 

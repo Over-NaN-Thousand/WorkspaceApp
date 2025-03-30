@@ -28,7 +28,7 @@ function handleSignup(event) {
         owner: accountType === 'list' || accountType === 'both' ? "Yes" : "No",
         coworker: accountType === 'rent' || accountType === 'both' ? "Yes" : "No"
     };
-
+//Get ready to fetch /register
 }
 
 
