@@ -93,7 +93,7 @@ async function insertManyObject(collectionName, newObject) {
 //**********************Read Section*******************************/
 
 //=====================Find One Object===========================//
-async function findOneObject(collectionName, newObject) {
+async function findOneField(collectionName, newObject) {
     return await connectToDatabase(async (client) => {
         const db = client.db(WorkspaceApp);
         const result = await db.collection(collectionName).findOne(newObject);
@@ -102,7 +102,7 @@ async function findOneObject(collectionName, newObject) {
 }
 
 //=====================Find Many Object===========================//
-async function findManyObject(collectionName, newObject) {
+async function findManyField(collectionName, newObject) {
     return await connectToDatabase(async (client) => {
         const db = client.db(WorkspaceApp);
         const result = await db.collection(collectionName).find(newObject).toArry();
@@ -375,8 +375,8 @@ module.exports = {
     updateManyFieldInOneObject,
     insertOneObject,
     insertManyObject,
-    findOneObject,
-    findManyObject,
+    findOneField,
+    findManyField,
 
 
 };

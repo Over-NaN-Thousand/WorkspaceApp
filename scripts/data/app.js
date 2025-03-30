@@ -23,8 +23,8 @@ const {
     updateManyFieldInOneObject,
     insertOneObject,
     insertManyObject,
-    findOneObject,
-    findManyObject,
+    findOneField,
+    findManyField,
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -45,8 +45,6 @@ app.use(cors()); // allow all requests.
 app.use(express.json()); // define middleware to parse json
 
 
-const db = client.db("WorkspaceApp");
-const usersData = db.collections("usersData");//Define usersData = client.db("WorkspaceApp").collection("userData")
 
 
 
@@ -91,7 +89,7 @@ app.post('/register', async (req, res) => {
     // If we know the way the frontend is sending the body, we can declare an object to receive the data accordingly:
     const {email, password} = req.body;
     // if user exists, early return.
-    const existingUser =await usersData.findOneObject({email});
+    const existingUser =await findOneField({email});
     if(existingUser) 
         return res.status(400).json({error: "User already exists!"});
     if(users[email]) 
