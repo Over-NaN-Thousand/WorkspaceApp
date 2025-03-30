@@ -189,7 +189,7 @@ async function deleteManyObject(collectionName, condition) {
     });
 }
 //=============Delete One Dield By any collection name and condition==============//
-async function deleteOneField(collectionName, condition, fieldName) {
+async function deleteOneFieldInOneObject(collectionName, condition, fieldName) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
@@ -203,14 +203,44 @@ async function deleteOneField(collectionName, condition, fieldName) {
         }
     });
 }
-//=============Delete Many Field By any collection name and condition==============//
-async function deleteManyField(collectionName, condition, fieldName) {
+//=============Delete One Dield in Many Object By any collection name and condition==============//
+async function deleteOneFieldInManyObject(collectionName, condition, fieldName) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
                 .db(DATABASE)
                 .collection(collectionName)
                 .updateMany(condition, {$unset:{[fieldName]:" "}});
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Delete Many Field in One Object By any collection name and condition==============//
+async function deleteManyFieldInOneObject(collectionName, condition, fieldName) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateOne(condition, {$unset:fieldName});
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Delete Many Field in Many Object By any collection name and condition==============//
+async function deleteManyFieldInManyObject(collectionName, condition, fieldName) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateMany(condition, {$unset:fieldName});
             return result;
         } catch (error) {
             console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
@@ -274,8 +304,10 @@ module.exports = {
     ObjectId,
     hashPassword,
     //verifyToken,
-    deleteOneField,
-    deleteManyField,
+    deleteOneFieldInOneObject,
+    deleteOneFieldInManyObject,
+    deleteManyFieldInOneObject,
+    deleteOneFieldInManyObject,
     deleteOneObject,
     deleteManyObject,
     overWriteOnebject,
