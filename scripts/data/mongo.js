@@ -316,7 +316,7 @@ module.exports = {
     deleteOneFieldInOneObject,
     deleteOneFieldInManyObject,
     deleteManyFieldInOneObject,
-    deleteOneFieldInManyObject,
+    deleteManyFieldInManyObject,
     deleteOneObject,
     deleteManyObject,
     overWriteOnebject,
