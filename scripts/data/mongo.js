@@ -59,8 +59,11 @@ async function listDatabases(client) {
 //======Delete======//
 //deleteOne()-----Delete one object by any condition    
 //deleteMany()----Delete many object by any condition   
-//undateOne()------with $unset = delete one field from one object by any condition
-//updateMany()-----with $unset = delete many field from many object by any condition
+//undateOne()--with $unset--input one field = delete one field from one object by any condition
+//undateOne()--with $unset--input many field = delete many field from one object by any condition
+//updateMany()---with $unset--input one field = delete one field from many object by any condition
+//updateMany()---with $unset--input many field = delete many field from many object by any condition
+
 
 //**********************Update Section*******************************/
 
