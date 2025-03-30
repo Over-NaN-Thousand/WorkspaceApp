@@ -86,47 +86,51 @@ app.get(`/test-db`, async (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-    // If we know the way the frontend is sending the body, we can declare an object to receive the data accordingly:
-    const {email, password} = req.body;
-    // if user exists, early return.
-    const existingUser =await findOneField({email});
-    if(existingUser) 
-        return res.status(400).json({error: "User already exists!"});
-    if(users[email]) 
-    
+    //Get data from frontend js
+    const {
+        firstName,
+        lastName,
+        email,
+        password,
+        owner,
+        coworker
+    } = req.body;
+    // check if user exists by email, early return.
+    const existingUser = await findOneField("usersData", { email });
+    if (existingUser)
+        return res.status(400).json({ error: "User already exists!" });
+
     // else try to save to "database"
+
+
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hashedPassword = hashPassword(password, salt);
+    const newUser = {
+        salt,
+        hashedPassword,
+        firstName,
+        lastName,
+        email,
+        owner,
+        coworker,
+    };
+
     try {
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hashedPassword = hashPassword(password, salt);
-        const newUser = { salt, hashedPassword };
-
-        users[email] = newUser;
-        saveUsers(users);
-
-        res.status(201).json({message: "User registered succesfully!"});
-    } catch {
-        res.status(500).send("fail");
-    }
-})
-
-app.delete('/users/:id', async (req, res) => { //Delete user by id
-    const userId = req.params.id;
-
-    // Check id if vaild
-    if (!ObjectId.isValid(userId)) {
-        return res.status(400).json({ error: "Invalid user ID" });
-    }
-    try {
-            const result = await deleteById("users", id);  //Then add this code, call deleteById function
-            if (result.deletedCount === 0) { //If user id is not in database
-                return res.status(404).json({ error: "User not found" }); //Return error
-            }
-            res.json({ message: `User ${userId} deleted successfully.` });
+        await insertOneObject("usersData", newUser); //Add newUser data into MongoDB
+        res.status(201).json({ message: "User registered successfully!" });
     } catch (err) {
-        console.error("Delete error:", err);
+        console.error("Register error:", err);
         res.status(500).json({ error: "Server error" });
     }
 });
+
+
+
+
+
+
+
+
 
 //==================================End of Routes for user==========================================================//
 
