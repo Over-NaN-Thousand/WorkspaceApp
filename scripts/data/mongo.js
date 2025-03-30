@@ -46,34 +46,181 @@ async function listDatabases(client) {
 //find()
 
 //======Update=====//
-//updateOne() without $set
-//updataMany()  without $set
-//updateOne() with $set
-//updataMany()  with $set
+//updateOne()--without $set= Overwrite the whole object---I dont think we will need it, I wrote it for particing purpose
+//updataMany()--without $set= Overwrite many whole object---I dont think we will need it, I wrote it for particing purpose
+//updateOne()--with $set--input one field= Update one field in one object by any condition
+//updataOne()--with $set--input many field= Update many field in one object by any condition
+//updateMany()--with $set--input one field=Update one field in many object by any condition
+//updateMany()--with $set--input many field=Update many field in many object by any condition
+
+
 
 //======Delete======//
-//deleteOne()
-//deleteMany()
+//deleteOne()-----Delete one object by any condition    
+//deleteMany()----Delete many object by any condition   
+//undateOne()------with $unset = delete one field from one object by any condition
+//updateMany()-----with $unset = delete many field from many object by any condition
 
+//**********************Update Section*******************************/
 
-//=============Delete One By ID==============//
-async function deleteById(collectionName, id) {
+//=============Overwrite One Object =========//
+async function overWriteOnebject(collectionName, condition, newObject) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
                 .db(DATABASE)
                 .collection(collectionName)
-                .deleteOne({ _id: new ObjectId(id) });
+                .updateOne(condition, newObject);
             return result;
         } catch (error) {
-            console.error("Error deleting property:", error);
+            console.error(`Error overwriting ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Overwrite Many Object ===============//
+async function overWriteManyObject(collectionName, condition, newObject) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateMany(condition, newObject);
+            return result;
+        } catch (error) {
+            console.error(`Error overwriting ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Update One Field in One Object=========//
+async function updateOneFieldInOneObject(collectionName, condition, newObject, newValue) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateOne(condition, {$set:{[newObject]:newValue}});
+            return result;
+        } catch (error) {
+            console.error(`Error updating ${newObject} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Update Many Field in One Object=========//
+async function updateManyFieldInOneObject(collectionName, condition, newField) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateOne(condition, {$set:newField});
+            return result;
+        } catch (error) {
+            console.error(`Error updating ${newField} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Update One Field in Many Object=========//
+async function updateOneFieldInManyObject(collectionName, condition, newObject, newValue) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateMany(condition, {$set:{[newObject]:newValue}});
+            return result;
+        } catch (error) {
+            console.error(`Error updating ${newField} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Update Many Field in Many Object=========//
+async function updateManyFieldInManyObject(collectionName, condition, newField) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateMany(condition, {$set:newField});
+            return result;
+        } catch (error) {
+            console.error(`Error updating ${newField} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+/***********************End of Update section*************************************/
+
+
+//*************************Delete Section****************************** */
+
+//=============Delete One Object By any collection name and condition==============//
+async function deleteOneObject(collectionName, condition) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .deleteOne(condition);
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Delete Many Object By any collection name and condition==============//
+async function deleteManyObject(collectionName, condition) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .deleteMany(condition);
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Delete One Dield By any collection name and condition==============//
+async function deleteOneField(collectionName, condition, fieldName) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateOne(condition, {$unset:{[fieldName]:" "}});
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
+            throw error;
+        }
+    });
+}
+//=============Delete Many Field By any collection name and condition==============//
+async function deleteManyField(collectionName, condition, fieldName) {
+    return await connectToDatabase(async (client) => {
+        try {
+            const result = await client
+                .db(DATABASE)
+                .collection(collectionName)
+                .updateMany(condition, {$unset:{[fieldName]:" "}});
+            return result;
+        } catch (error) {
+            console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
             throw error;
         }
     });
 }
 
-
-//
+/***********************End of Delete section*************************************/
+//================================End of CRUD for public used====================//
 
 //========================The functions of Property=======================//
 
@@ -127,7 +274,17 @@ module.exports = {
     ObjectId,
     hashPassword,
     //verifyToken,
-    deleteById,
+    deleteOneField,
+    deleteManyField,
+    deleteOneObject,
+    deleteManyObject,
+    overWriteOnebject,
+    overWriteManyObject,
+    updateOneFieldInOneObject,
+    updateOneFieldInManyObject,
+    updateManyFieldInManyObject,
+    updateManyFieldInOneObject,
+    
 };
 
 connectToDatabase(listDatabases);
