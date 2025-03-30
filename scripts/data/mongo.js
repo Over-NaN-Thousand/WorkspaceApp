@@ -1,9 +1,9 @@
 require('dotenv').config();
 const { MongoClient, ObjectId } = require('mongodb');
-const DATABASE = "WorkspaceApp"//Define the Database's name.
+const WorkspaceApp = "WorkspaceApp"//Define the Database's name.
 const crypto = require('crypto');
 
-//let users = loadUsers();
+
 const jwt = require('jsonwebtoken');
 
 
@@ -64,6 +64,54 @@ async function listDatabases(client) {
 //updateMany()---with $unset--input one field = delete one field from many object by any condition
 //updateMany()---with $unset--input many field = delete many field from many object by any condition
 
+//**********************Create Section*******************************/
+
+
+//=====================Insert One Object===========================//
+async function insertOneObject(collectionName, newObject) {
+    return await connectToDatabase(async (client) => {
+        const db = client.db(WorkspaceApp);
+        const result = await db.collection(collectionName).insertOne(newObject);
+        return result;
+    });
+}
+
+//=====================Insert Many Object===========================//
+async function insertManyObject(collectionName, newObject) {
+    return await connectToDatabase(async (client) => {
+        const db = client.db(WorkspaceApp);
+        const result = await db.collection(collectionName).insertMany(newObject);
+        return result;
+    });
+}
+
+//**********************End of Create Section*******************************/
+
+
+
+
+//**********************Read Section*******************************/
+
+//=====================Find One Object===========================//
+async function findOneObject(collectionName, newObject) {
+    return await connectToDatabase(async (client) => {
+        const db = client.db(WorkspaceApp);
+        const result = await db.collection(collectionName).findOne(newObject);
+        return result;
+    });
+}
+
+//=====================Find Many Object===========================//
+async function findManyObject(collectionName, newObject) {
+    return await connectToDatabase(async (client) => {
+        const db = client.db(WorkspaceApp);
+        const result = await db.collection(collectionName).find(newObject).toArry();
+        return result;
+    });
+}
+//**********************End of Read Section*******************************/
+
+
 
 //**********************Update Section*******************************/
 
@@ -72,7 +120,7 @@ async function overWriteOnebject(collectionName, condition, newObject) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
                 .updateOne(condition, newObject);
             return result;
@@ -87,7 +135,7 @@ async function overWriteManyObject(collectionName, condition, newObject) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
                 .updateMany(condition, newObject);
             return result;
@@ -102,9 +150,9 @@ async function updateOneFieldInOneObject(collectionName, condition, newObject, n
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateOne(condition, {$set:{[newObject]:newValue}});
+                .updateOne(condition, { $set: { [newObject]: newValue } });
             return result;
         } catch (error) {
             console.error(`Error updating ${newObject} from ${collectionName}:`, error);
@@ -117,9 +165,9 @@ async function updateManyFieldInOneObject(collectionName, condition, newField) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateOne(condition, {$set:newField});
+                .updateOne(condition, { $set: newField });
             return result;
         } catch (error) {
             console.error(`Error updating ${newField} from ${collectionName}:`, error);
@@ -133,10 +181,10 @@ async function updateOneFieldInManyObject(collectionName, condition, newObject, 
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
 
-                .updateMany(condition, {$set:{[newObject]:newValue}});
+                .updateMany(condition, { $set: { [newObject]: newValue } });
             return result;
         } catch (error) {
             console.error(`Error updating ${newField} from ${collectionName}:`, error);
@@ -151,9 +199,9 @@ async function updateManyFieldInManyObject(collectionName, condition, newField) 
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateMany(condition, {$set:newField});
+                .updateMany(condition, { $set: newField });
             return result;
         } catch (error) {
             console.error(`Error updating ${newField} from ${collectionName}:`, error);
@@ -171,7 +219,7 @@ async function deleteOneObject(collectionName, condition) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
                 .deleteOne(condition);
             return result;
@@ -186,7 +234,7 @@ async function deleteManyObject(collectionName, condition) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
                 .deleteMany(condition);
             return result;
@@ -201,9 +249,9 @@ async function deleteOneFieldInOneObject(collectionName, condition, fieldName) {
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateOne(condition, {$unset:{[fieldName]:" "}});
+                .updateOne(condition, { $unset: { [fieldName]: " " } });
             return result;
         } catch (error) {
             console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
@@ -216,9 +264,9 @@ async function deleteOneFieldInManyObject(collectionName, condition, fieldName) 
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateMany(condition, {$unset:{[fieldName]:" "}});
+                .updateMany(condition, { $unset: { [fieldName]: " " } });
             return result;
         } catch (error) {
             console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
@@ -231,9 +279,9 @@ async function deleteManyFieldInOneObject(collectionName, condition, fieldName) 
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateOne(condition, {$unset:fieldName});
+                .updateOne(condition, { $unset: fieldName });
             return result;
         } catch (error) {
             console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
@@ -246,9 +294,9 @@ async function deleteManyFieldInManyObject(collectionName, condition, fieldName)
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
-                .db(DATABASE)
+                .db(WorkspaceApp)
                 .collection(collectionName)
-                .updateMany(condition, {$unset:fieldName});
+                .updateMany(condition, { $unset: fieldName });
             return result;
         } catch (error) {
             console.error(`Error deleting ${fieldName} from ${collectionName}:`, error);
@@ -325,7 +373,11 @@ module.exports = {
     updateOneFieldInManyObject,
     updateManyFieldInManyObject,
     updateManyFieldInOneObject,
-    
+    insertOneObject,
+    insertManyObject,
+    findOneObject,
+    findManyObject,
+
 
 };
 

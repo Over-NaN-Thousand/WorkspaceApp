@@ -6,8 +6,25 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const {
     connectToDatabase,
+    ObjectId,
     hashPassword,
-    verifyToken,
+    //verifyToken,
+    deleteOneFieldInOneObject,
+    deleteOneFieldInManyObject,
+    deleteManyFieldInOneObject,
+    deleteManyFieldInManyObject,
+    deleteOneObject,
+    deleteManyObject,
+    overWriteOnebject,
+    overWriteManyObject,
+    updateOneFieldInOneObject,
+    updateOneFieldInManyObject,
+    updateManyFieldInManyObject,
+    updateManyFieldInOneObject,
+    insertOneObject,
+    insertManyObject,
+    findOneObject,
+    findManyObject,
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -27,8 +44,9 @@ const saltString = salt.toString(`hex`);
 app.use(cors()); // allow all requests.
 app.use(express.json()); // define middleware to parse json
 
-//Define and connect the Database's name.
-const DATABASE = "WorkspaceApp";
+
+const db = client.db("WorkspaceApp");
+const usersData = db.collections("usersData");//Define usersData = client.db("WorkspaceApp").collection("userData")
 
 
 
@@ -68,68 +86,49 @@ app.get(`/test-db`, async (req, res) => {
 
 //==================================Routes for user==========================================================//
 
-app.get("/protected", verifyToken, (req, res) => {
-    const { user } = req;
-    res.json({ msg: `Welcome ${user.email}` });
-});
 
-
-app.get('/', verifyToken, (req, res) => {
-    console.log("User data from token:", req.user);
-    res.json(req.user);
-});
-
-// Let's define our registration route:
-app.post('/signup', async (req, res) => {
+app.post('/register', async (req, res) => {
     // If we know the way the frontend is sending the body, we can declare an object to receive the data accordingly:
-    const { email, password } = req.body;
-
-
+    const {email, password} = req.body;
+    // if user exists, early return.
+    const existingUser =await usersData.findOneObject({email});
+    if(existingUser) 
+        return res.status(400).json({error: "User already exists!"});
+    if(users[email]) 
+    
     // else try to save to "database"
     try {
-        await connectToDatabase(async (client) => {
-            const db = client.db(DATABASE);
-            const usersCollection = db.collection("users");
-
-            const existingUser = await usersCollection.findOne({ email });
-            if (existingUser) return res.status(400).json({ error: "User already exists!" });
-        const salt = crypto.randomBytes(64).toString('hex');
+        const salt = crypto.randomBytes(16).toString('hex');
         const hashedPassword = hashPassword(password, salt);
         const newUser = { salt, hashedPassword };
 
-        await usersCollection.insertOne(newUser);
+        users[email] = newUser;
+        saveUsers(users);
 
-        res.status(201).json({ message: "User registered successfully!" });
-    });
-} catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Registration failed" });
-}
-});
-
-app.post('/login', async (req, res) => {
-    // just simulating, we already got the user by req.body.email from database
-    const { email, password } = req.body;
-    const user = users[email];
-
-    // If not found, early return.
-    if (!user) return res.status(400).json({ error: "User not found" });
-
-    // else try to authenticate
-    try {
-        const hashedPassword = hashPassword(password, user.salt);
-        if (hashedPassword !== user.hashedPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
+        res.status(201).json({message: "User registered succesfully!"});
     } catch {
-        res.status(500).send()
+        res.status(500).send("fail");
     }
-    const token = jwt.sign({ email },
-        process.env.JWT_SECRET_KEY, {
-        expiresIn: 86400
-    });
-    res.json({ email, token, message: "Login successful" });
 })
+
+app.delete('/users/:id', async (req, res) => { //Delete user by id
+    const userId = req.params.id;
+
+    // Check id if vaild
+    if (!ObjectId.isValid(userId)) {
+        return res.status(400).json({ error: "Invalid user ID" });
+    }
+    try {
+            const result = await deleteById("users", id);  //Then add this code, call deleteById function
+            if (result.deletedCount === 0) { //If user id is not in database
+                return res.status(404).json({ error: "User not found" }); //Return error
+            }
+            res.json({ message: `User ${userId} deleted successfully.` });
+    } catch (err) {
+        console.error("Delete error:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 //==================================End of Routes for user==========================================================//
 
