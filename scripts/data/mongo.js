@@ -46,6 +46,7 @@ async function listDatabases(client) {
 //find()
 
 //======Update=====//
+
 //updateOne()--without $set= Overwrite the whole object---I dont think we will need it, I wrote it for particing purpose
 //updataMany()--without $set= Overwrite many whole object---I dont think we will need it, I wrote it for particing purpose
 //updateOne()--with $set--input one field= Update one field in one object by any condition
@@ -125,19 +126,23 @@ async function updateManyFieldInOneObject(collectionName, condition, newField) {
 }
 //=============Update One Field in Many Object=========//
 async function updateOneFieldInManyObject(collectionName, condition, newObject, newValue) {
+
     return await connectToDatabase(async (client) => {
         try {
             const result = await client
                 .db(DATABASE)
                 .collection(collectionName)
+
                 .updateMany(condition, {$set:{[newObject]:newValue}});
             return result;
         } catch (error) {
             console.error(`Error updating ${newField} from ${collectionName}:`, error);
+
             throw error;
         }
     });
 }
+
 //=============Update Many Field in Many Object=========//
 async function updateManyFieldInManyObject(collectionName, condition, newField) {
     return await connectToDatabase(async (client) => {
@@ -222,6 +227,7 @@ async function deleteManyField(collectionName, condition, fieldName) {
 /***********************End of Delete section*************************************/
 //================================End of CRUD for public used====================//
 
+
 //========================The functions of Property=======================//
 
 
@@ -285,6 +291,7 @@ module.exports = {
     updateManyFieldInManyObject,
     updateManyFieldInOneObject,
     
+
 };
 
 connectToDatabase(listDatabases);
