@@ -6,8 +6,25 @@ const fs = require('fs');
 const { MongoClient } = require('mongodb');
 const {
     connectToDatabase,
+    ObjectId,
     hashPassword,
-    verifyToken,
+    //verifyToken,
+    deleteOneFieldInOneObject,
+    deleteOneFieldInManyObject,
+    deleteManyFieldInOneObject,
+    deleteManyFieldInManyObject,
+    deleteOneObject,
+    deleteManyObject,
+    overWriteOnebject,
+    overWriteManyObject,
+    updateOneFieldInOneObject,
+    updateOneFieldInManyObject,
+    updateManyFieldInManyObject,
+    updateManyFieldInOneObject,
+    insertOneObject,
+    insertManyObject,
+    findOneField,
+    findManyField,
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -27,8 +44,7 @@ const saltString = salt.toString(`hex`);
 app.use(cors()); // allow all requests.
 app.use(express.json()); // define middleware to parse json
 
-//Define and connect the Database's name.
-const DATABASE = "WorkspaceApp";
+
 
 
 
@@ -68,68 +84,53 @@ app.get(`/test-db`, async (req, res) => {
 
 //==================================Routes for user==========================================================//
 
-app.get("/protected", verifyToken, (req, res) => {
-    const { user } = req;
-    res.json({ msg: `Welcome ${user.email}` });
-});
 
-
-app.get('/', verifyToken, (req, res) => {
-    console.log("User data from token:", req.user);
-    res.json(req.user);
-});
-
-// Let's define our registration route:
-app.post('/signup', async (req, res) => {
-    // If we know the way the frontend is sending the body, we can declare an object to receive the data accordingly:
-    const { email, password } = req.body;
-
+app.post('/register', async (req, res) => {
+    //Get data from frontend js
+    const {
+        firstName,
+        lastName,
+        email,
+        password,
+        owner,
+        coworker
+    } = req.body;
+    // check if user exists by email, early return.
+    const existingUser = await findOneField("usersData", { email });
+    if (existingUser)
+        return res.status(400).json({ error: "User already exists!" });
 
     // else try to save to "database"
+
+
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hashedPassword = hashPassword(password, salt);
+    const newUser = {
+        salt,
+        hashedPassword,
+        firstName,
+        lastName,
+        email,
+        owner,
+        coworker,
+    };
+
     try {
-        await connectToDatabase(async (client) => {
-            const db = client.db(DATABASE);
-            const usersCollection = db.collection("users");
-
-            const existingUser = await usersCollection.findOne({ email });
-            if (existingUser) return res.status(400).json({ error: "User already exists!" });
-        const salt = crypto.randomBytes(64).toString('hex');
-        const hashedPassword = hashPassword(password, salt);
-        const newUser = { salt, hashedPassword };
-
-        await usersCollection.insertOne(newUser);
-
+        await insertOneObject("usersData", newUser); //Add newUser data into MongoDB
         res.status(201).json({ message: "User registered successfully!" });
-    });
-} catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Registration failed" });
-}
+    } catch (err) {
+        console.error("Register error:", err);
+        res.status(500).json({ error: "Server error" });
+    }
 });
 
-app.post('/login', async (req, res) => {
-    // just simulating, we already got the user by req.body.email from database
-    const { email, password } = req.body;
-    const user = users[email];
 
-    // If not found, early return.
-    if (!user) return res.status(400).json({ error: "User not found" });
 
-    // else try to authenticate
-    try {
-        const hashedPassword = hashPassword(password, user.salt);
-        if (hashedPassword !== user.hashedPassword) {
-            return res.status(401).json({ error: "Invalid credentials" });
-        }
-    } catch {
-        res.status(500).send()
-    }
-    const token = jwt.sign({ email },
-        process.env.JWT_SECRET_KEY, {
-        expiresIn: 86400
-    });
-    res.json({ email, token, message: "Login successful" });
-})
+
+
+
+
+
 
 //==================================End of Routes for user==========================================================//
 
