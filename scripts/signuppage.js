@@ -19,7 +19,8 @@ function handleSignup(event) {
 
     // Determine user role based on selected account type
     const newUser = {
-        id: Date.now(),
+        //Will use email as an identifier
+        //id: Date.now(),
         firstName,
         lastName,
         email,
@@ -28,6 +29,35 @@ function handleSignup(event) {
         coworker: accountType === 'rent' || accountType === 'both' ? "Yes" : "No"
     };
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//***************These are for localstorage****************** */
+/*
     // Retrieve existing users from localStorage
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
@@ -45,4 +75,4 @@ function handleSignup(event) {
     
     //For testing
     console.log(newUser);
-}
+}*/
