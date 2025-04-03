@@ -16,15 +16,17 @@ const DATABASE = "WorkspaceApp";
 
 
 
+
+
 // CRUD operations for PROPERTY
-app.post("/properties", async (req, res) => {
+app.post("/property", async (req, res) => {
     const newProperty = req.body;
 
     if (!newProperty.propertyId || !newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
         return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
 
     try {
-        const highestPropertyId = await connectToDatabase(getHighestId,"property","propertyId"); //get current highest propertyId, we'll add 1
+        const highestPropertyId = await connectToDatabase(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
         newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
 
         const result = await connectToDatabase(createProperty, newProperty);
@@ -38,8 +40,6 @@ app.post("/properties", async (req, res) => {
         res.status(500).json({ message: "An error occurred while creating the property." });
     }
 });
-
-        
 
 app.get("/properties", async (req, res) => {
     const filters = {};
@@ -114,6 +114,79 @@ app.delete("/properties/:id", async (req, res) => {
 
 
 
+//CRUD for WORKSPACES
+app.get("/workspaces", async (req, res) => {
+    try {
+        const filters = {};
+        //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
+        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
+        if (rawOwnerId) {
+            const ownerId = Number(rawOwnerId); 
+            if (!isNaN(ownerId)) {
+                filters.ownerId = ownerId;
+            } else {
+                console.error("Invalid ownerId provided:", ownerId);
+                return res.status(400).json({ message: "Invalid ownerId format." });
+            }
+        }
+        
+        const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
+        if (workspaceName) 
+            filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
+
+        const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
+        if (workspaceType)
+            filters.workspaceType = workspaceType;
+
+        const leaseTerm = req.headers["leaseterm"] || req.query.leaseTerm;
+        if (leaseTerm)
+            filters.leaseTerm = leaseTerm;
+
+        const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
+        const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
+            filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
+
+        const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
+        const maxSeatCapacity = Number(req.headers["maxcapacity"] || req.query.maxCapacity);
+        if (!isNaN(minSeatCapacity) || !isNaN(maxSeatCapacity))
+            filters.seatCapacity = buildMinMaxFilter(minSeatCapacity, maxSeatCapacity);
+
+        const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
+        const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
+            filters.price = buildMinMaxFilter(minPrice, maxPrice);
+
+        const amenities = req.headers["amenities"] || req.query.amenities;
+        if (amenities) {
+            filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
+        }
+
+        const workspaces = await connectToDatabase(getWorkspacesWithProperties, filters);
+        res.status(200).json({ workspaces });
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
+
+
+
+// helper function to build filters with min and max values
+function buildMinMaxFilter(min, max) {
+    
+    if (!isNaN(min) && !isNaN(max)) {
+        return { $gte: min, $lte: max };
+    }
+    else if (!isNaN(min)) {
+        return { $gte: min };
+    } else if (!isNaN(max)) {
+        return { $lte: max };
+    }
+    return {};
+}
+
+
 
 
 
@@ -126,9 +199,14 @@ app.listen(PORT, () => {
 
 
 
+
+
+
 /************************************************************************
  * Let's declare our functions down here and keep the logic up top.     *
  ************************************************************************/
+
+
 
 
 
@@ -164,7 +242,7 @@ async function getHighestId(client, collection, idField) {
             .sort({ [idField]: -1 })   // sort by propertyId DESC
             .limit(1)                   // top 1
             .next();
-
+        console.log(`Highest ${idField} in ${collection}:`, result);
         return result;
     } catch (error) {
         console.error("Error fetching the highest propertyId:", error);
@@ -237,4 +315,31 @@ async function deleteProperty(client, propertyId) {
 
 
 
+async function getWorkspacesWithProperties(client, filters) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .aggregate([
+                {
+                    $match: filters // apply filters
+                },
+                {
+                    $lookup: {
+                        from: "properties",         // join with properties
+                        localField: "propertyId",   // foreign key in workspaces
+                        foreignField: "propertyId", // primary key in properties
+                        as: "propertyDetails"       // result joined array
+                    }
+                },
+                {
+                    $unwind: "$propertyDetails"     // flatten the array
+                }
+            ]).toArray();
 
+        return result;
+    } catch (error) {
+        console.error("Error performing workspace-property join:", error);
+        throw error;
+    }
+}
