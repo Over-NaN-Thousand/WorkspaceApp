@@ -1,0 +1,30 @@
+/* styles.css */
+:root {
+    --background-color: white;
+    --text-color: black;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    --background-color: black;
+    --text-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: black;
+        --text-color: white;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --background-color: white;
+        --text-color: black;
+    }
+}

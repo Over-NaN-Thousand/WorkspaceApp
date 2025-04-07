@@ -16,6 +16,46 @@
     padding: 0;
 }
 
+@media (prefers-color-scheme: dark) {
+    .container {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    main {
+        background-color: #1e1e1e;
+    }
+
+    .content-section {
+        background-color: #2c2c2c;
+        border-color: #444;
+    }
+
+    .content-section .header-bar {
+        background-color: #444;
+        color: #e0e0e0;
+    }
+
+    .profile-picture img {
+        border-color: #444;
+    }
+
+    .profile-picture button,
+    .change-password button {
+        background-color: #3bb3ab;
+    }
+
+    .change-password input {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        border-color: #444;
+    }
+
+    #password-message {
+        color: #ff6b6b;
+    }
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: var(--body-bg);
