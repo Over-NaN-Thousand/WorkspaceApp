@@ -123,7 +123,7 @@ async function findManyField(collectionName, newObject) {
     const db = await connectToDatabase();
     const result = await db
         .collection(collectionName)
-        .find(newObject).toArry();
+        .find(newObject).toArray();
     return result;
     //});
 }
