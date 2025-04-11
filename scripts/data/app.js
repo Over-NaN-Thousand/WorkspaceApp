@@ -124,15 +124,60 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
 //==================================End of Routes for user==========================================================//
+
+
+
+
+
+//========================= Bookings API ===============================//
+
+// POST: Create new booking
+app.post('/bookings', async (req, res) => {
+    const { workspaceName, leaseType, userId, startTime, endTime } = req.body;
+
+    // Validation
+    if (!workspaceName || !leaseType || !userId || !startTime || !endTime) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        await connectToDatabase(async (db) => {
+            await db.collection("bookings").insertOne({
+                workspaceName,
+                leaseType,
+                userId,
+                startTime,
+                endTime,
+                createdAt: new Date()
+            });
+
+            res.status(201).json({ message: "Booking saved to DB" });
+        });
+    } catch (err) {
+        console.error("Booking error:", err);
+        res.status(500).json({ error: "Server error while booking" });
+    }
+});
+
+// GET: Retrieve all bookings
+app.get('/bookings', async (req, res) => {
+    try {
+        await connectToDatabase(async (db) => {
+            const bookings = await db.collection("bookings").find({}).toArray();
+            res.status(200).json(bookings);
+        });
+    } catch (err) {
+        console.error("Fetching bookings error:", err);
+        res.status(500).json({ error: "Failed to retrieve bookings" });
+    }
+});
+
+
+
+
+
+
 
 
 
