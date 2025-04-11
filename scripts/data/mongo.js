@@ -7,7 +7,8 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
-async function connectToDatabase(callback, ...args) {
+
+async function connectToDatabase() {
     /****************Put this code into your .env*****************
     MONGO_URI=mongodb+srv://UserName:Password@bvccluster.qgjve.mongodb.net/?retryWrites=true&w=majority
     *****************************************************************/
@@ -20,7 +21,9 @@ async function connectToDatabase(callback, ...args) {
     try {
         await client.connect();
         console.log('\nConnected to database');
-        await callback(client, ...args);
+
+        const db = client.db(WorkspaceApp);
+        return db;
     } catch (e) {
         console.error(e);
 

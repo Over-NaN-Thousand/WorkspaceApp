@@ -136,29 +136,28 @@ app.post('/register', async (req, res) => {
 app.post('/bookings', async (req, res) => {
     const { workspaceName, leaseType, userId, startTime, endTime } = req.body;
 
-    // Validation
     if (!workspaceName || !leaseType || !userId || !startTime || !endTime) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
     try {
-        await connectToDatabase(async (db) => {
-            await db.collection("bookings").insertOne({
-                workspaceName,
-                leaseType,
-                userId,
-                startTime,
-                endTime,
-                createdAt: new Date()
-            });
-
-            res.status(201).json({ message: "Booking saved to DB" });
+        const db = await connectToDatabase();
+        await db.collection("bookings").insertOne({
+            workspaceName,
+            leaseType,
+            userId,
+            startTime,
+            endTime,
+            createdAt: new Date()
         });
+
+        res.status(201).json({ message: "Booking saved to DB" });
     } catch (err) {
         console.error("Booking error:", err);
         res.status(500).json({ error: "Server error while booking" });
     }
 });
+
 
 // GET: Retrieve all bookings
 app.get('/bookings', async (req, res) => {
