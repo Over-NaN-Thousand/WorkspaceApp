@@ -13,10 +13,10 @@ async function connectToDatabase() {
         await client.connect();
         const db = client.db("WorkspaceApp");
         cachedDb = db;
-        console.log("✅ Connected to WorkspaceApp database");
+        console.log("Connected to WorkspaceApp database");
         return db;
     } catch (e) {
-        console.error("❌ DB connection failed:", e);
+        console.error("DB connection failed:", e);
         throw e;
     }
 }
