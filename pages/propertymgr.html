@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,159 +8,37 @@
 
     <base href="/WorkspaceApp/">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"></script>
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script type="module" src="scripts/propertymgr.js"></script> <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
+    <script type="module" src="scripts/propertymgr.js"></script>
+    <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/propertymgr.css">
     <link rel="stylesheet" href="styles/editpop.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!--fonts for symbols-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!--fonts for symbols-->
 </head>
+
 <body>
     <header id="header-mainjs"></header>
-    
-    <aside>
-        <h3>
-            Filters
-        </h3>
 
-        <div class="btn-container">
-            <button id="btnReset">Reset</button>
-            <button id="btnApply">Apply</button>
-        </div>
-
-        <div class="sort-container">
-            <!--Workspace filter drop down list.-->
-            <label for="selSortWorkspace">Sort By: Wrokspace</label>
-            <select id="selSortWorkspace" name="selSortWorkspace" title="Please select criteria to sort">
-                <option value="workspaceName" selected>Name</option>
-                <option value="workspaceType">Type</option>
-                <option value="price">Price</option>
-                <option value="leaseTerm">Lease Term</option>
-            </select>
-
-            <!--Property filter drop down list-->
-            <label for="selSortProperty">Sort By: Property</label>
-            <select id="selSortProperty" name="selSortProperty" title="Please select criteria to sort">
-                <option value="name" selected>Name</option>
-                <option value="city">City</option>
-                <option value="province">Province</option>
-                <option value="country">Country</option>
-            </select>
-
-
-        </div>
-
-        <section class="types">
-            <details open>
-                <summary>Workspace Type</summary>
-            </details>
-        </section>
-
-        <section class="price">
-            <details open>
-                <summary>Price Range</summary> <!--remembered this tip while scrolling instagram lol-->
-                <label>
-                    Min
-                    <input type="number" id="minPrice" name="minPrix" min="0" max="10000" step="0.01">
-                </label>
-                <label>
-                    Max
-                    <input type="number" id="maxPrice" name="maxPrice" min="0" max="10000" step="0.01">
-                </label>
-            </details>
-        </section>
-
-        <section class="term">
-            <details open>
-                <summary>Lease Term</summary>
-            </details>
-        </section>
-
-        <section class="capacity">
-            <details>
-            <summary>Seat Capacity</summary>
-            <label>
-                Min
-                <input type="number" id="minCapacity" name="minCapacity" min="1" max="10000">
-            </label>
-            <label>
-                Max
-                <input type="number" id="maxCapacity" name="maxCapacity" min="1" max="10000">
-            </label>
-            </details>
-        </section>
-
-        <section class="amenities">
-            <details>
-                <summary>Amenities</summary>
-            </details>
-        </section>
-
-
-    </aside>
-    
-    <main>
-    
+    <main class="main-section">
         <h1>My Properties</h1>
-        <article class="results-title">
-            <p id="display-count"></p>
-            
-        </article>
-        
-    
+
+        <section class="property-tools">
+            <button id="addProperty">Add Property</button>
+        </section>
+
+        <section class="workspace-tools">
+            <button id="addWorkspace">Add Workspace</button>
+        </section>
+
         <article id="properties-container">
-    
+            <!-- Dynamically loaded properties here -->
         </article>
 
-        <button type="button" id="addProperty" val="_new">Add Property</button>
-
-
-        <div id="workspacePopup" class="popup-container">
-            <div class="popup-content">
-                <h2>Edit Workspace</h2>
-                <form id="workspaceForm">
-                    <p>
-                        <label for="workspaceName">Workspace Name:</label>
-                        <input type="text" id="workspaceName" name="workspaceName">
-                    </p>
-                    <p>
-                        <label for="workspaceType">Workspace Type:</label>
-                        <select id="workspaceType" name="workspaceType" class="editWS-types"></select>
-                    </p>
-                    <p>
-                        <label for="leaseTerm">Lease Term:</label>
-                        <select id="leaseTerm" name="leaseTerm" class="editWS-term"></select>
-                    </p>
-                    <p>
-                        <label for="seatCapacity">Seat Capacity:</label>
-                        <input type="number" id="seatCapacity" name="seatCapacity">
-                    </p>
-                    <p>
-                        <label for="seatCapacity">Floor Area (Sq Ft):</label>
-                        <input type="number" id="sqFt" name="sqFt">
-                    </p>
-                    <p>
-                        <label for="price">Price:</label>
-                        <input type="number" id="price" name="price">
-                    </p>
-                    <p>
-                        <details>
-                            <summary>Amenities:</summary>
-                            <div id="amenities-container"></div>
-                        </details>
-                    </p>
-                    <div class="popup-buttons">
-                        <button type="button" id="saveWorkspace">Save</button>
-                        <button type="button" id="deleteWorkspace">Delete</button>
-                        <button type="button" id="closePopup">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
+        <!-- Add Property Popup -->
         <div id="propertyPopup" class="popup-container">
             <div class="popup-content">
                 <h2>Edit Property</h2>
@@ -203,10 +82,57 @@
                 </form>
             </div>
         </div>
-    
+        <!-- Add Workspace Popup -->
+        <div id="workspacePopup" class="popup-container"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 999;">
+            <div class="popup-content"
+                style="background-color: var(--filter-bg); padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                <h2>Edit Workspace</h2>
+                <form id="workspaceForm">
+                    <p>
+                        <label for="workspaceName">Workspace Name:</label>
+                        <input type="text" id="workspaceName" name="workspaceName">
+                    </p>
+                    <p>
+                        <label for="workspaceType">Workspace Type:</label>
+                        <input type="text" id="workspaceType" name="workspaceType">
+                    </p>
+                    <p>
+                        <label for="leaseTerm">Lease Term:</label>
+                        <input type="text" id="leaseTerm" name="leaseTerm">
+                    </p>
+                    <p>
+                        <label for="sqFt">Floor Area (Sq Ft):</label>
+                        <input type="number" id="sqFt" name="sqFt">
+                    </p>
+                    <p>
+                        <label for="seatCapacity">Seat Capacity:</label>
+                        <input type="number" id="seatCapacity" name="seatCapacity">
+                    </p>
+                    <p>
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price">
+                    </p>
+                    <p>
+                        <label for="rating">Rating:</label>
+                        <input type="number" id="rating" name="rating">
+                    </p>
+
+                    <p>
+                        <label for="amenities">Amenities:</label>
+                        <input type="text" id="amenities" name="amenities">
+                    </p>
+                    <div class="popup-buttons">
+                        <button type="button" id="saveWorkspace">Save</button>
+                        <button type="button" id="closeWorkspacePopup">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 
     <footer id="footer-mainjs"></footer>
+
 </body>
 
 </html>
