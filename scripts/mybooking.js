@@ -1,9 +1,14 @@
+import { workspaces } from "./data/workspaceData.js";
+
+
 $(document).ready(function () {
     const leaseType = localStorage.getItem("leaseType") || "hourly"; // Still grabbing lease type to pre-fill
     $("#leaseType").val(leaseType);
 
+
     loadDateTimeInputs(); // show time/date inputs based on lease type
     fetchAndShowBookings(); // get bookings from DB and show them
+    populateWorkspaceDropdown();
 
     // reload inputs if leaseType dropdown changes
     $("#leaseType").change(function () {
@@ -12,13 +17,13 @@ $(document).ready(function () {
 
     // when user clicks Book button
     $("#bookBtn").click(async function () {
-        const workspaceName = $("#workspaceName").val();
-        const userId = $("#userId").val();
+        const workspaceName = $("#workspaceSelect").val();
+        const userEmail = $("#userEmail").val();
         const leaseType = $("#leaseType").val();
         let startTime, endTime;
 
-        if (!workspaceName || !userId) {
-            alert("Please fill in workspace name and user ID!");
+        if (!workspaceName || !userEmail) {
+            alert("Please fill in workspace name and user Email!");
             return;
         }
 
@@ -46,7 +51,7 @@ $(document).ready(function () {
                 },
                 body: JSON.stringify({
                     workspaceName,
-                    userId,
+                    userEmail,
                     leaseType,
                     startTime,
                     endTime,
@@ -95,11 +100,13 @@ async function fetchAndShowBookings() {
 }
 
 function loadDateTimeInputs() {
-    let leaseType = $("#leaseType").val();
+    let leaseType = $("#leaseType").val().toLowerCase();
     let dateTimeSelection = $("#dateTimeSelection");
     dateTimeSelection.empty();
 
-    if (leaseType === "hourly") {
+    const timeBased = leaseType === "hourly";
+
+    if (timeBased) {
         dateTimeSelection.append(`
             <label for="startTime">Start Time:</label>
             <input type="time" id="startTime">
@@ -114,4 +121,24 @@ function loadDateTimeInputs() {
             <input type="date" id="endDate">
         `);
     }
+}
+
+
+function populateWorkspaceDropdown() {
+    const dropdown = $("#workspaceSelect");
+
+    workspaces.forEach(ws => {
+        dropdown.append(
+            `<option value="${ws.workspaceName}">${ws.workspaceName} - ${ws.leaseTerm}</option>`
+        );
+    });
+
+    // auto-fill lease type when user selects a workspace
+    dropdown.change(function () {
+        const selectedName = $(this).val();
+        const selectedWorkspace = workspaces.find(ws => ws.workspaceName === selectedName);
+        if (selectedWorkspace) {
+            $("#leaseType").val(selectedWorkspace.leaseTerm.toLowerCase());
+        }
+    });
 }

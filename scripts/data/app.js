@@ -137,19 +137,26 @@ app.post('/register', async (req, res) => {
 
 // POST: Create new booking
 app.post('/bookings', async (req, res) => {
-    const { workspaceName, leaseType, userId, startTime, endTime } = req.body;
-
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
     // Validation
-    if (!workspaceName || !leaseType || !userId || !startTime || !endTime) {
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
     try {
+        const user = await findOneField("usersData", { email: userEmail });
+        if (!user) {
+            return res.status(404).json({ error: "User not found. Please use a registered email." });
+        }
+
+
+
         const db = await connectToDatabase();
         await db.collection("bookings").insertOne({
             workspaceName,
             leaseType,
-            userId,
+            userEmail,
+            userId: user.id,
             startTime,
             endTime,
             createdAt: new Date()
@@ -179,10 +186,10 @@ app.get('/bookings', async (req, res) => {
 // PUT: Update an existing booking by ID
 app.put('/bookings/:id', async (req, res) => {
     const { id } = req.params;
-    const { workspaceName, leaseType, userId, startTime, endTime } = req.body;
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
 
     // Validate
-    if (!workspaceName || !leaseType || !userId || !startTime || !endTime) {
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
         return res.status(400).json({ error: "All fields are required for update" });
     }
 
@@ -194,7 +201,7 @@ app.put('/bookings/:id', async (req, res) => {
                 $set: {
                     workspaceName,
                     leaseType,
-                    userId,
+                    userEmail,
                     startTime,
                     endTime,
                     updatedAt: new Date()
