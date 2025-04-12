@@ -22,15 +22,15 @@ async function connectToDatabase() {
         await client.connect();
         console.log('\nConnected to database');
 
+        // SALMAN - reuse this for consistent db access (recommended by Mongo docs)
         const db = client.db(WorkspaceApp);
         return db;
     } catch (e) {
         console.error(e);
+        throw e;
 
-    } finally {
-        await client.close();
-        console.log('Disconnected from database\n');
     }
+
 }
 
 async function listDatabases(client) {
