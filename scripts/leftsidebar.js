@@ -37,42 +37,46 @@ $(document).ready(function () {
         }
     });
 
-    //Get elements
-    const sidebarButtons = $('.sidebar-btn');
-    const contentSections = $('.content-section');
 
     //Click function on left side bar(Edit profile only so far).
-    sidebarButtons.on('click', function (e) {
+    $(document).on('click', '.sidebar-btn', function (e) {
         e.preventDefault();
 
 
 
         //Remove default active class from all button
-        sidebarButtons.removeClass('active');
+        $('.sidebar-btn').removeClass('active');
         //Add active class to the button that user clicked
         $(this).addClass('active');
-
-        contentSections.hide();//Hide all contect section
 
         const sectionId = $(this).data('section');//display the section which the user clicked
 
         // If clicked logout
         if (sectionId === 'logout') {
             // Clear currentUser in localStorage
-            localStorage.removeItem('currentUser');
+            localStorage.removeItem('email');
+            localStorage.removeItem('token');
             alert('You have been successfully logged out.');
             window.location.href = '/WorkspaceApp/pages/login.html';
             return;
         }
 
-        if (sectionId === 'my-properties') {
+        if (sectionId === 'propertymgr') {
             window.location.href = '/WorkspaceApp/pages/propertymgr.html';
             return;
         }
 
 
-        if (sectionId === 'workspaces') {
+        if (sectionId === 'search') {
             window.location.href = '/WorkspaceApp/pages/search.html';
+            return;
+        }
+        if (sectionId === 'accountpage') {
+            window.location.href = '/WorkspaceApp/pages/accountpage.html';
+            return;
+        }
+        if (sectionId === 'review') {
+            window.location.href = '/WorkspaceApp/pages/reviews.html';
             return;
         }
         $(`#${sectionId}`).show();

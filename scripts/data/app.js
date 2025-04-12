@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 //const { MongoClient } = require('mongodb');
+
+
 const {
     connectToDatabase,
     ObjectId,
@@ -42,6 +44,7 @@ const crypto = require('node:crypto');
 // app and settings
 app.use(cors()); // allow all requests.
 app.use(express.json()); // Convert to parse json
+
 
 
 
@@ -189,7 +192,7 @@ app.get('/profile1', verifyToken, async (req, res) => {  //Named:/profile, verif
         res.status(500).json({ error: "Something went wrong" });
     }
 });
-//For changing passowrd
+//For changing passowrd   
 app.patch('/changePassword', verifyToken, async (req, res) => {
 
     try {
@@ -244,7 +247,31 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
 
 //==================================End of Routes for user==========================================================//
 
+//==================================Routes for WorkspaceDetails===================================================//
+//Add property
+app.post('/properties', verifyToken,async (req, res) => {
+    try {
+      const newProperty = req.body;
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
 
+  app.post('/workspaces', verifyToken, async (req, res) => {
+    try {
+      const newWorkspace = req.body;
+  
+      const result = await insertOneObject("workspaces", newWorkspace);
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("[ /workspaces Error]:", error);
+      res.status(500).json({ error: 'Failed to save workspace' });
+    }
+  });
+
+//==================================End of Routes for WorkspaceDetails===================================================//
 
 
 app.listen(PORT, () => {

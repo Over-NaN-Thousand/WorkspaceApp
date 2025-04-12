@@ -12,7 +12,7 @@ $(document).ready(async function () {
         return;
     }
     try {
-        const response = await fetch("http://localhost:3000/profile1", {
+        const response = await fetch("/profile1", {
             method: "GET",
             headers: {//Decoding
                 Authorization: `Bearer ${token}`//Decoding
@@ -63,7 +63,7 @@ $('#save-password').click(async function () {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/changePassword", {
+        const response = await fetch("/changePassword", {
             method: "PATCH",
             headers: {//Decoding
                 "Content-Type": "application/json",
