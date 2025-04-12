@@ -22,6 +22,8 @@ async function handleSignup(event) {
     const newUser = {
         //Will use email as an identifier
         //id: Date.now(),
+        //Will use email as an identifier
+        //id: Date.now(),
         firstName,
         lastName,
         email,
@@ -100,4 +102,5 @@ async function handleSignup(event) {
     
     //For testing
     console.log(newUser);
+}*/
 }*/

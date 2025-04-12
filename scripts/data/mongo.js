@@ -65,6 +65,15 @@ async function listDatabases() {
 
 
 
+//updateOne()--without $set= Overwrite the whole object---I dont think we will need it, I wrote it for particing purpose
+//updataMany()--without $set= Overwrite many whole object---I dont think we will need it, I wrote it for particing purpose
+//updateOne()--with $set--input one field= Update one field in one object by any condition
+//updataOne()--with $set--input many field= Update many field in one object by any condition
+//updateMany()--with $set--input one field=Update one field in many object by any condition
+//updateMany()--with $set--input many field=Update many field in many object by any condition
+
+
+
 //======Delete======//
 //deleteOne()-----Delete one object by any condition    
 //deleteMany()----Delete many object by any condition   
@@ -322,6 +331,8 @@ async function deleteManyFieldInManyObject(collectionName, condition, fieldName)
     //});
 }
 
+/***********************End of Delete section*************************************/
+//================================End of CRUD for public used====================//
 /***********************End of Delete section*************************************/
 //================================End of CRUD for public used====================//
 
