@@ -2,66 +2,70 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
 
-    <base href="/WorkspaceApp/">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-            crossorigin="anonymous"></script>
-    <script src="scripts/main.js" defer></script>
-    <script src="scripts/signuppage.js" defer></script>
+  <base href="/WorkspaceApp/">
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="scripts/main.js" defer></script>
+  <script src="scripts/signuppage.js" defer></script>
 
-    <link rel="stylesheet" href="styles/style.css" >
-    <link rel="stylesheet" href="styles/signup.css" >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" > <!--fonts for symbols-->
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/signup.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!--fonts for symbols-->
 </head>
-  
+
 <body>
-    <header id="header-mainjs"></header>
+  <header id="header-mainjs"></header>
 
 
-    <div class="main">
-        <div class="informationForm">
-            <div class="title"><span>Join QoWork!</span></div>
-            <form action="#">
+  <div class="main">
+    <div class="informationForm">
+      <div class="title"><span>Join QoWork!</span></div>
+      <form action="#">
 
-              <div class="row">
-                <input type="text" placeholder="First Name" required />
-              </div>
-
-              <div class="row">
-                <input type="text" placeholder="Last Name" required />
-              </div>
-
-                <div class="row">
-                    <input type="email" placeholder="Email" required />
-                  </div>
-
-                  <div class="row">
-                    <input type="password" placeholder="Password" required />
-                  </div>
-
-                  <div class="select-container row">
-                    <select class="custom-select">
-                      <option value="" disabled selected>Please select one of the options</option>
-                      <option value="rent">Renting Workspaces</option>
-                      <option value="list">Listing Workspaces</option>
-                      <option value="both">Both Renting and Listing</option>
-                    </select>
-                  </div>
-                  <div class="login-link">Already a member?<a href="/WorkspaceApp/pages/login.html">Log-in now !</a></div>
-              <div class="row button">
-                <input type="submit" value="Sign-up" />
-              </div>
-
-
-            </div>
-            </form>
+        <div class="row">
+          <input type="text" placeholder="First Name" required />
         </div>
+
+        <div class="row">
+          <input type="text" placeholder="Last Name" required />
+        </div>
+
+        <div class="row">
+          <input type="email" placeholder="Email" required />
+        </div>
+
+        <div class="row">
+          <input type="tel" placeholder="Phone Number" required />
+        </div>
+
+        <div class="row">
+          <input type="password" placeholder="Password" required />
+        </div>
+
+        <div class="select-container row">
+          <select class="custom-select">
+            <option value="" disabled selected>Please select one of the options</option>
+            <option value="rent">Renting Workspaces</option>
+            <option value="list">Listing Workspaces</option>
+            <option value="both">Both Renting and Listing</option>
+          </select>
+        </div>
+        <div class="login-link">Already a member?<a href="/WorkspaceApp/pages/login.html">Log-in now !</a></div>
+        <div class="row button">
+          <input type="submit" value="Sign-up" />
+        </div>
+
+
     </div>
-    <footer id="footer-mainjs"></footer>
+    </form>
+  </div>
+  </div>
+  <footer id="footer-mainjs"></footer>
 </body>
 
 </html>
