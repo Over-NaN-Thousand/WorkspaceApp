@@ -1,5 +1,5 @@
 //Import application(For public)
-require('dotenv').config();
+//require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -284,7 +284,7 @@ app.post('/login', async (req, res) => {
             email: existingUser.email,
         },
             process.env.JWT_SECRET_KEY, //Encode the above information(only email in the token)
-            { expiresIn: '86400' }//expired in 86400 second = 1 day
+            { expiresIn: "1d" }//expired in 86400 second = 1 day
         );
         res.status(200).json({   //Save email and token in local storage 
             email: existingUser.email,

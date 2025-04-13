@@ -3,16 +3,18 @@ const { MongoClient, ObjectId } = require('mongodb');
 //const WorkspaceApp = "WorkspaceApp"//Define the Database's name.
 const crypto = require('crypto');
 let db = null; //// let db=null(meaning no value, false) at first
-
 const jwt = require('jsonwebtoken');
 const DATABASE = "WorkspaceApp";
-
+const db_uri = process.env.MONGO_URI;
+const client = new MongoClient(db_uri);
 async function connectToDatabase() {  //It was (callback, ...args), but no more call back now
     /****************Put this code into your .env*****************
     MONGO_URI=mongodb+srv://UserName:Password@bvccluster.qgjve.mongodb.net/?retryWrites=true&w=majority
     *****************************************************************/
-    const db_uri = process.env.MONGO_URI;
-    const client = new MongoClient(db_uri);
+
+
+
+
 
     //=========Please notice everyone if you have edited above code=================//
 
@@ -561,21 +563,22 @@ async function getWorkspacesWithProperties(client, filters) {
 
 
 async function connectToDatabaseB(callback, ...args) {
-    const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
-    
-    const client = new MongoClient(db_uri);
 
     try {
-        await client.connect();
+        
+        //const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;   
+         //const client = new MongoClient(db_uri);
+
+        //await client.connect();
         console.log('\nConnected to database');
         return await callback(client, ...args); // call the function with arguments, then return the result
     } catch (e) {
         console.error("Database connection error:", e);
         throw e;
-    } finally {
+    } /*finally {
         await client.close();
         console.log('Disconnected from database\n');
-    }
+    }*/
 }
 
 
