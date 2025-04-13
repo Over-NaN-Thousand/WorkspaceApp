@@ -28,6 +28,7 @@ const {
     insertManyObject,
     findOneField,
     findManyField,
+    createProperty,
     buildMinMaxFilter,
     getHighestId,
     readProperties,
