@@ -125,7 +125,7 @@ const DATABASE = "WorkspaceApp";
       res.status(500).json({ error: 'Failed to fetch property' });
     }
   });*/ //Repeated by Victor
-  app.post("/properties", async (req, res) => {
+  app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
     if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
@@ -147,7 +147,7 @@ const DATABASE = "WorkspaceApp";
     }
 });
 
-app.get("/properties", async (req, res) => {
+app.get("/properties", verifyToken,async (req, res) => {
     const filters = {};
 
     const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
@@ -172,7 +172,7 @@ app.get("/properties", async (req, res) => {
     }
 });
 
-app.put("/properties/:id", async (req, res) => {
+app.put("/properties/:id", verifyToken,async (req, res) => {
     const propertyId = Number(req.params.id);       // get the property ID
     const updates = req.body;                       // get the updates
 
@@ -196,7 +196,7 @@ app.put("/properties/:id", async (req, res) => {
     }
 });
 
-app.delete("/properties/:id", async (req, res) => {
+app.delete("/properties/:id", verifyToken,async (req, res) => {
     const propertyId = Number(req.params.id);
 
     if (isNaN(propertyId)) {
@@ -395,7 +395,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
       res.status(500).json({ error: 'Failed to save workspace' });
     }
   });*/ //Repeated by Victor
-  app.post("/workspaces", async (req, res) => {
+  app.post("/workspaces", verifyToken,async (req, res) => {
     const newWorkspace = req.body;
     console.log("New workspace data:", newWorkspace); // For debugging
     // check that required fields were provided
@@ -440,7 +440,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
-app.get("/workspaces", async (req, res) => {
+app.get("/workspaces", verifyToken,async (req, res) => {
     try {
         const filters = {};
         //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
