@@ -65,7 +65,7 @@ $(document).ready(function () {
                 $("#bookingForm")[0].reset();
                 loadDateTimeInputs();
             } else {
-                alert("Booking failed: " + data.message);
+                alert("Booking failed: " + (data.error || "Unknown error"));
             }
         } catch (err) {
             console.error("Booking error:", err);

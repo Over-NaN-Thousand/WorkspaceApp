@@ -8,7 +8,7 @@ const {
     connectToDatabase,
     ObjectId,
     hashPassword,
-    //verifyToken,
+    verifyToken,
     deleteOneFieldInOneObject,
     deleteOneFieldInManyObject,
     deleteManyFieldInOneObject,
@@ -136,7 +136,7 @@ app.post('/register', async (req, res) => {
 //========================= Bookings API ===============================//
 
 // POST: Create new booking
-app.post('/bookings', async (req, res) => {
+app.post('/bookings', verifyToken, async (req, res) => {
     const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
     // Validation
     if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
@@ -184,7 +184,7 @@ app.get('/bookings', async (req, res) => {
 });
 
 // PUT: Update an existing booking by ID
-app.put('/bookings/:id', async (req, res) => {
+app.put('/bookings/:id', verifyToken, async (req, res) => {
     const { id } = req.params;
     const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
 
@@ -224,7 +224,7 @@ app.put('/bookings/:id', async (req, res) => {
 
 
 // DELETE: Remove a booking by ID
-app.delete('/bookings/:id', async (req, res) => {
+app.delete('/bookings/:id', verifyToken, async (req, res) => {
     const { id } = req.params;
 
     try {
