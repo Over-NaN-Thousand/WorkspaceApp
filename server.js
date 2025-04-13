@@ -19,10 +19,10 @@ const DATABASE = "WorkspaceApp";
 
 
 // CRUD operations for PROPERTY
-app.post("/property", async (req, res) => {
+app.post("/properties", async (req, res) => {
     const newProperty = req.body;
 
-    if (!newProperty.propertyId || !newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
+    if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
         return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
 
     try {
@@ -115,6 +115,51 @@ app.delete("/properties/:id", async (req, res) => {
 
 
 //CRUD for WORKSPACES
+app.post("/workspaces", async (req, res) => {
+    const newWorkspace = req.body;
+    console.log("New workspace data:", newWorkspace); // For debugging
+    // check that required fields were provided
+    if (!newWorkspace.propertyId || !newWorkspace.workspaceName || !newWorkspace.ownerId) {
+        return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerId." });
+    }
+    
+
+    try {
+        // check that property is valid
+        const propertyExists = await connectToDatabase(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("properties")
+                .findOne({ propertyId: newWorkspace.propertyId });
+        });
+        
+        if (!propertyExists) {
+            return res.status(400).json({ message: "Invalid propertyId provided. Property does not exist." });
+        }
+
+        // get highest workspaceID then add 1
+        const highestWorkspaceId = await connectToDatabase(getHighestId, "workspaces", "workspaceID");
+        newWorkspace.workspaceID = (highestWorkspaceId?.workspaceID || 0) + 1;
+
+        // add new workspace
+        const result = await connectToDatabase(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("workspaces")
+                .insertOne(newWorkspace);
+        });
+
+        if (result.acknowledged) {
+            res.status(201).json({ message: "Workspace created successfully.", workspace: newWorkspace });
+        } else {
+            res.status(500).json({ message: "Failed to create workspace." });
+        }
+    } catch (error) {
+        console.error("Error creating workspace:", error);
+        res.status(500).json({ message: "An error occurred while creating the workspace." });
+    }
+});
+
 app.get("/workspaces", async (req, res) => {
     try {
         const filters = {};
@@ -162,13 +207,21 @@ app.get("/workspaces", async (req, res) => {
             filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
         }
 
+        console.log("Filters:", filters); // For debugging
+
         const workspaces = await connectToDatabase(getWorkspacesWithProperties, filters);
         res.status(200).json({ workspaces });
+        console.log("Retreived number of workspaces:", workspaces.length); // For debugging
     } catch (error) {
         console.error("Error fetching workspaces:", error);
         res.status(500).json({ message: "An error occurred while fetching workspaces." });
     }
 });
+
+
+
+
+
 
 
 
@@ -214,6 +267,7 @@ app.listen(PORT, () => {
 //AL: this wrapper function takes care of connecting to the database, calling the function we want to execute, error handling, and closing the connection afterwards.
 async function connectToDatabase(callback, ...args) {
     const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
+    
     const client = new MongoClient(db_uri);
 
     try {
@@ -242,7 +296,7 @@ async function getHighestId(client, collection, idField) {
             .sort({ [idField]: -1 })   // sort by propertyId DESC
             .limit(1)                   // top 1
             .next();
-        console.log(`Highest ${idField} in ${collection}:`, result);
+        //console.log(`Highest ${idField} in ${collection}:`, result);
         return result;
     } catch (error) {
         console.error("Error fetching the highest propertyId:", error);
@@ -334,7 +388,35 @@ async function getWorkspacesWithProperties(client, filters) {
                 },
                 {
                     $unwind: "$propertyDetails"     // flatten the array
+                },
+                {
+                    $project: { // Project specific fields to flatten `propertyDetails`
+                        workspaceID: 1,
+                        workspaceName: 1,
+                        imgFileName: 1,
+                        workspaceType: 1,
+                        leaseTerm: 1,
+                        sqFt: 1,
+                        seatCapacity: 1,
+                        price: 1,
+                        amenities: 1,
+                        propertyId: 1,
+                        ownerId: 1,
+                        rating: 1,
+                        name: "$propertyDetails.name",
+                        address1: "$propertyDetails.address1",
+                        address2: "$propertyDetails.address2",
+                        postalcode: "$propertyDetails.postalcode",
+                        city: "$propertyDetails.city",
+                        province: "$propertyDetails.province",
+                        country: "$propertyDetails.country",
+                        neighborhood: "$propertyDetails.neighbourhood", 
+                        propertyImgFileName: "$propertyDetails.imgFileName", 
+                        propertyOwnerId: "$propertyDetails.ownerId"
+                    
+                    }
                 }
+
             ]).toArray();
 
         return result;
