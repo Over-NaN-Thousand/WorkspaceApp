@@ -359,6 +359,22 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
+app.delete('/user', verifyToken, async (req, res) => {
+    const userEmail = req.headers["email"] || req.query.email;
+    try {
+    const result = await deleteOneObject("usersData", {email:userEmail});
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "User deleted successfully." });
+        } else {
+            res.status(404).json({ message: "User was not found." });
+        }
+    }
+    catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "An error occurred while deleting the user." });
+    }
+});
+
 
 //==================================End of Routes for user==========================================================//
 
