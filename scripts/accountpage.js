@@ -12,7 +12,7 @@ $(document).ready(async function () {
         return;
     }
     try {
-        const response = await fetch("/profile1", {
+        const response = await fetch("http://localhost:3000/profile1", {
             method: "GET",
             headers: {//Decoding
                 Authorization: `Bearer ${token}`//Decoding
