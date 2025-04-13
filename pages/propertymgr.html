@@ -28,10 +28,12 @@
 
         <section class="property-tools">
             <button id="addProperty">Add Property</button>
+            <button id="viewMyProperty">My Property</button>
         </section>
 
         <section class="workspace-tools">
             <button id="addWorkspace">Add Workspace</button>
+            <button id="viewMyWorkspace">My Workspace</button>
         </section>
 
         <article id="properties-container">
@@ -83,10 +85,8 @@
             </div>
         </div>
         <!-- Add Workspace Popup -->
-        <div id="workspacePopup" class="popup-container"
-            style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 999;">
-            <div class="popup-content"
-                style="background-color: var(--filter-bg); padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+        <div id="workspacePopup" class="popup-container">
+            <div class="popup-content">
                 <h2>Edit Workspace</h2>
                 <form id="workspaceForm">
                     <p>
@@ -129,7 +129,88 @@
                 </form>
             </div>
         </div>
+        <section id="selectMyPropertySection">
+            <h2>Select My Property</h2>
+            <select id="propertySelector">
+              <option value="">-- Select a property --</option>
+            </select>
+          </section>
+        <!-- My Property Form -->
+        <form id="myPropertyForm">
+            <h2>My Property</h2>
+            <div>
+                <label for="myPropertyName">Name:</label>
+                <input type="text" id="myPropertyName" readonly>
+            </div>
+            <div>
+                <label for="myAddress1">Address 1:</label>
+                <input type="text" id="myAddress1" readonly>
+            </div>
+            <div>
+                <label for="myAddress2">Address 2:</label>
+                <input type="text" id="myAddress2" readonly>
+            </div>
+            <div>
+                <label for="myNeighborhood">Neighborhood:</label>
+                <input type="text" id="myNeighborhood" readonly>
+            </div>
+            <div>
+                <label for="myCity">City:</label>
+                <input type="text" id="myCity" readonly>
+            </div>
+            <div>
+                <label for="myProvince">Province:</label>
+                <input type="text" id="myProvince" readonly>
+            </div>
+            <div>
+                <label for="myCountry">Country:</label>
+                <input type="text" id="myCountry" readonly>
+            </div>
+            <div>
+                <label for="myPostalCode">Postal Code:</label>
+                <input type="text" id="myPostalCode" readonly>
+            </div>
+          </form>
+      
+          <!-- My Workspace Form -->
+          <form id="myWorkspaceForm">
+            <h2>My Workspace</h2>
+            <div>
+                <label for="myWorkspaceName">Name:</label>
+                <input type="text" id="myWorkspaceName" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceType">Type:</label>
+                <input type="text" id="myWorkspaceType" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceLease">Lease Term:</label>
+                <input type="text" id="myWorkspaceLease" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceSqFt">Floor Area (Sq Ft):</label>
+                <input type="number" id="myWorkspaceSqFt" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceSeat">Seat Capacity:</label>
+                <input type="number" id="myWorkspaceSeat" readonly>
+            </div>
+            <div>
+                <label for="myWorkspacePrice">Price:</label>
+                <input type="number" id="myWorkspacePrice" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceRating">Rating:</label>
+                <input type="number" id="myWorkspaceRating" readonly>
+            </div>
+            <div>
+                <label for="myWorkspaceAmenities">Amenities:</label>
+                <input type="text" id="myWorkspaceAmenities" readonly>
+            </div>
+          </form>
     </main>
+
+
 
     <footer id="footer-mainjs"></footer>
 
