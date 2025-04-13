@@ -5,7 +5,7 @@ const crypto = require('crypto');
 let db = null; //// let db=null(meaning no value, false) at first
 
 const jwt = require('jsonwebtoken');
-
+const DATABASE = "WorkspaceApp";
 
 async function connectToDatabase() {  //It was (callback, ...args), but no more call back now
     /****************Put this code into your .env*****************
@@ -558,7 +558,23 @@ async function getWorkspacesWithProperties(client, filters) {
 }
 
 
+async function connectToDatabaseB(callback, ...args) {
+    const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
+    
+    const client = new MongoClient(db_uri);
 
+    try {
+        await client.connect();
+        console.log('\nConnected to database');
+        return await callback(client, ...args); // call the function with arguments, then return the result
+    } catch (e) {
+        console.error("Database connection error:", e);
+        throw e;
+    } finally {
+        await client.close();
+        console.log('Disconnected from database\n');
+    }
+}
 
 
 
@@ -571,6 +587,7 @@ async function getWorkspacesWithProperties(client, filters) {
 
 //===================End of the function of user==========================//
 module.exports = {
+    connectToDatabaseB,
     connectToDatabase,
     ObjectId,
     hashPassword,

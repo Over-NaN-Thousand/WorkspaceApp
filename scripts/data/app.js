@@ -8,6 +8,7 @@ const fs = require('fs');
 
 const {
     connectToDatabase,
+    connectToDatabaseB,
     ObjectId,
     hashPassword,
     verifyToken,
@@ -130,10 +131,10 @@ const DATABASE = "WorkspaceApp";
         return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
 
     try {
-        const highestPropertyId = await connectToDatabase(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
+        const highestPropertyId = await connectToDatabaseB(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
         newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
 
-        const result = await connectToDatabase(createProperty, newProperty);
+        const result = await connectToDatabaseB(createProperty, newProperty);
             if (result.acknowledged) {
                 res.status(201).json({ message: "Property created successfully.", property: newProperty });
             } else {
@@ -161,7 +162,7 @@ app.get("/properties", async (req, res) => {
         filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
 
     try {
-        const properties = await connectToDatabase(readProperties, filters);
+        const properties = await connectToDatabaseB(readProperties, filters);
         // console.dir(properties);
         res.status(200).json({ properties });
     } catch (error) {
@@ -182,7 +183,7 @@ app.put("/properties/:id", async (req, res) => {
         return res.status(400).json({ message: "No updates provided in request body." });
     
     try {
-        const result = await connectToDatabase(updateProperty, propertyId, updates);
+        const result = await connectToDatabaseB(updateProperty, propertyId, updates);
         if (result.modifiedCount > 0) {
             res.status(200).json({ message: "Property updated successfully." });
         } else {
@@ -202,7 +203,7 @@ app.delete("/properties/:id", async (req, res) => {
     }
 
     try {
-        const result = await connectToDatabase(deleteProperty, propertyId);
+        const result = await connectToDatabaseB(deleteProperty, propertyId);
         if (result.deletedCount > 0) {
             res.status(200).json({ message: "Property deleted successfully." });
         } else {
@@ -404,7 +405,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
 
     try {
         // check that property is valid
-        const propertyExists = await connectToDatabase(async (client) => {
+        const propertyExists = await connectToDatabaseB(async (client) => {
             return await client
                 .db(DATABASE)
                 .collection("properties")
@@ -416,11 +417,11 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
         }
 
         // get highest workspaceID then add 1
-        const highestWorkspaceId = await connectToDatabase(getHighestId, "workspaces", "workspaceID");
+        const highestWorkspaceId = await connectToDatabaseB(getHighestId, "workspaces", "workspaceID");
         newWorkspace.workspaceID = (highestWorkspaceId?.workspaceID || 0) + 1;
 
         // add new workspace
-        const result = await connectToDatabase(async (client) => {
+        const result = await connectToDatabaseB(async (client) => {
             return await client
                 .db(DATABASE)
                 .collection("workspaces")
@@ -487,7 +488,7 @@ app.get("/workspaces", async (req, res) => {
 
         console.log("Filters:", filters); // For debugging
 
-        const workspaces = await connectToDatabase(getWorkspacesWithProperties, filters);
+        const workspaces = await connectToDatabaseB(getWorkspacesWithProperties, filters);
         res.status(200).json({ workspaces });
         console.log("Retreived number of workspaces:", workspaces.length); // For debugging
     } catch (error) {
