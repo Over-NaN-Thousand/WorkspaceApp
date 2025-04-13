@@ -370,8 +370,192 @@ const verifyToken = (req, res, next) => {
 };
 
 
+/**************************************************** 
+ * Andrie section
+ * **************************************************/
+// helper function to build filters with min and max values
+function buildMinMaxFilter(min, max) {
+    
+    if (!isNaN(min) && !isNaN(max)) {
+        return { $gte: min, $lte: max };
+    }
+    else if (!isNaN(min)) {
+        return { $gte: min };
+    } else if (!isNaN(max)) {
+        return { $lte: max };
+    }
+    return {};
+}
+
+/************************************************************************
+ * Let's declare our functions down here and keep the logic up top.     *
+ ************************************************************************/
 
 
+
+
+
+
+//AL: this wrapper function takes care of connecting to the database, calling the function we want to execute, error handling, and closing the connection afterwards.
+/*Repeated connectToDatabase()
+async function connectToDatabase(callback, ...args) {
+    const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
+    
+    const client = new MongoClient(db_uri);
+
+    try {
+        await client.connect();
+        console.log('\nConnected to database');
+        return await callback(client, ...args); // call the function with arguments, then return the result
+    } catch (e) {
+        console.error("Database connection error:", e);
+        return res.status(500).json({ message: "Database connection failed." });
+    } finally {
+        await client.close();
+        console.log('Disconnected from database\n');
+    }
+}*/
+
+
+
+
+async function getHighestId(client, collection, idField) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection(collection)
+            .find()
+            .sort({ [idField]: -1 })   // sort by propertyId DESC
+            .limit(1)                   // top 1
+            .next();
+        //console.log(`Highest ${idField} in ${collection}:`, result);
+        return result;
+    } catch (error) {
+        console.error("Error fetching the highest propertyId:", error);
+        throw error;
+    }
+}
+
+async function createProperty(client, property) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("properties")
+            .insertOne(property); // insert the property
+        
+        console.log(`Property inserted successfully with ID: ${result.insertedId}`);
+        return result;
+    } catch (error) {
+        console.error("Error inserting property into the database:", error);
+        throw error;
+    }
+}
+
+async function readProperties(client, filters) {
+    try {
+        const properties = await client
+            .db(DATABASE)
+            .collection("properties")
+            .find(filters)
+            .toArray(); // make an array
+
+        console.log(`Retrieved ${properties.length} property(ies).`);
+        return properties;
+    } catch (error) {
+        console.error("Error retrieving properties:", error);
+        throw error;
+    }
+}
+
+async function updateProperty(client, propertyId, updates) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("properties")
+            .updateOne(
+                { propertyId }, // only update one document with propertyId
+                { $set: updates }
+            );
+
+        console.log(`Modified property:  propertyId=${propertyId}.`);
+        return result;
+    } catch (error) {
+        console.error("Error updating property: ", error);
+        throw error;
+    }
+}
+
+async function deleteProperty(client, propertyId) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("properties")
+            .deleteOne({ propertyId });
+        console.log(`Deleted property: propertyId=${propertyId}.`);
+        return result;
+    } catch (error) {
+        console.error("Error deleting property:", error);
+        throw error;
+    }
+}
+
+
+async function getWorkspacesWithProperties(client, filters) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .aggregate([
+                {
+                    $match: filters // apply filters
+                },
+                {
+                    $lookup: {
+                        from: "properties",         // join with properties
+                        localField: "propertyId",   // foreign key in workspaces
+                        foreignField: "propertyId", // primary key in properties
+                        as: "propertyDetails"       // result joined array
+                    }
+                },
+                {
+                    $unwind: "$propertyDetails"     // flatten the array
+                },
+                {
+                    $project: { // Project specific fields to flatten `propertyDetails`
+                        workspaceID: 1,
+                        workspaceName: 1,
+                        imgFileName: 1,
+                        workspaceType: 1,
+                        leaseTerm: 1,
+                        sqFt: 1,
+                        seatCapacity: 1,
+                        price: 1,
+                        amenities: 1,
+                        propertyId: 1,
+                        ownerId: 1,
+                        rating: 1,
+                        name: "$propertyDetails.name",
+                        address1: "$propertyDetails.address1",
+                        address2: "$propertyDetails.address2",
+                        postalcode: "$propertyDetails.postalcode",
+                        city: "$propertyDetails.city",
+                        province: "$propertyDetails.province",
+                        country: "$propertyDetails.country",
+                        neighborhood: "$propertyDetails.neighbourhood", 
+                        propertyImgFileName: "$propertyDetails.imgFileName", 
+                        propertyOwnerId: "$propertyDetails.ownerId"
+                    
+                    }
+                }
+
+            ]).toArray();
+
+        return result;
+    } catch (error) {
+        console.error("Error performing workspace-property join:", error);
+        throw error;
+    }
+}
 
 
 
@@ -407,7 +591,13 @@ module.exports = {
     insertManyObject,
     findOneField,
     findManyField,
-
+    createProperty,
+    buildMinMaxFilter,
+    getHighestId,
+    readProperties,
+    updateProperty,
+    deleteProperty,
+    getWorkspacesWithProperties,
 
 };
 

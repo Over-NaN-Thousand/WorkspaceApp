@@ -27,6 +27,12 @@ const {
     insertManyObject,
     findOneField,
     findManyField,
+    buildMinMaxFilter,
+    getHighestId,
+    readProperties,
+    updateProperty,
+    deleteProperty,
+    getWorkspacesWithProperties,
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -45,7 +51,7 @@ const crypto = require('node:crypto');
 app.use(cors()); // allow all requests.
 app.use(express.json()); // Convert to parse json
 
-
+const DATABASE = "WorkspaceApp";
 
 
 
@@ -82,7 +88,7 @@ app.use(express.json()); // Convert to parse json
 
 //==================================End of Routes for Property===================================================//
 //Add property
-app.post('/addProperties', verifyToken,async (req, res) => {
+/*app.post('/addProperties', verifyToken,async (req, res) => {
     try {
         const all = await findManyField("properties", {});
         const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
@@ -116,8 +122,97 @@ app.post('/addProperties', verifyToken,async (req, res) => {
       console.error("Error in /myProperty:", err);
       res.status(500).json({ error: 'Failed to fetch property' });
     }
-  });
+  });*/ //Repeated by Victor
+  app.post("/properties", async (req, res) => {
+    const newProperty = req.body;
 
+    if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
+        return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
+
+    try {
+        const highestPropertyId = await connectToDatabase(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
+        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
+
+        const result = await connectToDatabase(createProperty, newProperty);
+            if (result.acknowledged) {
+                res.status(201).json({ message: "Property created successfully.", property: newProperty });
+            } else {
+                res.status(500).json({ message: "Failed to create property." });
+            }
+    } catch (error) {
+        console.error("Error creating property:", error);
+        res.status(500).json({ message: "An error occurred while creating the property." });
+    }
+});
+
+app.get("/properties", async (req, res) => {
+    const filters = {};
+
+    const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
+    if (!isNaN(ownerId)) {
+        filters.ownerId = ownerId; 
+    } else {
+        console.error("Invalid ownerId provided:", ownerId);
+        return res.status(400).json({ message: "Invalid ownerId format." });
+    }
+
+    const propertyName = req.headers["name"] || req.query.name;
+    if (propertyName) 
+        filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
+
+    try {
+        const properties = await connectToDatabase(readProperties, filters);
+        // console.dir(properties);
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error("Error fetching properties:", error);
+        res.status(500).json({ message: "An error occurred while fetching properties." });
+    }
+});
+
+app.put("/properties/:id", async (req, res) => {
+    const propertyId = Number(req.params.id);       // get the property ID
+    const updates = req.body;                       // get the updates
+
+    if (isNaN(propertyId))
+        return res.status(400).json({ message: "Invalid property ID provided." });
+    
+
+    if (!updates || Object.keys(updates).length === 0) 
+        return res.status(400).json({ message: "No updates provided in request body." });
+    
+    try {
+        const result = await connectToDatabase(updateProperty, propertyId, updates);
+        if (result.modifiedCount > 0) {
+            res.status(200).json({ message: "Property updated successfully." });
+        } else {
+            res.status(404).json({ message: "Property not found or no changes were made." });
+        }
+    } catch (error) {
+        console.error("Error updating property:", error);
+        res.status(500).json({ message: "An error occurred while updating the property." });
+    }
+});
+
+app.delete("/properties/:id", async (req, res) => {
+    const propertyId = Number(req.params.id);
+
+    if (isNaN(propertyId)) {
+        return res.status(400).json({ message: "Invalid property ID provided." });
+    }
+
+    try {
+        const result = await connectToDatabase(deleteProperty, propertyId);
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "Property deleted successfully." });
+        } else {
+            res.status(404).json({ message: "Property not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting property:", error);
+        res.status(500).json({ message: "An error occurred while deleting the property." });
+    }
+});
 //==================================Routes for user==========================================================//
 
 
@@ -286,11 +381,9 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
 //==================================Routes for WorkspaceDetails===================================================//
 
 
-  app.post('/addWorkspaces', verifyToken, async (req, res) => {
+  /*app.post('/addWorkspaces', verifyToken, async (req, res) => {
     try {
-        const all = await findManyField("workspaces", {});
-        const maxId = all.reduce((max, p) => Math.max(max, p.workspaceId || 0), 0);
-        const newId = maxId + 1;
+
       const newWorkspace = req.body;
   
       const result = await insertOneObject("workspaces", newWorkspace);
@@ -299,8 +392,109 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
       console.error("[ /workspaces Error]:", error);
       res.status(500).json({ error: 'Failed to save workspace' });
     }
-  });
+  });*/ //Repeated by Victor
+  app.post("/workspaces", async (req, res) => {
+    const newWorkspace = req.body;
+    console.log("New workspace data:", newWorkspace); // For debugging
+    // check that required fields were provided
+    if (!newWorkspace.propertyId || !newWorkspace.workspaceName || !newWorkspace.ownerId) {
+        return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerId." });
+    }
+    
 
+    try {
+        // check that property is valid
+        const propertyExists = await connectToDatabase(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("properties")
+                .findOne({ propertyId: newWorkspace.propertyId });
+        });
+        
+        if (!propertyExists) {
+            return res.status(400).json({ message: "Invalid propertyId provided. Property does not exist." });
+        }
+
+        // get highest workspaceID then add 1
+        const highestWorkspaceId = await connectToDatabase(getHighestId, "workspaces", "workspaceID");
+        newWorkspace.workspaceID = (highestWorkspaceId?.workspaceID || 0) + 1;
+
+        // add new workspace
+        const result = await connectToDatabase(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("workspaces")
+                .insertOne(newWorkspace);
+        });
+
+        if (result.acknowledged) {
+            res.status(201).json({ message: "Workspace created successfully.", workspace: newWorkspace });
+        } else {
+            res.status(500).json({ message: "Failed to create workspace." });
+        }
+    } catch (error) {
+        console.error("Error creating workspace:", error);
+        res.status(500).json({ message: "An error occurred while creating the workspace." });
+    }
+});
+
+app.get("/workspaces", async (req, res) => {
+    try {
+        const filters = {};
+        //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
+        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
+        if (rawOwnerId) {
+            const ownerId = Number(rawOwnerId); 
+            if (!isNaN(ownerId)) {
+                filters.ownerId = ownerId;
+            } else {
+                console.error("Invalid ownerId provided:", ownerId);
+                return res.status(400).json({ message: "Invalid ownerId format." });
+            }
+        }
+        
+        const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
+        if (workspaceName) 
+            filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
+
+        const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
+        if (workspaceType)
+            filters.workspaceType = workspaceType;
+
+        const leaseTerm = req.headers["leaseterm"] || req.query.leaseTerm;
+        if (leaseTerm)
+            filters.leaseTerm = leaseTerm;
+
+        const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
+        const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
+            filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
+
+        const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
+        const maxSeatCapacity = Number(req.headers["maxcapacity"] || req.query.maxCapacity);
+        if (!isNaN(minSeatCapacity) || !isNaN(maxSeatCapacity))
+            filters.seatCapacity = buildMinMaxFilter(minSeatCapacity, maxSeatCapacity);
+
+        const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
+        const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
+            filters.price = buildMinMaxFilter(minPrice, maxPrice);
+
+        const amenities = req.headers["amenities"] || req.query.amenities;
+        if (amenities) {
+            filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
+        }
+
+        console.log("Filters:", filters); // For debugging
+
+        const workspaces = await connectToDatabase(getWorkspacesWithProperties, filters);
+        res.status(200).json({ workspaces });
+        console.log("Retreived number of workspaces:", workspaces.length); // For debugging
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
 //==================================End of Routes for WorkspaceDetails===================================================//
 
 
