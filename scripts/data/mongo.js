@@ -27,6 +27,7 @@ async function connectToDatabase() {  //It was (callback, ...args), but no more 
         return db;
     } catch (e) {
         console.error(e);
+        throw e;
 
 
         //No more diconnecting
@@ -36,6 +37,7 @@ async function connectToDatabase() {  //It was (callback, ...args), but no more 
         }*/
     }
 }
+
 async function listDatabases() {
     const db = await connectToDatabase();
     const databasesList = await db
@@ -358,7 +360,7 @@ const verifyToken = (req, res, next) => {
         return res.status(403).json({ error: "Unauthorized" });//Error
     }
 
-    const token = authHeader.split(" ")[1]; // Extract the token part
+    const token = authHeader.split(" ")[1];
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);//Decoded by jwt

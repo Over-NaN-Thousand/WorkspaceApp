@@ -12,6 +12,7 @@ const {
     ObjectId,
     hashPassword,
     verifyToken,
+
     deleteOneFieldInOneObject,
     deleteOneFieldInManyObject,
     deleteManyFieldInOneObject,
@@ -498,6 +499,117 @@ app.get("/workspaces", verifyToken,async (req, res) => {
     }
 });
 //==================================End of Routes for WorkspaceDetails===================================================//
+//========================= Bookings API ===============================//
+
+// POST: Create new booking
+app.post('/bookings', verifyToken, async (req, res) => {
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
+    // Validation
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        const user = await findOneField("usersData", { email: userEmail });
+        if (!user) {
+            return res.status(404).json({ error: "User not found. Please use a registered email." });
+        }
+
+
+
+        const db = await connectToDatabase();
+        await db.collection("bookings").insertOne({
+            workspaceName,
+            leaseType,
+            userEmail,
+            userId: user.id,
+            startTime,
+            endTime,
+            createdAt: new Date()
+        });
+
+        res.status(201).json({ message: "Booking saved to DB" });
+
+    } catch (err) {
+        console.error("Booking error:", err);
+        res.status(500).json({ error: "Server error while booking" });
+    }
+});
+
+// GET: Retrieve all bookings
+app.get('/bookings', async (req, res) => {
+    try {
+        await connectToDatabase(async (db) => {
+            const bookings = await db.collection("bookings").find({}).toArray();
+            res.status(200).json(bookings);
+        });
+    } catch (err) {
+        console.error("Fetching bookings error:", err);
+        res.status(500).json({ error: "Failed to retrieve bookings" });
+    }
+});
+
+// PUT: Update an existing booking by ID
+app.put('/bookings/:id', verifyToken, async (req, res) => {
+    const { id } = req.params;
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
+
+    // Validate
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
+        return res.status(400).json({ error: "All fields are required for update" });
+    }
+
+    try {
+        const db = await connectToDatabase();
+        const result = await db.collection("bookings").updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: {
+                    workspaceName,
+                    leaseType,
+                    userEmail,
+                    startTime,
+                    endTime,
+                    updatedAt: new Date()
+                }
+            }
+        );
+
+        if (result.modifiedCount === 1) {
+            res.status(200).json({ message: "Booking updated successfully!" });
+        } else {
+            res.status(404).json({ message: "Booking not found or no changes made" });
+        }
+
+    } catch (err) {
+        console.error("Update booking error:", err);
+        res.status(500).json({ error: "Server error while updating" });
+    }
+});
+
+
+
+// DELETE: Remove a booking by ID
+app.delete('/bookings/:id', verifyToken, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const db = await connectToDatabase();
+        const result = await db.collection("bookings").deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: "Booking deleted successfully!" });
+        } else {
+            res.status(404).json({ message: "Booking not found" });
+        }
+
+    } catch (err) {
+        console.error("Delete booking error:", err);
+        res.status(500).json({ error: "Server error while deleting" });
+    }
+});
+
+//===========================End of Bookings API ============================//
 
 
 app.listen(PORT, () => {
