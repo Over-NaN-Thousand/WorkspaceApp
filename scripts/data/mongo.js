@@ -377,7 +377,7 @@ const verifyToken = (req, res, next) => {
  * **************************************************/
 // helper function to build filters with min and max values
 function buildMinMaxFilter(min, max) {
-    
+
     if (!isNaN(min) && !isNaN(max)) {
         return { $gte: min, $lte: max };
     }
@@ -444,7 +444,7 @@ async function createProperty(client, property) {
             .db(DATABASE)
             .collection("properties")
             .insertOne(property); // insert the property
-        
+
         console.log(`Property inserted successfully with ID: ${result.insertedId}`);
         return result;
     } catch (error) {
@@ -543,10 +543,10 @@ async function getWorkspacesWithProperties(client, filters) {
                         city: "$propertyDetails.city",
                         province: "$propertyDetails.province",
                         country: "$propertyDetails.country",
-                        neighborhood: "$propertyDetails.neighbourhood", 
-                        propertyImgFileName: "$propertyDetails.imgFileName", 
+                        neighborhood: "$propertyDetails.neighbourhood",
+                        propertyImgFileName: "$propertyDetails.imgFileName",
                         propertyOwnerId: "$propertyDetails.ownerId"
-                    
+
                     }
                 }
 
@@ -562,7 +562,7 @@ async function getWorkspacesWithProperties(client, filters) {
 
 async function connectToDatabaseB(callback, ...args) {
     const db_uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URI}`;
-    
+
     const client = new MongoClient(db_uri);
 
     try {
