@@ -81,8 +81,42 @@ app.use(express.json()); // Convert to parse json
 
 
 //==================================End of Routes for Property===================================================//
+//Add property
+app.post('/addProperties', verifyToken,async (req, res) => {
+    try {
+        const all = await findManyField("properties", {});
+        const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
+        const newId = maxId + 1;
+      const newProperty ={
+        ...req.body,
+        propertyId: newId,
 
+      };
 
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
+
+  //Display property
+  app.get('/myProperty', verifyToken, async (req, res) => {
+    try {
+      const email = req.user.email;
+      const all = await findManyField("properties", { ownerEmail: email });
+  
+      if (!all || all.length === 0) {
+        return res.status(404).json({ message: 'No properties found' });
+      }
+  
+
+      res.status(200).json(all);
+    } catch (err) {
+      console.error("Error in /myProperty:", err);
+      res.status(500).json({ error: 'Failed to fetch property' });
+    }
+  });
 
 //==================================Routes for user==========================================================//
 
@@ -127,6 +161,8 @@ const salt = crypto.randomBytes(64).toString('hex');
         res.status(500).json({ error: "Server error" });
     }
 });
+
+
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body; //Get the email, password from frontend
@@ -248,27 +284,13 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
 //==================================End of Routes for user==========================================================//
 
 //==================================Routes for WorkspaceDetails===================================================//
-//Add property
-app.post('/addProperties', verifyToken,async (req, res) => {
-    try {
-        const all = await findManyField("properties", {});
-        const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
-        const newId = maxId + 1;
-      const newProperty ={
-        ...req.body,
-        propertyId: newId,
 
-      };
-
-      const result = await insertOneObject("properties", newProperty);
-      res.status(201).json(result);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to save property' });
-    }
-  });
 
   app.post('/addWorkspaces', verifyToken, async (req, res) => {
     try {
+        const all = await findManyField("workspaces", {});
+        const maxId = all.reduce((max, p) => Math.max(max, p.workspaceId || 0), 0);
+        const newId = maxId + 1;
       const newWorkspace = req.body;
   
       const result = await insertOneObject("workspaces", newWorkspace);
@@ -278,22 +300,7 @@ app.post('/addProperties', verifyToken,async (req, res) => {
       res.status(500).json({ error: 'Failed to save workspace' });
     }
   });
-  app.get('/myProperty', verifyToken, async (req, res) => {
-    try {
-      const email = req.user.email;
-      const all = await findManyField("properties", { ownerEmail: email });
-  
-      if (!all || all.length === 0) {
-        return res.status(404).json({ message: 'No properties found' });
-      }
-  
 
-      res.status(200).json(all);
-    } catch (err) {
-      console.error("Error in /myProperty:", err);
-      res.status(500).json({ error: 'Failed to fetch property' });
-    }
-  });
 //==================================End of Routes for WorkspaceDetails===================================================//
 
 
