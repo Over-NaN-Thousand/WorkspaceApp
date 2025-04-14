@@ -3,20 +3,19 @@ const { MongoClient, ObjectId } = require('mongodb');
 //const WorkspaceApp = "WorkspaceApp"//Define the Database's name.
 const crypto = require('crypto');
 let db = null; //// let db=null(meaning no value, false) at first
+
 const jwt = require('jsonwebtoken');
 const DATABASE = "WorkspaceApp";
 const db_uri = process.env.MONGO_URI;
 const client = new MongoClient(db_uri);
+
 async function connectToDatabase() {  //It was (callback, ...args), but no more call back now
     /****************Put this code into your .env*****************
     MONGO_URI=mongodb+srv://UserName:Password@bvccluster.qgjve.mongodb.net/?retryWrites=true&w=majority
     *****************************************************************/
 
-
-
-
-
     //=========Please notice everyone if you have edited above code=================//
+
 
     try {
         //If db has value which mean has already connected to database, return to db.
@@ -374,6 +373,7 @@ const verifyToken = (req, res, next) => {
 };
 
 
+
 /**************************************************** 
  * Andrei section
  * **************************************************/
@@ -419,6 +419,7 @@ async function connectToDatabase(callback, ...args) {
         console.log('Disconnected from database\n');
     }
 }*/
+
 
 
 

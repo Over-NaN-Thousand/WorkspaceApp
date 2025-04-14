@@ -10,9 +10,9 @@ const {
     connectToDatabase,
     connectToDatabaseB,
     ObjectId,
+    ObjectId,
     hashPassword,
     verifyToken,
-
     deleteOneFieldInOneObject,
     deleteOneFieldInManyObject,
     deleteManyFieldInOneObject,
@@ -56,6 +56,7 @@ const crypto = require('node:crypto');
 // app and settings
 app.use(cors()); // allow all requests.
 app.use(express.json()); // Convert to parse json
+
 
 const DATABASE = "WorkspaceApp";
 
@@ -240,6 +241,9 @@ const salt = crypto.randomBytes(64).toString('hex');
     }
 });
 
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body; //Get the email, password from frontend
+
 
 
 app.post('/login', async (req, res) => {
@@ -276,6 +280,7 @@ app.post('/login', async (req, res) => {
     }
 
 });
+
 
 //Testing used
 app.get('/protect', verifyToken, (req, res) => { //Get the token from user then decode it
@@ -359,6 +364,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
+
 app.delete('/user', verifyToken, async (req, res) => {
     const userEmail = req.headers["email"] || req.query.email;
     try {
@@ -376,9 +382,34 @@ app.delete('/user', verifyToken, async (req, res) => {
 });
 
 
+
 //==================================End of Routes for user==========================================================//
 
+//==================================Routes for WorkspaceDetails===================================================//
+//Add property
+app.post('/properties', verifyToken,async (req, res) => {
+    try {
+      const newProperty = req.body;
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
 
+  app.post('/workspaces', verifyToken, async (req, res) => {
+    try {
+      const newWorkspace = req.body;
+  
+      const result = await insertOneObject("workspaces", newWorkspace);
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("[ /workspaces Error]:", error);
+      res.status(500).json({ error: 'Failed to save workspace' });
+    }
+  });
+
+//==================================End of Routes for WorkspaceDetails===================================================//
 
 
 
