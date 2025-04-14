@@ -1,25 +1,60 @@
+// import { Property, properties } from './data/propertydata.js';
+// import { Workspace, workspaces } from './data/workspacedata.js';
+
+// const allWorkspaces = workspaces.map(workspace => {                                     // AL: go through every workspace object in workspaces list...
+//     const property = properties.find(prop => prop.propertyId === workspace.propertyId); //...for each workspace, look for their matching property using propertyID
+//     return {
+//         ...workspace,               //combine fields that workspace already has ..
+//         propertyName: property.name, // .. with the fields of the property its located in
+//         address1: property.address1,
+//         address2: property.address2,
+//         neighborhood: property.neighbourhood,
+//         city: property.city,
+//         province: property.province,
+//         country: property.country,
+//         postalcode: property.postalcode,
+//         propertyImgFileName: property.imgFileName,
+//         propertyOwnerId: property.ownerId
+//     };
+// });
 
 
-import { Property, properties } from './data/propertydata.js';
-import { Workspace, workspaces } from './data/workspacedata.js';
+const fetchAllWorkspaces = async ()=> {
+    try {
+        // Make a GET request to your backend endpoint
+        const response = await fetch("http://localhost:3000/workspaces");
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
+        }
 
+        // Parse the JSON response
+        const data = await response.json();
 
-const allWorkspaces = workspaces.map(workspace => {                                     // AL: go through every workspace object in workspaces list...
-    const property = properties.find(prop => prop.propertyId === workspace.propertyId); //...for each workspace, look for their matching property using propertyID
-    return {
-        ...workspace,               //combine fields that workspace already has ..
-        propertyName: property.name, // .. with the fields of the property its located in
-        address1: property.address1,
-        address2: property.address2,
-        neighborhood: property.neighbourhood,
-        city: property.city,
-        province: property.province,
-        country: property.country,
-        postalcode: property.postalcode,
-        propertyImgFileName: property.imgFileName,
-        propertyOwnerId: property.ownerId
-    };
-});
+        // Update the global allWorkspaces variable
+        return data.workspaces.map(workspace => ({
+            ...workspace,  // Keep all workspace fields
+            propertyName: workspace.name,
+            address1: workspace.address1,
+            address2: workspace.address2,
+            neighborhood: workspace.neighborhood || "",
+            city: workspace.city,
+            province: workspace.province,
+            country: workspace.country,
+            postalcode: workspace.postalcode,
+            propertyImgFileName: workspace.propertyImgFileName,
+            propertyOwnerId: workspace.propertyOwnerId
+        }));
+
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        return [];
+    } 
+}
+
+const allWorkspaces = await fetchAllWorkspaces();
+console.log(allWorkspaces); // AL - check if all workspaces are loaded correctly
+
 
 
 $(document).ready(function() {
@@ -105,11 +140,15 @@ function DisplayWorkspaces(workspaceList){
     
     
     workspaceList.forEach(workspace => {
-        const defaultPic = setDefaultPic(workspace.workspaceType);
+        console.log(workspace.workspaceType)
+        let defaultPic = setDefaultPic(workspace.workspaceType) || "desk.png";
+
+        
+
         const section = `
             <section class="workspace-item" >
                 <div class="workspace-picture">
-                    <img src="${workspace.imgFileName}" alt="${workspace.workspaceName}" onerror="this.src='resources/images/${defaultPic}';">
+                    <img src="resources/images/${defaultPic}" alt="${workspace.workspaceName}" onerror="this.src='resources/images/${defaultPic}';">
                 </div>
                 <div class="workspace-details">
                     <h2 style="margin-top: 0;">${workspace.workspaceName}</h2>

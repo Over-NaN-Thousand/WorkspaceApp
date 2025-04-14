@@ -1,5 +1,5 @@
 //Import application(For public)
-require('dotenv').config();
+//require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -8,6 +8,7 @@ const fs = require('fs');
 
 const {
     connectToDatabase,
+    connectToDatabaseB,
     ObjectId,
     ObjectId,
     hashPassword,
@@ -28,6 +29,16 @@ const {
     insertManyObject,
     findOneField,
     findManyField,
+    createProperty,
+    buildMinMaxFilter,
+    getHighestId,
+    readProperties,
+    updateProperty,
+    deleteProperty,
+    getWorkspacesWithProperties,
+    getWorkspaces,
+    updateWorkspace,
+    deleteWorkspace
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -47,6 +58,7 @@ app.use(cors()); // allow all requests.
 app.use(express.json()); // Convert to parse json
 
 
+const DATABASE = "WorkspaceApp";
 
 
 
@@ -78,10 +90,110 @@ app.use(express.json()); // Convert to parse json
 });*/
 //======================================================================================================//
 
+
+
+
+
+
+
 //==================================Routes for Property===================================================//
 
+app.post("/properties", verifyToken, async (req, res) => {
+    const newProperty = req.body;
+
+    if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
+        return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
+
+    try {
+        const highestPropertyId = await connectToDatabaseB(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
+        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
+
+        const result = await connectToDatabaseB(createProperty, newProperty);
+            if (result.acknowledged) {
+                res.status(201).json({ message: "Property created successfully.", property: newProperty });
+            } else {
+                res.status(500).json({ message: "Failed to create property." });
+            }
+    } catch (error) {
+        console.error("Error creating property:", error);
+        res.status(500).json({ message: "An error occurred while creating the property." });
+    }
+});
+
+app.get("/properties", verifyToken,async (req, res) => {
+    const filters = {};
+
+    const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
+    if (!isNaN(ownerId)) {
+        filters.ownerId = ownerId; 
+    } else {
+        console.error("Invalid ownerId provided:", ownerId);
+        return res.status(400).json({ message: "Invalid ownerId format." });
+    }
+
+    const propertyName = req.headers["name"] || req.query.name;
+    if (propertyName) 
+        filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
+
+    try {
+        const properties = await connectToDatabaseB(readProperties, filters);
+        // console.dir(properties);
+        res.status(200).json({ properties });
+    } catch (error) {
+        console.error("Error fetching properties:", error);
+        res.status(500).json({ message: "An error occurred while fetching properties." });
+    }
+});
+
+app.put("/properties/:id", verifyToken,async (req, res) => {
+    const propertyId = Number(req.params.id);       // get the property ID
+    const updates = req.body;                       // get the updates
+
+    if (isNaN(propertyId))
+        return res.status(400).json({ message: "Invalid property ID provided." });
+    
+
+    if (!updates || Object.keys(updates).length === 0) 
+        return res.status(400).json({ message: "No updates provided in request body." });
+    
+    try {
+        const result = await connectToDatabaseB(updateProperty, propertyId, updates);
+        if (result.modifiedCount > 0) {
+            res.status(200).json({ message: "Property updated successfully." });
+        } else {
+            res.status(404).json({ message: "Property not found or no changes were made." });
+        }
+    } catch (error) {
+        console.error("Error updating property:", error);
+        res.status(500).json({ message: "An error occurred while updating the property." });
+    }
+});
+
+app.delete("/properties/:id", verifyToken,async (req, res) => {
+    const propertyId = Number(req.params.id);
+
+    if (isNaN(propertyId)) {
+        return res.status(400).json({ message: "Invalid property ID provided." });
+    }
+
+    try {
+        const result = await connectToDatabaseB(deleteProperty, propertyId);
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "Property deleted successfully." });
+        } else {
+            res.status(404).json({ message: "Property not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting property:", error);
+        res.status(500).json({ message: "An error occurred while deleting the property." });
+    }
+});
 
 //==================================End of Routes for Property===================================================//
+
+
+
+
 
 
 
@@ -133,6 +245,11 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body; //Get the email, password from frontend
 
 
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body; //Get the email, password from frontend
+
+
     // else try to authenticate
     try {
         // Find the user data by email then store into existingUser
@@ -151,7 +268,7 @@ app.post('/login', async (req, res) => {
             email: existingUser.email,
         },
             process.env.JWT_SECRET_KEY, //Encode the above information(only email in the token)
-            { expiresIn: '86400' }//expired in 86400 second = 1 day
+            { expiresIn: "1d" }//expired in 86400 second = 1 day
         );
         res.status(200).json({   //Save email and token in local storage 
             email: existingUser.email,
@@ -163,6 +280,7 @@ app.post('/login', async (req, res) => {
     }
 
 });
+
 
 //Testing used
 app.get('/protect', verifyToken, (req, res) => { //Get the token from user then decode it
@@ -246,6 +364,25 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
+
+app.delete('/user', verifyToken, async (req, res) => {
+    const userEmail = req.headers["email"] || req.query.email;
+    try {
+    const result = await deleteOneObject("usersData", {email:userEmail});
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "User deleted successfully." });
+        } else {
+            res.status(404).json({ message: "User was not found." });
+        }
+    }
+    catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "An error occurred while deleting the user." });
+    }
+});
+
+
+
 //==================================End of Routes for user==========================================================//
 
 //==================================Routes for WorkspaceDetails===================================================//
@@ -273,6 +410,307 @@ app.post('/properties', verifyToken,async (req, res) => {
   });
 
 //==================================End of Routes for WorkspaceDetails===================================================//
+
+
+
+
+
+//==================================Routes for WorkspaceDetails===================================================//
+
+  app.post("/workspaces", verifyToken,async (req, res) => {
+    const newWorkspace = req.body;
+    console.log("New workspace data:", newWorkspace); // For debugging
+    // check that required fields were provided
+    if (!newWorkspace.propertyId || !newWorkspace.workspaceName || !newWorkspace.ownerId) {
+        return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerId." });
+    }
+    
+
+    try {
+        // check that property is valid
+        const propertyExists = await connectToDatabaseB(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("properties")
+                .findOne({ propertyId: newWorkspace.propertyId });
+        });
+        
+        if (!propertyExists) {
+            return res.status(400).json({ message: "Invalid propertyId provided. Property does not exist." });
+        }
+
+        // get highest workspaceID then add 1
+        const highestWorkspaceId = await connectToDatabaseB(getHighestId, "workspaces", "workspaceID");
+        newWorkspace.workspaceID = (highestWorkspaceId?.workspaceID || 0) + 1;
+
+        // add new workspace
+        const result = await connectToDatabaseB(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("workspaces")
+                .insertOne(newWorkspace);
+        });
+
+        if (result.acknowledged) {
+            res.status(201).json({ message: "Workspace created successfully.", workspace: newWorkspace });
+        } else {
+            res.status(500).json({ message: "Failed to create workspace." });
+        }
+    } catch (error) {
+        console.error("Error creating workspace:", error);
+        res.status(500).json({ message: "An error occurred while creating the workspace." });
+    }
+});
+
+
+app.get("/workspacedetails", verifyToken,async (req, res) => {
+    try {
+        const filters = {};
+        //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
+        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
+        if (rawOwnerId) {
+            const ownerId = Number(rawOwnerId); 
+            if (!isNaN(ownerId)) {
+                filters.ownerId = ownerId;
+            } else {
+                console.error("Invalid ownerId provided:", ownerId);
+                return res.status(400).json({ message: "Invalid ownerId format." });
+            }
+        }
+        
+        const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
+        if (workspaceName) 
+            filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
+
+        const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
+        if (workspaceType)
+            filters.workspaceType = workspaceType;
+
+        const leaseTerm = req.headers["leaseterm"] || req.query.leaseTerm;
+        if (leaseTerm)
+            filters.leaseTerm = leaseTerm;
+
+        const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
+        const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
+            filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
+
+        const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
+        const maxSeatCapacity = Number(req.headers["maxcapacity"] || req.query.maxCapacity);
+        if (!isNaN(minSeatCapacity) || !isNaN(maxSeatCapacity))
+            filters.seatCapacity = buildMinMaxFilter(minSeatCapacity, maxSeatCapacity);
+
+        const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
+        const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
+            filters.price = buildMinMaxFilter(minPrice, maxPrice);
+
+        const amenities = req.headers["amenities"] || req.query.amenities;
+        if (amenities) {
+            filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
+        }
+
+        const workspaces = await connectToDatabaseB(getWorkspacesWithProperties, filters);
+        res.status(200).json({ workspaces });
+        console.log("Retreived number of workspaces:", workspaces.length); // For debugging
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
+
+app.get("/workspaces", verifyToken,async (req, res) => {
+    try {
+        const filters = {};
+        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
+        if (rawOwnerId) {
+            const ownerId = Number(rawOwnerId); 
+            if (!isNaN(ownerId)) {
+                filters.ownerId = ownerId;
+            } else {
+                console.error("Invalid ownerId provided:", ownerId);
+                return res.status(400).json({ message: "Invalid ownerId format." });
+            }
+        }
+        const workspaces = await connectToDatabaseB(getWorkspaces, filters);
+        res.status(200).json({ workspaces });
+        console.log("Retrieved number of workspaces:", workspaces.length); // For debugging
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
+
+
+
+app.put("/workspaces/:id", verifyToken,async (req, res) => {
+    const workspaceId = Number(req.params.id);       // get the workspace ID
+    const updates = req.body;                       // get the updates
+
+    if (isNaN(workspaceId))
+        return res.status(400).json({ message: "Invalid workspace ID provided." });
+    
+
+    if (!updates || Object.keys(updates).length === 0) 
+        return res.status(400).json({ message: "No updates provided in request body." });
+    
+    try {
+        const result = await connectToDatabaseB(updateWorkspace, workspaceId, updates);
+        if (result.modifiedCount > 0) {
+            res.status(200).json({ message: "Workspace updated successfully." });
+        } else {
+            res.status(404).json({ message: "Workspace not found or no changes were made." });
+        }
+    } catch (error) {
+        console.error("Error updating workspace:", error);
+        res.status(500).json({ message: "An error occurred while updating workspace." });
+    }
+});
+
+app.delete("/workspaces/:id", verifyToken,async (req, res) => {
+    const workspaceId = Number(req.params.id);
+
+    if (isNaN(workspaceId)) {
+        return res.status(400).json({ message: "Invalid workspace ID provided." });
+    }
+
+    try {
+        const result = await connectToDatabaseB(deleteWorkspace, workspaceId);
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "Workspace deleted successfully." });
+        } else {
+            res.status(404).json({ message: "Workspace not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting workspace:", error);
+        res.status(500).json({ message: "An error occurred while deleting workspace." });
+    }
+});
+
+//==================================End of Routes for WorkspaceDetails===================================================//
+
+
+
+
+
+
+
+//========================= Bookings API ===============================//
+
+// POST: Create new booking
+app.post('/bookings', verifyToken, async (req, res) => {
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
+    // Validation
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        const user = await findOneField("usersData", { email: userEmail });
+        if (!user) {
+            return res.status(404).json({ error: "User not found. Please use a registered email." });
+        }
+
+
+
+        const db = await connectToDatabase();
+        await db.collection("bookings").insertOne({
+            workspaceName,
+            leaseType,
+            userEmail,
+            userId: user.id,
+            startTime,
+            endTime,
+            createdAt: new Date()
+        });
+
+        res.status(201).json({ message: "Booking saved to DB" });
+
+    } catch (err) {
+        console.error("Booking error:", err);
+        res.status(500).json({ error: "Server error while booking" });
+    }
+});
+
+// GET: Retrieve all bookings
+app.get('/bookings', async (req, res) => {
+    try {
+        await connectToDatabase(async (db) => {
+            const bookings = await db.collection("bookings").find({}).toArray();
+            res.status(200).json(bookings);
+        });
+    } catch (err) {
+        console.error("Fetching bookings error:", err);
+        res.status(500).json({ error: "Failed to retrieve bookings" });
+    }
+});
+
+// PUT: Update an existing booking by ID
+app.put('/bookings/:id', verifyToken, async (req, res) => {
+    const { id } = req.params;
+    const { workspaceName, leaseType, userEmail, startTime, endTime } = req.body;
+
+    // Validate
+    if (!workspaceName || !leaseType || !userEmail || !startTime || !endTime) {
+        return res.status(400).json({ error: "All fields are required for update" });
+    }
+
+    try {
+        const db = await connectToDatabase();
+        const result = await db.collection("bookings").updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: {
+                    workspaceName,
+                    leaseType,
+                    userEmail,
+                    startTime,
+                    endTime,
+                    updatedAt: new Date()
+                }
+            }
+        );
+
+        if (result.modifiedCount === 1) {
+            res.status(200).json({ message: "Booking updated successfully!" });
+        } else {
+            res.status(404).json({ message: "Booking not found or no changes made" });
+        }
+
+    } catch (err) {
+        console.error("Update booking error:", err);
+        res.status(500).json({ error: "Server error while updating" });
+    }
+});
+
+
+
+// DELETE: Remove a booking by ID
+app.delete('/bookings/:id', verifyToken, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const db = await connectToDatabase();
+        const result = await db.collection("bookings").deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount === 1) {
+            res.status(200).json({ message: "Booking deleted successfully!" });
+        } else {
+            res.status(404).json({ message: "Booking not found" });
+        }
+
+    } catch (err) {
+        console.error("Delete booking error:", err);
+        res.status(500).json({ error: "Server error while deleting" });
+    }
+});
+
+//===========================End of Bookings API ============================//
+
+
+
+
+
 
 
 app.listen(PORT, () => {
