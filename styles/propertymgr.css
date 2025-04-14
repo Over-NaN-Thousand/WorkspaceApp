@@ -72,10 +72,12 @@ h1 {
 #addPWorkspace:hover {
     background-color: #e6e6e6;
 }
+
 #myPropertyForm {
     display: none;
   }
   
+
 
 
 @media screen and (max-width: 768px) {

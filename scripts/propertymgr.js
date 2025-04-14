@@ -148,3 +148,4 @@ $('#viewMyProperty').on('click', async function () {
         alert("Something went wrong.");
     }
 });
+
