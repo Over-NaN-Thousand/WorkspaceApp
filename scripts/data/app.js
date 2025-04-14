@@ -241,10 +241,6 @@ const salt = crypto.randomBytes(64).toString('hex');
     }
 });
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body; //Get the email, password from frontend
-
-
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body; //Get the email, password from frontend
@@ -387,7 +383,7 @@ app.delete('/user', verifyToken, async (req, res) => {
 
 //==================================Routes for WorkspaceDetails===================================================//
 //Add property
-app.post('/properties', verifyToken,async (req, res) => {
+/*app.post('/properties', verifyToken,async (req, res) => {
     try {
       const newProperty = req.body;
       const result = await insertOneObject("properties", newProperty);
@@ -407,7 +403,7 @@ app.post('/properties', verifyToken,async (req, res) => {
       console.error("[ /workspaces Error]:", error);
       res.status(500).json({ error: 'Failed to save workspace' });
     }
-  });
+  });*/
 
 //==================================End of Routes for WorkspaceDetails===================================================//
 
@@ -716,10 +712,5 @@ app.delete('/bookings/:id', verifyToken, async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
-
 
 
