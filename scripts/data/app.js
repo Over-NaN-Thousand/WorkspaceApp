@@ -96,6 +96,40 @@ const DATABASE = "WorkspaceApp";
 
 
 
+//==================================Routes for Property===================================================//
+
+
+
+//==================================End of Routes for Property===================================================//
+//Add property
+/*app.post('/addProperties', verifyToken,async (req, res) => {
+    try {
+        const all = await findManyField("properties", {});
+        const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
+        const newId = maxId + 1;
+      const newProperty ={
+        ...req.body,
+        propertyId: newId,
+
+      };
+
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
+
+  //Display property
+  app.get('/myProperty', verifyToken, async (req, res) => {
+    try {
+      const email = req.user.email;
+      const all = await findManyField("properties", { ownerEmail: email });
+  
+      if (!all || all.length === 0) {
+        return res.status(404).json({ message: 'No properties found' });
+      }
+  
 
       res.status(200).json(all);
     } catch (err) {
@@ -103,8 +137,6 @@ const DATABASE = "WorkspaceApp";
       res.status(500).json({ error: 'Failed to fetch property' });
     }
   });*/ //Repeated by Victor
-
-//==================================Routes for Property===================================================//
 
 
 app.post("/properties", verifyToken, async (req, res) => {
@@ -114,34 +146,34 @@ app.post("/properties", verifyToken, async (req, res) => {
         return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
 
     try {
-        const highestPropertyId = await connectToDatabaseB(getHighestId, "properties", "propertyId"); //get current highest propertyId, we'll add 1
+        const highestPropertyId = await connectToDatabaseB(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
         newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
 
         const result = await connectToDatabaseB(createProperty, newProperty);
-        if (result.acknowledged) {
-            res.status(201).json({ message: "Property created successfully.", property: newProperty });
-        } else {
-            res.status(500).json({ message: "Failed to create property." });
-        }
+            if (result.acknowledged) {
+                res.status(201).json({ message: "Property created successfully.", property: newProperty });
+            } else {
+                res.status(500).json({ message: "Failed to create property." });
+            }
     } catch (error) {
         console.error("Error creating property:", error);
         res.status(500).json({ message: "An error occurred while creating the property." });
     }
 });
 
-app.get("/properties", verifyToken, async (req, res) => {
+app.get("/properties", verifyToken,async (req, res) => {
     const filters = {};
 
     const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
     if (!isNaN(ownerId)) {
-        filters.ownerId = ownerId;
+        filters.ownerId = ownerId; 
     } else {
         console.error("Invalid ownerId provided:", ownerId);
         return res.status(400).json({ message: "Invalid ownerId format." });
     }
 
     const propertyName = req.headers["name"] || req.query.name;
-    if (propertyName)
+    if (propertyName) 
         filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
 
     try {
@@ -154,17 +186,17 @@ app.get("/properties", verifyToken, async (req, res) => {
     }
 });
 
-app.put("/properties/:id", verifyToken, async (req, res) => {
+app.put("/properties/:id", verifyToken,async (req, res) => {
     const propertyId = Number(req.params.id);       // get the property ID
     const updates = req.body;                       // get the updates
 
     if (isNaN(propertyId))
         return res.status(400).json({ message: "Invalid property ID provided." });
+    
 
-
-    if (!updates || Object.keys(updates).length === 0)
+    if (!updates || Object.keys(updates).length === 0) 
         return res.status(400).json({ message: "No updates provided in request body." });
-
+    
     try {
         const result = await connectToDatabaseB(updateProperty, propertyId, updates);
         if (result.modifiedCount > 0) {
@@ -178,7 +210,7 @@ app.put("/properties/:id", verifyToken, async (req, res) => {
     }
 });
 
-app.delete("/properties/:id", verifyToken, async (req, res) => {
+app.delete("/properties/:id", verifyToken,async (req, res) => {
     const propertyId = Number(req.params.id);
 
     if (isNaN(propertyId)) {
@@ -227,8 +259,8 @@ app.post('/register', async (req, res) => {
         return res.status(400).json({ error: "User already exists!" });
 
     // else try to save to "database"
-    //To get the secret key(64-byte, saltString)(For member)
-    const salt = crypto.randomBytes(64).toString('hex');
+//To get the secret key(64-byte, saltString)(For member)
+const salt = crypto.randomBytes(64).toString('hex');
     const hashedPassword = hashPassword(password, salt);
     const newUser = {
         salt,
@@ -321,7 +353,7 @@ app.patch('/changePassword', verifyToken, async (req, res) => {
 
     try {
         const { newPassword, currentPassword, confirmPassword } = req.body;
-        const { email } = req.user;
+        const {email} = req.user;
 
         if (newPassword !== confirmPassword) {
             return res.status(401).json({ error: `New passord is not confirmed!` });
@@ -335,7 +367,7 @@ app.patch('/changePassword', verifyToken, async (req, res) => {
             return res.status(401).json({ error: `Your cureent password is incorrect!` });
         }
         //To get the secret key(64-byte, saltString)(For member)
-        const salt = crypto.randomBytes(64).toString('hex');
+const salt = crypto.randomBytes(64).toString('hex');
         const newHashedPassword = hashPassword(newPassword, salt);
 
         const result = await updateManyFieldInOneObject(
@@ -354,7 +386,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     const { email } = req.user; // Get the email from token(I only stored email into the token as an id use)
     try {
         const user = await findOneField("usersData", { email });//Find the user data from database, userData, by email and store into "user"
-
+        
         if (!user) //If cant find anything(most likely it is not poosible coz the user has a verified token)
             return res.status(404).json({ error: "User not found" });//return error
 
@@ -362,7 +394,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
             firstName: user.firstName,
             owner: user.owner,
             coworker: user.coworker
-
+            
         });
     } catch (err) { //catch error
         res.status(500).json({ error: "Something went wrong" });
@@ -388,6 +420,12 @@ app.delete('/user', verifyToken, async (req, res) => {
 
 
 
+//==================================End of Routes for user==========================================================//
+
+//==================================Routes for WorkspaceDetails===================================================//
+
+
+
 /*app.post('/addWorkspaces', verifyToken, async (req, res) => {
   try {
 
@@ -401,10 +439,6 @@ app.delete('/user', verifyToken, async (req, res) => {
   }
 });*/ //Repeated by Victor
 
-
-//==================================End of Routes for user==========================================================//
-
-//==================================Routes for WorkspaceDetails===================================================//
 //Add property
 /*app.post('/properties', verifyToken,async (req, res) => {
     try {
@@ -444,7 +478,7 @@ app.delete('/user', verifyToken, async (req, res) => {
     if (!newWorkspace.propertyId || !newWorkspace.workspaceName || !newWorkspace.ownerId) {
         return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerId." });
     }
-
+    
 
     try {
         // check that property is valid
@@ -454,7 +488,7 @@ app.delete('/user', verifyToken, async (req, res) => {
                 .collection("properties")
                 .findOne({ propertyId: newWorkspace.propertyId });
         });
-
+        
         if (!propertyExists) {
             return res.status(400).json({ message: "Invalid propertyId provided. Property does not exist." });
         }
@@ -491,7 +525,7 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
         //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
         const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
         if (rawOwnerId) {
-            const ownerId = Number(rawOwnerId);
+            const ownerId = Number(rawOwnerId); 
             if (!isNaN(ownerId)) {
                 filters.ownerId = ownerId;
             } else {
@@ -499,9 +533,9 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
                 return res.status(400).json({ message: "Invalid ownerId format." });
             }
         }
-
+        
         const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
-        if (workspaceName)
+        if (workspaceName) 
             filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
 
         const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
@@ -514,7 +548,7 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
 
         const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
         const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
-        if (!isNaN(minSqFt) || !isNaN(maxSqFt))
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
             filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
 
         const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
@@ -524,7 +558,7 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
 
         const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
         const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
-        if (!isNaN(minPrice) || !isNaN(maxPrice))
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
             filters.price = buildMinMaxFilter(minPrice, maxPrice);
 
         const amenities = req.headers["amenities"] || req.query.amenities;
@@ -655,12 +689,12 @@ app.post('/bookings', verifyToken, async (req, res) => {
 });
 
 // GET: Retrieve all bookings
-app.get('/bookings', async (req, res) => {
+app.get('/bookings',verifyToken, async (req, res) => {
     try {
-        const db = await connectToDatabase();
-        const bookings = await db.collection("bookings").find({}).toArray();
-        res.status(200).json(bookings);
-
+        await connectToDatabase(async (db) => {
+            const bookings = await db.collection("bookings").find({}).toArray();
+            res.status(200).json(bookings);
+        });
     } catch (err) {
         console.error("Fetching bookings error:", err);
         res.status(500).json({ error: "Failed to retrieve bookings" });
