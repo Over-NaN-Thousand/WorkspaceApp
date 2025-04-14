@@ -63,7 +63,7 @@ $('#save-password').click(async function () {
     }
 
     try {
-        const response = await fetch("/changePassword", {
+        const response = await fetch("http://localhost:3000/changePassword", {
             method: "PATCH",
             headers: {//Decoding
                 "Content-Type": "application/json",
