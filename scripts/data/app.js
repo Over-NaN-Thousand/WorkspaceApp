@@ -36,6 +36,9 @@ const {
     updateProperty,
     deleteProperty,
     getWorkspacesWithProperties,
+    getWorkspaces,
+    updateWorkspace,
+    deleteWorkspace
 } = require('./mongo');//To import connectToDatabase from mongo.js
 
 const app = express();
@@ -86,47 +89,15 @@ const DATABASE = "WorkspaceApp";
 });*/
 //======================================================================================================//
 
+
+
+
+
+
+
 //==================================Routes for Property===================================================//
 
-
-//==================================End of Routes for Property===================================================//
-//Add property
-/*app.post('/addProperties', verifyToken,async (req, res) => {
-    try {
-        const all = await findManyField("properties", {});
-        const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
-        const newId = maxId + 1;
-      const newProperty ={
-        ...req.body,
-        propertyId: newId,
-
-      };
-
-      const result = await insertOneObject("properties", newProperty);
-      res.status(201).json(result);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to save property' });
-    }
-  });
-
-  //Display property
-  app.get('/myProperty', verifyToken, async (req, res) => {
-    try {
-      const email = req.user.email;
-      const all = await findManyField("properties", { ownerEmail: email });
-  
-      if (!all || all.length === 0) {
-        return res.status(404).json({ message: 'No properties found' });
-      }
-  
-
-      res.status(200).json(all);
-    } catch (err) {
-      console.error("Error in /myProperty:", err);
-      res.status(500).json({ error: 'Failed to fetch property' });
-    }
-  });*/ //Repeated by Victor
-  app.post("/properties", verifyToken, async (req, res) => {
+app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
     if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
@@ -216,6 +187,15 @@ app.delete("/properties/:id", verifyToken,async (req, res) => {
         res.status(500).json({ message: "An error occurred while deleting the property." });
     }
 });
+
+//==================================End of Routes for Property===================================================//
+
+
+
+
+
+
+
 //==================================Routes for user==========================================================//
 
 
@@ -379,23 +359,33 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
+app.delete('/user', verifyToken, async (req, res) => {
+    const userEmail = req.headers["email"] || req.query.email;
+    try {
+    const result = await deleteOneObject("usersData", {email:userEmail});
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "User deleted successfully." });
+        } else {
+            res.status(404).json({ message: "User was not found." });
+        }
+    }
+    catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "An error occurred while deleting the user." });
+    }
+});
+
+
 //==================================End of Routes for user==========================================================//
+
+
+
+
+
+
 
 //==================================Routes for WorkspaceDetails===================================================//
 
-
-  /*app.post('/addWorkspaces', verifyToken, async (req, res) => {
-    try {
-
-      const newWorkspace = req.body;
-  
-      const result = await insertOneObject("workspaces", newWorkspace);
-      res.status(201).json(result);
-    } catch (error) {
-      console.error("[ /workspaces Error]:", error);
-      res.status(500).json({ error: 'Failed to save workspace' });
-    }
-  });*/ //Repeated by Victor
   app.post("/workspaces", verifyToken,async (req, res) => {
     const newWorkspace = req.body;
     console.log("New workspace data:", newWorkspace); // For debugging
@@ -441,7 +431,8 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
-app.get("/workspaces", verifyToken,async (req, res) => {
+
+app.get("/workspacedetails", verifyToken,async (req, res) => {
     try {
         const filters = {};
         //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
@@ -488,8 +479,6 @@ app.get("/workspaces", verifyToken,async (req, res) => {
             filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
         }
 
-        console.log("Filters:", filters); // For debugging
-
         const workspaces = await connectToDatabaseB(getWorkspacesWithProperties, filters);
         res.status(200).json({ workspaces });
         console.log("Retreived number of workspaces:", workspaces.length); // For debugging
@@ -498,7 +487,83 @@ app.get("/workspaces", verifyToken,async (req, res) => {
         res.status(500).json({ message: "An error occurred while fetching workspaces." });
     }
 });
+
+app.get("/workspaces", verifyToken,async (req, res) => {
+    try {
+        const filters = {};
+        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
+        if (rawOwnerId) {
+            const ownerId = Number(rawOwnerId); 
+            if (!isNaN(ownerId)) {
+                filters.ownerId = ownerId;
+            } else {
+                console.error("Invalid ownerId provided:", ownerId);
+                return res.status(400).json({ message: "Invalid ownerId format." });
+            }
+        }
+        const workspaces = await connectToDatabaseB(getWorkspaces, filters);
+        res.status(200).json({ workspaces });
+        console.log("Retrieved number of workspaces:", workspaces.length); // For debugging
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
+
+
+
+app.put("/workspaces/:id", verifyToken,async (req, res) => {
+    const workspaceId = Number(req.params.id);       // get the workspace ID
+    const updates = req.body;                       // get the updates
+
+    if (isNaN(workspaceId))
+        return res.status(400).json({ message: "Invalid workspace ID provided." });
+    
+
+    if (!updates || Object.keys(updates).length === 0) 
+        return res.status(400).json({ message: "No updates provided in request body." });
+    
+    try {
+        const result = await connectToDatabaseB(updateWorkspace, workspaceId, updates);
+        if (result.modifiedCount > 0) {
+            res.status(200).json({ message: "Workspace updated successfully." });
+        } else {
+            res.status(404).json({ message: "Workspace not found or no changes were made." });
+        }
+    } catch (error) {
+        console.error("Error updating workspace:", error);
+        res.status(500).json({ message: "An error occurred while updating workspace." });
+    }
+});
+
+app.delete("/workspaces/:id", verifyToken,async (req, res) => {
+    const workspaceId = Number(req.params.id);
+
+    if (isNaN(workspaceId)) {
+        return res.status(400).json({ message: "Invalid workspace ID provided." });
+    }
+
+    try {
+        const result = await connectToDatabaseB(deleteWorkspace, workspaceId);
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: "Workspace deleted successfully." });
+        } else {
+            res.status(404).json({ message: "Workspace not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting workspace:", error);
+        res.status(500).json({ message: "An error occurred while deleting workspace." });
+    }
+});
+
 //==================================End of Routes for WorkspaceDetails===================================================//
+
+
+
+
+
+
+
 //========================= Bookings API ===============================//
 
 // POST: Create new booking
@@ -610,6 +675,11 @@ app.delete('/bookings/:id', verifyToken, async (req, res) => {
 });
 
 //===========================End of Bookings API ============================//
+
+
+
+
+
 
 
 app.listen(PORT, () => {

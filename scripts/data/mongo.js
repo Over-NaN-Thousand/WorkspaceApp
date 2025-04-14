@@ -375,7 +375,7 @@ const verifyToken = (req, res, next) => {
 
 
 /**************************************************** 
- * Andrie section
+ * Andrei section
  * **************************************************/
 // helper function to build filters with min and max values
 function buildMinMaxFilter(min, max) {
@@ -562,6 +562,54 @@ async function getWorkspacesWithProperties(client, filters) {
 }
 
 
+async function getWorkspaces(client, filters) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .find(filters)
+            .toArray();
+        return result;
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        throw error;
+    }
+}
+
+async function updateWorkspace(client, workspaceID, updates) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .updateOne(
+                { workspaceID }, // only update one document with workspaceId
+                { $set: updates }
+            );
+
+        console.log(`Modified workspace:  workspaceId=${workspaceID}.`);
+        return result;
+    } catch (error) {
+        console.error("Error updating workspace: ", error);
+        throw error;
+    }
+}
+
+async function deleteWorkspace(client, workspaceID) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .deleteOne({ workspaceID });
+        console.log(`Deleted property: propertyId=${workspaceID}.`);
+        return result;
+    } catch (error) {
+        console.error("Error deleting workspace:", error);
+        throw error;
+    }
+}
+
+
+
 async function connectToDatabaseB(callback, ...args) {
 
     try {
@@ -620,6 +668,9 @@ module.exports = {
     updateProperty,
     deleteProperty,
     getWorkspacesWithProperties,
+    getWorkspaces,
+    updateWorkspace,
+    deleteWorkspace
 
 };
 
