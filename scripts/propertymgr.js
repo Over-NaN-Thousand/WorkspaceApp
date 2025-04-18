@@ -84,16 +84,29 @@ $(document).ready(function () {
     
     $('#saveWorkspace').on('click', async function () {
         const token = localStorage.getItem('token');
+        const email = localStorage.getItem('email');
+    
+        console.log("Property owner email from localStorage:", email);
+    
+        try {
+            // Step 1: Fetch property owner's info from backend using their email
+            const ownerRes = await fetch(`http://localhost:3000/profile1`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+        if (!ownerRes.ok) throw new Error("Property owner not found");
+        const ownerData = await ownerRes.json();
+    
         const workspaceData = {
-            //workspaceID: Date.now(), //Need to be fixed
-            workspaceName: $('#workspaceName').val(),
             workspaceType: $('#workspaceType').val(),
             leaseTerm: $('#leaseTerm').val(),
             sqFt: parseInt($('#sqFt').val()),
             seatCapacity: parseInt($('#seatCapacity').val()),
             price: parseFloat($('#price').val()),
-            rating: parseInt($('#rating').val()),
-            //propertyId: parseInt($('#propertyId').val()), //Need to be fixed
+            propertyId: parseInt($('#propertyId').val()), 
 
             amenities: $('#amenities').val().split(',').map(a => a.trim()),
             ownerEmail: localStorage.getItem('email')
@@ -119,9 +132,15 @@ $(document).ready(function () {
             console.error(err);
             alert('Network or server error!');
         }
+        
+        } catch (err) {
+            console.error("Error saving workspace:", err);
+            alert('Network, server error, or property owner lookup failed.');
+        }   
     });
 
-});
+
+
 
 $('#viewMyProperty').on('click', async function () {
     const token = localStorage.getItem('token');
@@ -175,4 +194,4 @@ $('#viewMyProperty').on('click', async function () {
         alert("Something went wrong.");
     }
 });
-
+});

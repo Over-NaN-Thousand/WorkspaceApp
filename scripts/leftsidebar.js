@@ -21,7 +21,7 @@ $(document).ready(function () {
             });
             const userData = await response.json(); //Wait for backend to send back to frontend then store in data
             if (response.ok) {
-                document.getElementById("first-name").textContent = userData.firstName;
+                document.getElementById("sidebar-first-name").textContent = userData.firstName;
                 document.getElementById("owner-status").textContent = userData.owner;
                 document.getElementById("coworker-status").textContent = userData.coworker;
 
