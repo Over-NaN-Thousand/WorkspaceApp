@@ -22,10 +22,24 @@ $(document).ready(function () {
             const userData = await response.json(); //Wait for backend to send back to frontend then store in data
             if (response.ok) {
                 document.getElementById("sidebar-first-name").textContent = userData.firstName;
-                document.getElementById("owner-status").textContent = userData.owner;
-                document.getElementById("coworker-status").textContent = userData.coworker;
-
-            }
+            
+                // Set owner status
+                let ownerStatusText = userData.owner === "Yes" ? "Owner" : "";
+                let coworkerStatusText = userData.coworker === "Yes" ? "Coworker" : "";
+            
+                // Combine statuses
+                let statusMessage = "";
+                if (ownerStatusText && coworkerStatusText) {
+                    statusMessage = `You are an ${ownerStatusText} and a ${coworkerStatusText}`;
+                } else if (ownerStatusText) {
+                    statusMessage = `You are an ${ownerStatusText}`;
+                } else if (coworkerStatusText) {
+                    statusMessage = `You are a ${coworkerStatusText}`;
+                }
+            
+                // Display the message in the sidebar
+                document.getElementById("owner-coworker-status").textContent = statusMessage;
+            }  
             else {
                 alert("We can not get your information!")
                 window.location.href = "/WorkspaceApp/pages/login.html";
