@@ -199,41 +199,44 @@ if (!ownerId) {
 
 //------------------------Left Section---------------------------------//
 
-        const sectionDivL= $("<div>").appendTo("#workspace-display-left");
-         // Set workspace name in the existing div
-        $("#workspaceTitle").text(selectedWorkspace.workspaceName).appendTo(sectionDivL);
+//------------------------Left Section---------------------------------//
 
-        //Left section list
-        const ulL = $("<ul>").addClass("detailsList");
-             // Address details
-            $("<li>").addClass("detailBoxHeading").text("Address").appendTo(ulL);
-            $("<li>").text(`Line 1: ${selectedWorkspace.address1}`).appendTo(ulL);
-            $("<li>").text(`Line 2: ${selectedWorkspace.address2}`).appendTo(ulL);
-            $("<li>").text(`Postal Code: ${selectedWorkspace.postalcode}`).appendTo(ulL);
-            $("<li>").text(`City: ${selectedWorkspace.city}`).appendTo(ulL);
-            $("<li>").text(`Province: ${selectedWorkspace.province}`).appendTo(ulL);
-            $("<li>").text(`Country: ${selectedWorkspace.country}`).appendTo(ulL);
+const sectionDivL = $("<div>").appendTo("#workspace-display-left");
 
-            // Workspace details
-            $("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
-            $("<li>").text(`Type: ${selectedWorkspace.workspaceType}`).appendTo(ulL);
-            $("<li>").text(`Price: $${selectedWorkspace.price} / ${selectedWorkspace.leaseTerm}`).appendTo(ulL);
-            $("<li>").text(`Square Footage: ${selectedWorkspace.sqFt} sq ft`).appendTo(ulL);
-            $("<li>").text(`Seat Capacity: ${selectedWorkspace.seatCapacity}`).appendTo(ulL);
+// Set workspace name in the existing div
+$("#workspaceTitle").text(selectedWorkspace.workspaceName).appendTo(sectionDivL);
 
-            // Display amenities
-            $("<li>").addClass("detailBoxHeading").text("Amenities").appendTo(ulL);
-            selectedWorkspace.amenities.forEach(amenity => {
-                const [key, value] = Object.entries(amenity)[0];
-                if (value) {
-                    $("<li>").text(`- ${key}`).appendTo(ulL);
-                } else {
-                    $("<li>").text(`- ${key}: N/A`).appendTo(ulL);
-                }
-            });
+// Left section list
+const ulL = $("<ul>").addClass("detailsList");
 
-            
-            sectionDivL.append(ulL);
+// Address details
+$("<li>").addClass("detailBoxHeading").text("Address").appendTo(ulL);
+$("<li>").text(`Line 1: ${selectedWorkspace.address1}`).appendTo(ulL);
+$("<li>").text(`Line 2: ${selectedWorkspace.address2}`).appendTo(ulL);
+$("<li>").text(`Postal Code: ${selectedWorkspace.postalcode}`).appendTo(ulL);
+$("<li>").text(`City: ${selectedWorkspace.city}`).appendTo(ulL);
+$("<li>").text(`Province: ${selectedWorkspace.province}`).appendTo(ulL);
+$("<li>").text(`Country: ${selectedWorkspace.country}`).appendTo(ulL);
+
+// Workspace details
+$("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
+$("<li>").text(`Type: ${selectedWorkspace.workspaceType}`).appendTo(ulL);
+$("<li>").text(`Price: $${selectedWorkspace.price} / ${selectedWorkspace.leaseTerm}`).appendTo(ulL);
+$("<li>").text(`Square Footage: ${selectedWorkspace.sqFt} sq ft`).appendTo(ulL);
+$("<li>").text(`Seat Capacity: ${selectedWorkspace.seatCapacity}`).appendTo(ulL);
+
+// Display amenities if they exist
+if (selectedWorkspace.amenities && selectedWorkspace.amenities.length > 0) {
+    $("<li>").addClass("detailBoxHeading").text("Amenities").appendTo(ulL);
+    selectedWorkspace.amenities.forEach(amenity => {
+        $("<li>").text(`- ${amenity}`).appendTo(ulL);  // Display each amenity directly
+    });
+} else {
+    // If no amenities, hide the section (or show "N/A")
+    $("<li>").addClass("detailBoxHeading").text("Amenities: N/A").appendTo(ulL);
+}
+
+sectionDivL.append(ulL);
 
 //------------------------Right Section---------------------------------//
 
