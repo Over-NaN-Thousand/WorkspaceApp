@@ -19,10 +19,17 @@
 // });
 
 
+
+
+
 const fetchAllWorkspaces = async ()=> {
     try {
-        // Make a GET request to your backend endpoint
-        const response = await fetch("http://localhost:3000/workspaces");
+        // Make a GET request to backend endpoint
+        //const response = await fetch("http://localhost:3000/workspaces");
+
+        //public/workspacedetails is the endpoint to get all workspaces without a token
+        const response = await fetch("http://localhost:3000/publicWorkspaces");
+
         
         if (!response.ok) {
             throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
@@ -52,12 +59,17 @@ const fetchAllWorkspaces = async ()=> {
     } 
 }
 
-const allWorkspaces = await fetchAllWorkspaces();
-console.log(allWorkspaces); // AL - check if all workspaces are loaded correctly
 
+//const allWorkspaces = await fetchAllWorkspaces();
+//console.log(allWorkspaces); // AL - check if all workspaces are loaded correctly
 
+let allWorkspaces = [];
 
 $(document).ready(function() {
+    (async function () {
+
+    allWorkspaces = await fetchAllWorkspaces(); // Make sure data is ready
+    console.log(allWorkspaces); // Confirm it’s loaded
 
     //Create the filters in the page
     const optWStypes = [...new Set(allWorkspaces.map(workspace => workspace.workspaceType))]; //dynamic by using map // new Set() goes through the list and only adds unique values, but the result is not yet an array, that's what you need the dots before it ...new Set() to make it an array
@@ -89,6 +101,7 @@ $(document).ready(function() {
 
     //run Apply to initialize list
     ClickApplyBtn();
+})();
 });
 
 
@@ -312,4 +325,3 @@ function ClickResetBtn() {
     sessionStorage.removeItem('filters');           //clear session
     DisplayWorkspaces(allWorkspaces);
 }
-

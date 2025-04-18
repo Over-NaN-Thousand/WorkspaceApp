@@ -84,4 +84,3 @@ $(document).ready(function () {
 
     $('input[data-section="edit-profile"]').addClass('active');//Active "edit-profile".
 });
-

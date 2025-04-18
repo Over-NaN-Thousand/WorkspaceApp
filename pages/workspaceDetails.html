@@ -25,22 +25,54 @@
  
         <div class="main">
  
-                <!--Pop-up window owner details-->
-            <div id="overlay" class="Popup">
-                <div class="popup" id="popup">
-                    <span class="close">&times;</span><!--close with X in corner-->
-                    <div class="content">
-                        <h1 class="title">Owner Information</h1>
-                        <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
-                        <h2 class="subHeading">Workspaces:</h2>
-                        <ul class="WorkspacesList"></ul>
-                        <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
-                        <button class="closeBtn">Close</button>
-                    </div>
-                </div>
-            </div>
- 
- 
+ <!-- Owner Popup 
+<div id="overlay-owner" class="overlay">
+    <div id="popup-owner" class="popup">
+      <span class="close">&times;</span>
+      <div class="content">
+        <h1 class="title">Owner Information</h1>
+        <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
+        <h2 class="subHeading">Workspaces:</h2>
+        <ul class="WorkspacesList"></ul>
+        <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
+      </div>
+      <button class="closeBtn">Close</button>
+    </div>
+  </div>-->
+
+  <div id="overlay" class="Popup">
+    <div class="popup" id="popup">
+        <span class="close">&times;</span><!--close with X in corner-->
+        <div class="content">
+            <h1 class="title">Owner Information</h1>
+            <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
+            <h2 class="subHeading">Workspaces:</h2>
+            <ul class="WorkspacesList"></ul>
+            <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
+            <button class="closeBtn">Close</button>
+        </div>
+    </div>
+</div>
+
+  
+  <!-- Review Popup 
+  <div id="overlay-review" class="overlay">
+    <div id="popup-review" class="popup">
+      <span class="close">&times;</span>
+      <div class="content">Leave a Review</div>
+      <select type="dropdown">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <button class="closeBtn">Close</button>
+    </div>
+  </div>-->
+
+            
+
  
             <div class="detailsBoxL">
                 <div class="title" id="workspaceTitle"></div>
@@ -50,18 +82,16 @@
                 </div>
  
                 <!--button for Owner contact-->
-                <div class="row-button">
-                    <button class="ownerBtn">
-                        Owner Info
-                    </button>
+                <div class="rowBtn">
+                    <button class="ownerBtn">Owner Info</button>
+                </div>
+                    <div class="rowBtn">
                 <!--button for booking-->
-                    <button class="bookingBtn">
-                        Book
-                    </button>
+                    <button class="bookingBtn">Book</button>
                 </div>
                    
-                <div class="row button">
-                    <div class="signup-link" value="Sign-up"></div>
+                <div class="rowBtn">
+                    <button class="reviewBtn">Leave Review</button>
                 </div>
             </div>
            

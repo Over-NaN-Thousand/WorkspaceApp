@@ -4,55 +4,111 @@ import properties from './propertyData.js';
 import reviews from './workspaceReviews.js';
 
 
-
 $(document).ready(function () {
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
 
-//-------------popup---------------------------------------------   
-    const popupOverlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const closePopup = popup.querySelector('.close');
-    const ownerBtn = document.querySelector('.ownerBtn');
-    const bookingBtn = document.querySelector('.bookingBtn');
-    const closeBtn = popup.querySelector('.closeBtn'); 
-  
+//----------------------------------popups---------------------------------------------// 
+ 
+const popupOverlay = document.getElementById('overlay');
+const popup = document.getElementById('popup');
+const closePopup = popup.querySelector('.close');
+const ownerBtn = document.querySelector('.ownerBtn');
+const bookingBtn = document.querySelector('.bookingBtn');
+const closeBtn = popup.querySelector('.closeBtn'); 
 
-    // Ensure popup is hidden at start
+
+// Ensure popup is hidden at start
+popupOverlay.style.display = 'none';
+
+// Open popup function
+function openPopup() {
+    console.log("Opening popup");
+    popupOverlay.style.display = 'block';
+}
+
+// Close popup function
+function closeFunction() {
+    console.log("Closing popup");
     popupOverlay.style.display = 'none';
+}
+    
 
-    // Open popup function
-    function openPopup() {
-        console.log("Opening popup");
-        popupOverlay.style.display = 'block';
+
+   // Open popup on button click
+ownerBtn.addEventListener('click', openPopup);
+
+// Close popup with 'x' button
+closePopup.addEventListener('click', closeFunction);
+
+// Close popup with close button
+closeBtn.addEventListener('click', closeFunction);
+
+// Close popup by clicking outside
+$('#overlay').on('click', (event) => {
+    if (event.target === popupOverlay) {
+        closeFunction();
     }
+});
 
-    // Close popup function
-    function closeFunction() {
-        console.log("Closing popup");
-        popupOverlay.style.display = 'none';
+
+/*
+// ----------------- Popup Elements -----------------
+const overlay = document.getElementById('overlay');
+const popup = document.getElementById('popup');
+const closePopupBtn = popup.querySelector('.close');
+const ownerBtn = document.querySelector('.ownerBtn');
+const bookingBtn = document.querySelector('.bookingBtn');
+const closeBtn = popup.querySelector('.closeBtn');
+
+// ----------------- Ensure default state -----------------
+
+overlay.style.display = 'none';
+
+// ----------------- General Popup Functions -----------------
+
+// Close all overlays
+function closeAllPopups() {
+    document.querySelectorAll('.overlay').forEach(overlay => {
+        overlay.style.display = 'none';
+    });
+}
+
+// Open specific overlay by ID
+function openSpecificPopup(overlayId) {
+    closeAllPopups(); // Hide others
+    const targetOverlay = document.getElementById(overlayId);
+    if (targetOverlay) {
+        targetOverlay.style.display = 'block';
     }
-        
-   
+}
+    
 
-       // Open popup on button click
-    ownerBtn.addEventListener('click', openPopup);
+// ----------------- Event Listeners -----------------
 
-    // Close popup with 'x' button
-    closePopup.addEventListener('click', closeFunction);
+document.querySelector('.ownerBtn')?.addEventListener('click', () => {
+    openSpecificPopup('overlay-owner');
+});
 
-    // Close popup with close button
-    closeBtn.addEventListener('click', closeFunction);
+document.querySelector('.reviewBtn')?.addEventListener('click', () => {
+    openSpecificPopup('overlay-review');
+});
 
-    // Close popup by clicking outside
-    $('#overlay').on('click', (event) => {
-        if (event.target === popupOverlay) {
-            closeFunction();
+document.querySelectorAll('.overlay .close, .overlay .closeBtn').forEach(btn => {
+    btn.addEventListener('click', closeAllPopups);
+});
+
+document.querySelectorAll('.overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeAllPopups();
         }
     });
+});
+*/
+//------------------------Booking form---------------------------------//
 
-
-    //booking form -- would like this to be a popup if i can make it work
+    // Function to handle booking button click
     function bookingForm(){
     // Redirect to book.html page
     window.location.href = '/WorkspaceApp/pages/bookingtemp.html';
@@ -60,24 +116,6 @@ $(document).ready(function () {
 
     bookingBtn.addEventListener('click', bookingForm);
    
-    /*
-      // Open popup on button click
-      bookingBtn.addEventListener('click', openPopup);
-
-      // Close popup with 'x' button
-      closePopup.addEventListener('click', closeFunction);
-  
-      // Close popup with close button
-      closeBtn.addEventListener('click', closeFunction);
-  
-      // Close popup by clicking outside
-      $('#overlay').on('click', (event) => {
-          if (event.target === popupOverlay) {
-              closeFunction();
-          }
-      });
-*/
-
 function receiveSearchString(){
     const currUrl = new URL(window.location.href);
     const params = new URLSearchParams(currUrl.search);
@@ -85,9 +123,7 @@ function receiveSearchString(){
     return searchText;
 }
 
-
 var targetId = Number(receiveSearchString());
-
 
     //const workspace = JSON.parse(localStorage.getItem('Workspace'));
     //var targetId = workspace;
@@ -96,7 +132,7 @@ var targetId = Number(receiveSearchString());
 
     //var targetId = 19;
 
-      // Validate input fields
+      // fallBack to default workspace ID if not found in URL
       if (!targetId) {
         targetId = 19; 
     }
@@ -117,7 +153,8 @@ var targetId = Number(receiveSearchString());
     console.log("Reviews:", targetReviews);
 
 
-    // --- Set Owner Contact Info ---
+//------------------------Owner contact info---------------------------------//
+
     if (targetOwner) {
         // Display owner name
         $('.OwnerName').text(`${targetOwner.firstName} ${targetOwner.lastName}`);
@@ -139,8 +176,8 @@ var targetId = Number(receiveSearchString());
         }
     }
 
+//------------------------Left Section---------------------------------//
 
-        //-------Left section----------------------------------------------
         const sectionDivL= $("<div>").appendTo("#workspace-display-left");
          // Set workspace name in the existing div
         $("#workspaceTitle").text(targetWorkspace.workspaceName).appendTo(sectionDivL);
@@ -177,8 +214,8 @@ var targetId = Number(receiveSearchString());
             });
             sectionDivL.append(ulL);
 
+//------------------------Right Section---------------------------------//
 
-// //right section---------------------------------------------------
             const sectionDivR = $("<div>").appendTo(rightContainer);
 
         //avg rating calculation
@@ -196,8 +233,8 @@ var targetId = Number(receiveSearchString());
             if (averageStarRating === 0) {
                 $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
             }
-//---------------------------------review------------------------------------
 
+//------------------------Reviews---------------------------------//
 
             const reviewContainer = $(".reviewBody").empty();
 
