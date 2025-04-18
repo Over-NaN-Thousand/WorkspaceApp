@@ -926,11 +926,6 @@ app.delete('/bookings/:id', verifyToken, async (req, res) => {
 //===========================End of Bookings API ============================//
 
 
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
