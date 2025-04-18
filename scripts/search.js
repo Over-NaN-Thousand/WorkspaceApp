@@ -24,9 +24,7 @@
 
 const fetchAllWorkspaces = async ()=> {
     try {
-        // Make a GET request to backend endpoint
-        //const response = await fetch("http://localhost:3000/workspaces");
-
+  
         //public/workspacedetails is the endpoint to get all workspaces without a token
         const response = await fetch("http://localhost:3000/publicWorkspaces");
 
