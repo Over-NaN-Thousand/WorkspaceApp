@@ -735,73 +735,6 @@ app.get('/ownersWorkspaceList/:ownerId', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Something went wrong" });
-=======
-app.get("/workspaces", verifyToken,async (req, res) => {
-    try {
-        const filters = {};
-        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
-        if (rawOwnerId) {
-            const ownerId = Number(rawOwnerId); 
-            if (!isNaN(ownerId)) {
-                filters.ownerId = ownerId;
-            } else {
-                console.error("Invalid ownerId provided:", ownerId);
-                return res.status(400).json({ message: "Invalid ownerId format." });
-            }
-        }
-        const workspaces = await connectToDatabaseB(getWorkspaces, filters);
-        res.status(200).json({ workspaces });
-        console.log("Retrieved number of workspaces:", workspaces.length); // For debugging
-    } catch (error) {
-        console.error("Error fetching workspaces:", error);
-        res.status(500).json({ message: "An error occurred while fetching workspaces." });
-    }
-});
-
-
-
-app.put("/workspaces/:id", verifyToken,async (req, res) => {
-    const workspaceId = Number(req.params.id);       // get the workspace ID
-    const updates = req.body;                       // get the updates
-
-    if (isNaN(workspaceId))
-        return res.status(400).json({ message: "Invalid workspace ID provided." });
-    
-
-    if (!updates || Object.keys(updates).length === 0) 
-        return res.status(400).json({ message: "No updates provided in request body." });
-    
-    try {
-        const result = await connectToDatabaseB(updateWorkspace, workspaceId, updates);
-        if (result.modifiedCount > 0) {
-            res.status(200).json({ message: "Workspace updated successfully." });
-        } else {
-            res.status(404).json({ message: "Workspace not found or no changes were made." });
-        }
-    } catch (error) {
-        console.error("Error updating workspace:", error);
-        res.status(500).json({ message: "An error occurred while updating workspace." });
-    }
-});
-
-app.delete("/workspaces/:id", verifyToken,async (req, res) => {
-    const workspaceId = Number(req.params.id);
-
-    if (isNaN(workspaceId)) {
-        return res.status(400).json({ message: "Invalid workspace ID provided." });
-    }
-
-    try {
-        const result = await connectToDatabaseB(deleteWorkspace, workspaceId);
-        if (result.deletedCount > 0) {
-            res.status(200).json({ message: "Workspace deleted successfully." });
-        } else {
-            res.status(404).json({ message: "Workspace not found." });
-        }
-    } catch (error) {
-        console.error("Error deleting workspace:", error);
-        res.status(500).json({ message: "An error occurred while deleting workspace." });
-
     }
 });
 
@@ -927,11 +860,12 @@ app.delete('/bookings/:id', verifyToken, async (req, res) => {
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
 
