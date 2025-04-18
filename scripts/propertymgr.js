@@ -22,39 +22,66 @@ $(document).ready(function () {
 
     $('#saveProperty').on('click', async function () {
         const token = localStorage.getItem('token');
-        const propertyData = {
-            name: $('#propertyName').val(),
-            address1: $('#address1').val(),
-            address2: $('#address2').val(),
-            neighborhood: $('#neighborhood').val(),
-            city: $('#city').val(),
-            province: $('#province').val(),
-            country: $('#country').val(),
-            postalcode: $('#postalCode').val(),
-            ownerEmail: localStorage.getItem('email')
-        };
-
+        const email = localStorage.getItem('email');
+    
+        console.log("Property owner email from localStorage:", email);
+    
         try {
-            const res = await fetch('http://localhost:3000/addProperties', {
+            // Step 1: Fetch property owner's info from backend using their email
+            const ownerRes = await fetch(`http://localhost:3000/profile1`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (!ownerRes.ok) throw new Error("Property owner not found");
+            const ownerData = await ownerRes.json();
+    
+            const ownerId = ownerData.email;  // Use email or ownerId based on your model
+    
+            // Step 2: Build property data with the owner's email or _id
+            const propertyData = {
+                name: $('#propertyName').val(),
+                address1: $('#address1').val(),
+                address2: $('#address2').val(),
+                neighborhood: $('#neighborhood').val(),
+                city: $('#city').val(),
+                province: $('#province').val(),
+                country: $('#country').val(),
+                postalcode: $('#postalCode').val(),
+                ownerId: ownerId, // Use the fetched ownerId
+            };
+    
+            console.log("Sending property data:", propertyData);
+    
+            // Step 3: Send the property to the backend
+            const res = await fetch('http://localhost:3000/properties', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(propertyData)
             });
-
+    
             if (res.ok) {
                 alert('Property saved to database!');
                 $('#propertyPopup').css('display', 'none');
             } else {
-                alert(' Failed to save property!');
+                const errorData = await res.json();
+                console.error("Backend error:", errorData);
+                alert('Failed to save property!');
             }
+    
         } catch (err) {
-            console.error(err);
-            alert(' Network or server error!');
+            console.error("Error saving property:", err);
+            alert('Network, server error, or property owner lookup failed.');
         }
     });
+    
+
+    
     $('#saveWorkspace').on('click', async function () {
         const token = localStorage.getItem('token');
         const workspaceData = {

@@ -139,22 +139,39 @@ const DATABASE = "WorkspaceApp";
   });*/ //Repeated by Victor
 
 
-app.post("/properties", verifyToken, async (req, res) => {
+  app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
-    if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
-        return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
-
     try {
-        const highestPropertyId = await connectToDatabaseB(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
-        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
+        // Lookup owner by email
+        const owner = await connectToDatabaseB(
+            async (client) => {
+                return await client
+                    .db(DATABASE)
+                    .collection("usersData") 
+                    .findOne({ email: newProperty.ownerEmail }); // Find owner by email
+            }
+        );
+
+        if (!owner) {
+            return res.status(404).json({ message: "Owner not found for given email." });
+        }
+
+        // check if all required fields are present
+        if (!newProperty.name || !newProperty.ownerEmail) {
+            return res.status(400).json({ message: "Missing required fields: name or ownerEmail." });
+        }
+
+        const highestPropertyId = await connectToDatabaseB(getHighestId, "properties", "propertyId");
+        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1;
 
         const result = await connectToDatabaseB(createProperty, newProperty);
-            if (result.acknowledged) {
-                res.status(201).json({ message: "Property created successfully.", property: newProperty });
-            } else {
-                res.status(500).json({ message: "Failed to create property." });
-            }
+
+        if (result.acknowledged) {
+            res.status(201).json({ message: "Property created successfully.", property: newProperty });
+        } else {
+            res.status(500).json({ message: "Failed to create property." });
+        }
     } catch (error) {
         console.error("Error creating property:", error);
         res.status(500).json({ message: "An error occurred while creating the property." });
@@ -328,6 +345,7 @@ app.get('/protect', verifyToken, (req, res) => { //Get the token from user then 
         res.status(500).json({ error: "Failed to get user data." });
     }
 });
+
 //Getting all data from user, frontend will take the data then display them
 app.get('/profile1', verifyToken, async (req, res) => {  //Named:/profile, verifyToken=check if the user is authorizled
     const { email } = req.user; // Get the email from token(I only stored email into the token as an id use)
@@ -417,6 +435,7 @@ app.delete('/user', verifyToken, async (req, res) => {
         res.status(500).json({ message: "An error occurred while deleting the user." });
     }
 });
+
 
 
 

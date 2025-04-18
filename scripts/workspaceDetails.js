@@ -199,7 +199,6 @@ if (!ownerId) {
 
 //------------------------Left Section---------------------------------//
 
-//------------------------Left Section---------------------------------//
 
 const sectionDivL = $("<div>").appendTo("#workspace-display-left");
 
