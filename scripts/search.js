@@ -120,6 +120,11 @@ function loadFiltersFromSession() {
     const filters = JSON.parse(sessionStorage.getItem('filters'));
 
     if (filters) {
+        //null/undefined protection for arrays
+        filters.workspaceTypes = filters.workspaceTypes || [];
+        filters.amenities = filters.amenities || [];
+
+
         $('input[name="optWStypes"]').each(function () {
             $(this).prop('checked', filters.workspaceTypes.includes($(this).val())); //mark optWStypes checked if the opt's value is in the list in the filter
         });
@@ -133,8 +138,10 @@ function loadFiltersFromSession() {
         $("#maxPrice").val(filters.maxPrice || '');
         $("#minCapacity").val(filters.minCapacity || '');
         $("#maxCapacity").val(filters.maxCapacity || '');
+         $("#selSort").val(filters.sortField || "workspaceName"); //load sort field
 
-            $("#selSort").val(filters.sortField || "workspaceName"); //load sort field
+        // restores previous filters when the user returns to the page to see their last filtered results
+        DisplayWorkspaces(allWorkspaces); //AL - this will show the filtered workspaces when the page is loaded
     }
 }
 
@@ -300,6 +307,8 @@ function ApplyFilters(workspaceList){
     };
     sessionStorage.setItem('filters', JSON.stringify(filters));
 
+    // SAVE FILTERED WORKSPACE LIST TO SESSION STORAGE
+    sessionStorage.setItem('workspaceList', JSON.stringify(returnList));
 
     //FINALLY! What remains from all these filtering is returned
     return returnList;

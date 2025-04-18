@@ -1,13 +1,50 @@
-import workspaces from './workspaceData.js';
+//import workspaces from './workspaceData.js';
 import userData from './userData.js';//for owner contact info
-import properties from './propertyData.js';
+//import properties from './propertyData.js';
 import reviews from './workspaceReviews.js';
 
+//----------------------- Get workspace from session storage-----------------------// 
 
 $(document).ready(function () {
+    // Fetch the workspace ID from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const workspaceId = urlParams.get('workspaceid');
+
+    // Retrieve the workspace list from sessionStorage
+    const workspaceList = JSON.parse(sessionStorage.getItem('workspaceList')); // sessionStorage instead of localStorage
+
+    // Check if workspace list or workspace ID is missing
+    if (!workspaceList || !workspaceId) {
+        $('#workspace-details').text('Workspace not found.');
+        return;
+    }
+
+    // Find the specific workspace from the list based on the workspace ID
+    const selectedWorkspace = workspaceList.find(ws => ws.workspaceID == workspaceId);
+
+    // If the workspace isn't found, show an error
+    if (!selectedWorkspace) {
+        $('#workspace-details').text('Workspace not found.');
+        return;
+    }
+
+// ----------------------Populate the workspace details in the HTML---------------------------------//
+/*
+    const targetId = selectedWorkspace.workspaceID; // Get the workspace ID from the URL
+    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
+    const targetOwnerId = targetWorkspace.ownerId;
+    const targetPropertyId = targetWorkspace.propertyId;
+    const targetOwner = userData.find(user => user.id === targetOwnerId);
+    const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
+    const workspaceRating = targetWorkspace.rating;
+    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
+
+
+//------------------------Workspace details page---------------------------------//
+
     const leftContainer = $("#workspace-display-left");
     const rightContainer = $("#workspace-display-right");
-
+*/
 //----------------------------------popups---------------------------------------------// 
  
 const popupOverlay = document.getElementById('overlay');
@@ -115,169 +152,163 @@ document.querySelectorAll('.overlay').forEach(overlay => {
     }
 
     bookingBtn.addEventListener('click', bookingForm);
-   
-function receiveSearchString(){
-    const currUrl = new URL(window.location.href);
-    const params = new URLSearchParams(currUrl.search);
-    const searchText = ("workspace.workspaceID");
-    return searchText;
-}
-
-var targetId = Number(receiveSearchString());
-
-    //const workspace = JSON.parse(localStorage.getItem('Workspace'));
-    //var targetId = workspace;
-
-    //const workspace = JSON.parse(localStorage.getItem('Workspace'));
-
-    //var targetId = 19;
-
-      // fallBack to default workspace ID if not found in URL
-      if (!targetId) {
-        targetId = 19; 
-    }
-
-    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
-
-    const targetOwnerId = targetWorkspace.ownerId;
-    const targetPropertyId = targetWorkspace.propertyId;
-    const targetOwner = userData.find(user => user.id === targetOwnerId);
-    const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
-    const workspaceRating = targetWorkspace.rating;
-    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
-
-    console.log("Workspace:", targetWorkspace);
-    console.log("Owner:", targetOwner);
-    console.log("Property:", targetProperty);
-    console.log("Rating:", workspaceRating);
-    console.log("Reviews:", targetReviews);
 
 
 //------------------------Owner contact info---------------------------------//
 
-    if (targetOwner) {
-        // Display owner name
-        $('.OwnerName').text(`${targetOwner.firstName} ${targetOwner.lastName}`);
+const ownerId = selectedWorkspace.ownerId;
 
-        // Display owner email
-        $('.ContactInfo').html(`<p>Email: <a href="mailto:${targetOwner.email}">${targetOwner.email}</a></p>`);
+if (!ownerId) {
+    // No ownerId found – show fallback text
+    $(".OwnerName").text("No owner information found.");
+    $(".ContactInfo").html(`<p>Not available</p>`);
+    $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
+    $(".contact-owner-btn").prop("disabled", true); // Optional
+} else {
+    // Fetch owner contact info
+    $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
+        $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
+        $(".ContactInfo").html(`
+            <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
+            <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
+        `);
 
-        // Display other workspaces by the same owner
-        const ownersWorkspaces = workspaces.filter(workspace => workspace.ownerId === targetOwnerId);
-        const workspaceList = $('.WorkspacesList');
-        workspaceList.empty(); // Clear previous list
+        // Fetch other workspaces by the same owner
+        $.get(`/ownersWorkspaceList/${ownerId}`, function (workspaces) {
+            const ownersOtherWorkspaces = $(".WorkspacesList").empty();
+            const filtered = workspaces.filter(ws => ws.workspaceID != selectedWorkspace.workspaceID);
 
-        if (ownersWorkspaces.length > 0) {
-            ownersWorkspaces.forEach(workspace => {
-                $('<li>').text(workspace.workspaceName).appendTo(workspaceList);
-            });
-        } else {
-            $('<li>').text('No other workspaces available').appendTo(workspaceList);
-        }
-    }
+            if (filtered.length > 0) {
+                filtered.forEach(ws => {
+                    $("<li>").text(ws.workspaceName).appendTo(ownersOtherWorkspaces);
+                });
+            } else {
+                $("<li>").text("No other workspaces available").appendTo(ownersOtherWorkspaces);
+            }
+        }).fail(() => {
+            $(".WorkspacesList").html(`<li>Failed to load other workspaces</li>`);
+        });
+
+    }).fail(() => {
+        $(".OwnerName").text("No owner information found.");
+        $(".ContactInfo").html(`<p>Not available</p>`);
+        $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
+        $(".contact-owner-btn").prop("disabled", true);
+    });
+}
 
 //------------------------Left Section---------------------------------//
 
         const sectionDivL= $("<div>").appendTo("#workspace-display-left");
          // Set workspace name in the existing div
-        $("#workspaceTitle").text(targetWorkspace.workspaceName).appendTo(sectionDivL);
+        $("#workspaceTitle").text(selectedWorkspace.workspaceName).appendTo(sectionDivL);
 
         //Left section list
         const ulL = $("<ul>").addClass("detailsList");
-            //address
+             // Address details
             $("<li>").addClass("detailBoxHeading").text("Address").appendTo(ulL);
-            $("<li>").text(`Line 1: ${targetProperty.address1}`).appendTo(ulL);
-            $("<li>").text(`Line 2: ${targetProperty.address2}`).appendTo(ulL);
-            $("<li>").text(`Postal Code: ${targetProperty.postalcode}`).appendTo(ulL);
-            $("<li>").text(`City: ${targetProperty.city}`).appendTo(ulL);
-            $("<li>").text(`Province: ${targetProperty.province}`).appendTo(ulL);
-            $("<li>").text(`Country: ${targetProperty.country}`).appendTo(ulL);
-            //workspace details
+            $("<li>").text(`Line 1: ${selectedWorkspace.address1}`).appendTo(ulL);
+            $("<li>").text(`Line 2: ${selectedWorkspace.address2}`).appendTo(ulL);
+            $("<li>").text(`Postal Code: ${selectedWorkspace.postalcode}`).appendTo(ulL);
+            $("<li>").text(`City: ${selectedWorkspace.city}`).appendTo(ulL);
+            $("<li>").text(`Province: ${selectedWorkspace.province}`).appendTo(ulL);
+            $("<li>").text(`Country: ${selectedWorkspace.country}`).appendTo(ulL);
+
+            // Workspace details
             $("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
-            $("<li>").text(`Type: ${targetWorkspace.workspaceType}`).appendTo(ulL);
-            $("<li>").text(`Price: $${targetWorkspace.price} / ${targetWorkspace.leaseTerm}`).appendTo(ulL);
-            $("<li>").text(`Square Footage: ${targetWorkspace.sqFt} sq ft`).appendTo(ulL);
-            $("<li>").text(`Seat Capacity: ${targetWorkspace.seatCapacity}`).appendTo(ulL);
-            $("<li>").text(`Price: ${targetWorkspace.price}' /'${(targetWorkspace.leaseTerm)}`).appendTo(ulL);
+            $("<li>").text(`Type: ${selectedWorkspace.workspaceType}`).appendTo(ulL);
+            $("<li>").text(`Price: $${selectedWorkspace.price} / ${selectedWorkspace.leaseTerm}`).appendTo(ulL);
+            $("<li>").text(`Square Footage: ${selectedWorkspace.sqFt} sq ft`).appendTo(ulL);
+            $("<li>").text(`Seat Capacity: ${selectedWorkspace.seatCapacity}`).appendTo(ulL);
 
             // Display amenities
             $("<li>").addClass("detailBoxHeading").text("Amenities").appendTo(ulL);
-            targetWorkspace.amenities.forEach( amenity =>{
+            selectedWorkspace.amenities.forEach(amenity => {
                 const [key, value] = Object.entries(amenity)[0];
                 if (value) {
                     $("<li>").text(`- ${key}`).appendTo(ulL);
-                }
-                else{
+                } else {
                     $("<li>").text(`- ${key}: N/A`).appendTo(ulL);
                 }
-
             });
+
+            
             sectionDivL.append(ulL);
 
 //------------------------Right Section---------------------------------//
 
-            const sectionDivR = $("<div>").appendTo(rightContainer);
+// Get ratings array from the selected workspace
+let workspaceRating = selectedWorkspace.rating || [];
 
-        //avg rating calculation
-        const averageStarRating = workspaceRating.length > 0 
-        ? Math.round(workspaceRating.reduce((a, b) => a + b) / workspaceRating.length): 0;
-        console.log(averageStarRating);
+// If the rating is an array with a single string (like ["2, 3, 5, 2, 2"]), split it into individual numbers
+if (workspaceRating.length === 1 && typeof workspaceRating[0] === "string") {
+    workspaceRating = workspaceRating[0].split(",").map(r => Number(r.trim()));
+}
 
-        //add star symbols
-        const starRatingDiv = $(".starRating").empty(); 
+console.log("Raw Ratings Array:", workspaceRating);
 
-           for(let i=0; i < averageStarRating; i++){
-               $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
-           }
-            // If no rating, show empty stars
-            if (averageStarRating === 0) {
-                $("<span>").addClass("fa fa-star").appendTo(starRatingDiv);
-            }
+// Calculate average rating
+const averageStarRating = workspaceRating.length > 0 
+    ? Math.round(workspaceRating.reduce((a, b) => a + b, 0) / workspaceRating.length)
+    : 0;
+
+console.log("Average Rating:", averageStarRating);
+
+const starRatingDiv = $(".starRating").empty();
+const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
+
+// Toggle visibility based on rating availability
+ratingHeading.toggle(workspaceRating.length > 0);
+starRatingDiv.toggle(workspaceRating.length > 0);
+
+// If ratings exist, render stars
+if (workspaceRating.length > 0) {
+    for (let i = 0; i < averageStarRating; i++) {
+        $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
+    }
+}
 
 //------------------------Reviews---------------------------------//
+const targetReviews = selectedWorkspace.reviews || [];
 
-            const reviewContainer = $(".reviewBody").empty();
+const reviewContainer = $(".reviewBody").empty();
+const reviewSection = $(".reviewContainer"); // Full review block
+const reviewHeading = $(".reviewContainer .subHeading"); // Just the heading inside review section
 
-            // track review index
-            let currentReviewIndex = 0;
+let currentReviewIndex = 0;
 
-            function displayReview(index) {
-            reviewContainer.empty();
-            if (targetReviews.length > 0) {
-                const review = targetReviews[index];
-                $("<p>").text(`${review.date}`).appendTo(".reviewBody"),
-                $("<p>").text(`${review.comment}`).appendTo(".reviewBody");
-                } else {
-                $("<p>").text("No reviews available").appendTo(".reviewBody");
-            }
-            }
-            
-            if (targetReviews.length > 0) {
-                displayReview(currentReviewIndex);
+function displayReview(index) {
+    reviewContainer.empty();
+    const review = targetReviews[index];
+    $("<p>").text(`${review.date}`).appendTo(".reviewBody");
+    $("<p>").text(`${review.comment}`).appendTo(".reviewBody");
+}
 
-                // Prev/Next buttons
-                const prevButton = $(`<button>`).text(`Prev`).addClass(`review-btn prev-btn`).appendTo(`.leftBtn`);
-                const nextButton = $(`<button>`).text(`Next`).addClass(`review-btn next-btn`).appendTo(`.rightBtn`);
+// Only show the review section if there are reviews
+if (targetReviews.length > 0) {
+    reviewSection.show();
+    reviewHeading.show();
 
-                // Event listeners 
-                prevButton.on("click", () => {
-                    currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
-                    displayReview(currentReviewIndex);
-                });
+    displayReview(currentReviewIndex);
 
-                nextButton.on("click", () => {
-                    currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
-                    displayReview(currentReviewIndex);
-                });
-            } else {
-                displayReview(currentReviewIndex);
-            };
-            
+    // Prev/Next buttons
+    const prevButton = $(`<button>`).text(`Prev`).addClass(`review-btn prev-btn`).appendTo(`.leftBtn`);
+    const nextButton = $(`<button>`).text(`Next`).addClass(`review-btn next-btn`).appendTo(`.rightBtn`);
+
+    prevButton.on("click", () => {
+        currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
+        displayReview(currentReviewIndex);
     });
 
-
-
+    nextButton.on("click", () => {
+        currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
+        displayReview(currentReviewIndex);
+    });
+} else {
+    reviewSection.hide(); // This hides the whole block, including heading
+}
     
 
+})
 
     

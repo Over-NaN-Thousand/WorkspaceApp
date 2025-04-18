@@ -651,17 +651,6 @@ app.get("/publicWorkspaces",async (req, res) => {
 
     try {
         const filters = {};
-        //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
-        const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
-        if (rawOwnerId) {
-            const ownerId = Number(rawOwnerId); 
-            if (!isNaN(ownerId)) {
-                filters.ownerId = ownerId;
-            } else {
-                console.error("Invalid ownerId provided:", ownerId);
-                return res.status(400).json({ message: "Invalid ownerId format." });
-            }
-        }
         
         const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
         if (workspaceName) 
@@ -705,7 +694,46 @@ app.get("/publicWorkspaces",async (req, res) => {
 });
 
 
+//getting Owner data for contact info display
+app.get('/ownerContactInfo/:ownerId', async (req, res) => {
+    const { ownerId } = req.params;
 
+    try {
+        const owner = await findOneField("usersData", { userId: Number(ownerId) });
+
+        if (!owner)
+            return res.status(404).json({ error: "Owner not found" });
+
+        res.status(200).json({
+            firstName: owner.firstName,
+            lastName: owner.lastName,
+            email: owner.email,
+            phoneNumber: owner.phoneNumber
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+);
+
+app.get('/ownersWorkspaceList/:ownerId', async (req, res) => {
+    const { ownerId } = req.params;
+
+    try {
+        const ownersWorkspaceList = await findManyField("workspaces", {
+            ownerId: Number(ownerId)
+        });
+
+        if (!ownersWorkspaceList || ownersWorkspaceList.length === 0) {
+            return res.status(404).json({ error: "No workspaces found for this owner" });
+        }
+
+        res.status(200).json(ownersWorkspaceList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
 
 //==================================End of Routes for WorkspaceDetails===================================================//
 
