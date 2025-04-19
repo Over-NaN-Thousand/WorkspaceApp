@@ -7,221 +7,133 @@
     <title>Property Manager</title>
 
     <base href="/WorkspaceApp/">
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="scripts/main.js" defer></script>
-    <script type="module" src="scripts/propertymgr.js"></script>
+    <script src="scripts/leftsidebar.js" defer></script>
+    
     <!-- making it a module so we can import:  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules -->
 
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/leftsidebar.css">
     <link rel="stylesheet" href="styles/propertymgr.css">
-    <link rel="stylesheet" href="styles/editpop.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!--fonts for symbols-->
 </head>
 
 <body>
-    <header id="header-mainjs"></header>
+    <div class="container">
+        <header id="header-mainjs"></header>
+        <div class="main-wrapper">
+            <aside id="leftSideBar-mainjs"></aside>
+            <main id="main-content">
+                <div class="content-section" id="content-section">
+                    <div class="header-bar">Property Manager</div>
+                    <div class="content-body">
+                        <div class="toolbar">
+                            <button id="addPropertyBtn">Add Property</button>
+                        </div>
+                        <div id="property-list" class="property-list">
+                        <!-- Dynamically filled with user's properties -->
+                        </div>
 
-    <main class="main-section">
-        <h1>My Properties</h1>
-
-        <section class="property-tools">
-            <button id="addProperty">Add Property</button>
-
-            <button id="viewMyProperty">My Property</button>
-
-        </section>
-
-        <section class="workspace-tools">
-            <button id="addWorkspace">Add Workspace</button>
-
-            <button id="viewMyWorkspace">My Workspace</button>
-
-        </section>
-
-        <article id="properties-container">
-            <!-- Dynamically loaded properties here -->
-        </article>
-
-        <!-- Add Property Popup -->
-        <div id="propertyPopup" class="popup-container">
-            <div class="popup-content">
-                <h2>Edit Property</h2>
-                <form id="propertyForm">
-                    <p>
-                        <label for="propertyName">Property Name:</label>
-                        <input type="text" id="propertyName" name="propertyName">
-                    </p>
-                    <p>
-                        <label for="address1">Address 1:</label>
-                        <input type="text" id="address1" name="address1">
-                    </p>
-                    <p>
-                        <label for="address2">Address 2:</label>
-                        <input type="text" id="address2" name="address2">
-                    </p>
-                    <p>
-                        <label for="neighborhood">Neighborhood:</label>
-                        <input type="text" id="neighborhood" name="neighborhood">
-                    </p>
-                    <p>
-                        <label for="city">City:</label>
-                        <input type="text" id="city" name="city">
-                    </p>
-                    <p>
-                        <label for="province">Province:</label>
-                        <input type="text" id="province" name="province">
-                    </p>
-                    <p>
-                        <label for="country">Country:</label>
-                        <input type="text" id="country" name="country">
-                    </p>
-                    <p>
-                        <label for="postalCode">Postal Code:</label>
-                        <input type="text" id="postalCode" name="postalCode">
-                    </p>
-                    <div class="popup-buttons">
-                        <button type="button" id="saveProperty">Save</button>
-                        <button type="button" id="closePropertyPopup">Close</button>
                     </div>
-                </form>
-            </div>
+                </div>  
+
+    <!-- Property Popup -->
+    <div id="propertyPopup" class="popup-container">
+        <div class="popup-content">
+            <h2>Add Property</h2>
+            <form id="propertyForm">
+                <p>
+                    <label for="propertyName">Property Name:</label>
+                    <input type="text" id="propertyName" name="propertyName">
+                </p>
+                <p>
+                    <label for="address1">Address 1:</label>
+                    <input type="text" id="address1" name="address1">
+                </p>
+                <p>
+                    <label for="address2">Address 2:</label>
+                    <input type="text" id="address2" name="address2">
+                </p>
+                <p>
+                    <label for="neighborhood">Neighborhood:</label>
+                    <input type="text" id="neighborhood" name="neighborhood">
+                </p>
+                <p>
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city">
+                </p>
+                <p>
+                    <label for="province">Province:</label>
+                    <input type="text" id="province" name="province">
+                </p>
+                <p>
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country">
+                </p>
+                <p>
+                    <label for="postalCode">Postal Code:</label>
+                    <input type="text" id="postalCode" name="postalCode">
+                </p>
+                <div class="popup-buttons">
+                    <button type="button" id="saveProperty">Save</button>
+                    <button type="button" id="closePropertyPopup">Close</button>
+                </div>
+            </form>
         </div>
-        <!-- Add Workspace Popup -->
+    </div>
 
-        <div id="workspacePopup" class="popup-container">
-            <div class="popup-content">
+    <!-- Add Workspace Popup -->
+    <div id="workspacePopup" class="popup-container" style="display:none;">
+        <div class="popup-content">
+            <h2>Add Workspace</h2>
+            <form id="workspaceForm">
+                <p>
+                    <label for="workspaceName">Workspace Name:</label>
+                    <input type="text" id="workspaceName" name="workspaceName">
+                </p>
+                <p>
+                    <label for="workspaceType">Workspace Type:</label>
+                    <input type="text" id="workspaceType" name="workspaceType">
+                </p>
+                <p>
+                    <label for="leaseTerm">Lease Term:</label>
+                    <input type="text" id="leaseTerm" name="leaseTerm">
+                </p>
+                <p>
+                    <label for="sqFt">Floor Area (Sq Ft):</label>
+                    <input type="number" id="sqFt" name="sqFt">
+                </p>
+                <p>
+                    <label for="seatCapacity">Seat Capacity:</label>
+                    <input type="number" id="seatCapacity" name="seatCapacity">
+                </p>
+                <p>
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" name="price">
+                </p>
+                <p>
+                    <label for="rating">Rating:</label>
+                    <input type="number" id="rating" name="rating">
+                </p>
 
-                <h2>Edit Workspace</h2>
-                <form id="workspaceForm">
-                    <p>
-                        <label for="workspaceName">Workspace Name:</label>
-                        <input type="text" id="workspaceName" name="workspaceName">
-                    </p>
-                    <p>
-                        <label for="workspaceType">Workspace Type:</label>
-                        <input type="text" id="workspaceType" name="workspaceType">
-                    </p>
-                    <p>
-                        <label for="leaseTerm">Lease Term:</label>
-                        <input type="text" id="leaseTerm" name="leaseTerm">
-                    </p>
-                    <p>
-                        <label for="sqFt">Floor Area (Sq Ft):</label>
-                        <input type="number" id="sqFt" name="sqFt">
-                    </p>
-                    <p>
-                        <label for="seatCapacity">Seat Capacity:</label>
-                        <input type="number" id="seatCapacity" name="seatCapacity">
-                    </p>
-                    <p>
-                        <label for="price">Price:</label>
-                        <input type="number" id="price" name="price">
-                    </p>
-                    <p>
-                        <label for="rating">Rating:</label>
-                        <input type="number" id="rating" name="rating">
-                    </p>
-
-                    <p>
-                        <label for="amenities">Amenities:</label>
-                        <input type="text" id="amenities" name="amenities">
-                    </p>
-                    <div class="popup-buttons">
-                        <button type="button" id="saveWorkspace">Save</button>
-                        <button type="button" id="closeWorkspacePopup">Close</button>
-                    </div>
-                </form>
-            </div>
+                <p>
+                    <label for="amenities">Amenities:</label>
+                    <input type="text" id="amenities" name="amenities">
+                </p>
+                <div class="popup-buttons">
+                    <button type="button" id="saveWorkspace">Save</button>
+                    <button type="button" id="closeWorkspacePopup">Close</button>
+                </div>
+            </form>
         </div>
-
-        <section id="selectMyPropertySection">
-            <h2>Select My Property</h2>
-            <select id="propertySelector">
-              <option value="">-- Select a property --</option>
-            </select>
-          </section>
-        <!-- My Property Form -->
-        <form id="myPropertyForm">
-            <h2>My Property</h2>
-            <div>
-                <label for="myPropertyName">Name:</label>
-                <input type="text" id="myPropertyName" readonly>
-            </div>
-            <div>
-                <label for="myAddress1">Address 1:</label>
-                <input type="text" id="myAddress1" readonly>
-            </div>
-            <div>
-                <label for="myAddress2">Address 2:</label>
-                <input type="text" id="myAddress2" readonly>
-            </div>
-            <div>
-                <label for="myNeighborhood">Neighborhood:</label>
-                <input type="text" id="myNeighborhood" readonly>
-            </div>
-            <div>
-                <label for="myCity">City:</label>
-                <input type="text" id="myCity" readonly>
-            </div>
-            <div>
-                <label for="myProvince">Province:</label>
-                <input type="text" id="myProvince" readonly>
-            </div>
-            <div>
-                <label for="myCountry">Country:</label>
-                <input type="text" id="myCountry" readonly>
-            </div>
-            <div>
-                <label for="myPostalCode">Postal Code:</label>
-                <input type="text" id="myPostalCode" readonly>
-            </div>
-          </form>
-      
-          <!-- My Workspace Form -->
-          <form id="myWorkspaceForm">
-            <h2>My Workspace</h2>
-            <div>
-                <label for="myWorkspaceName">Name:</label>
-                <input type="text" id="myWorkspaceName" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceType">Type:</label>
-                <input type="text" id="myWorkspaceType" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceLease">Lease Term:</label>
-                <input type="text" id="myWorkspaceLease" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceSqFt">Floor Area (Sq Ft):</label>
-                <input type="number" id="myWorkspaceSqFt" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceSeat">Seat Capacity:</label>
-                <input type="number" id="myWorkspaceSeat" readonly>
-            </div>
-            <div>
-                <label for="myWorkspacePrice">Price:</label>
-                <input type="number" id="myWorkspacePrice" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceRating">Rating:</label>
-                <input type="number" id="myWorkspaceRating" readonly>
-            </div>
-            <div>
-                <label for="myWorkspaceAmenities">Amenities:</label>
-                <input type="text" id="myWorkspaceAmenities" readonly>
-            </div>
-          </form>
-
-    </main>
-
-
-
-    <footer id="footer-mainjs"></footer>
-
+    </div>
+                       
+            </main>
+        </div>
+        <footer id="footer-mainjs"></footer>
+    </div>
+    <script type="module" src="scripts/propertymgr.js" defer></script>
 </body>
-
 </html>

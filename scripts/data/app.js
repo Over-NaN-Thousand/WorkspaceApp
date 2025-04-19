@@ -178,34 +178,35 @@ const DATABASE = "WorkspaceApp";
     }
 });
 
-app.get("/properties", verifyToken,async (req, res) => {
-    const filters = {};
-
-    const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
-    if (!isNaN(ownerId)) {
-        filters.ownerId = ownerId; 
-    } else {
-        console.error("Invalid ownerId provided:", ownerId);
-        return res.status(400).json({ message: "Invalid ownerId format." });
-    }
-
-    const propertyName = req.headers["name"] || req.query.name;
-    if (propertyName) 
-        filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
-
+app.get('/properties', verifyToken, async (req, res) => {
     try {
-        const properties = await connectToDatabaseB(readProperties, filters);
-        // console.dir(properties);
-        res.status(200).json({ properties });
-    } catch (error) {
-        console.error("Error fetching properties:", error);
-        res.status(500).json({ message: "An error occurred while fetching properties." });
+        const { email } = req.user;
+        if (!email) return res.status(400).json({ error: 'Email missing from token' });
+
+        const properties = await connectToDatabaseB(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("properties")
+                .find({ ownerId: email })
+                .toArray();
+        });
+
+        if (!properties.length) {
+            return res.status(404).json({ error: "No properties found for this owner." });
+        }
+
+        res.json({ properties });
+    } catch (err) {
+        console.error("Error in /properties:", err);
+        res.status(500).json({ error: "Failed to fetch properties." });
     }
+
 });
 
+
 app.put("/properties/:id", verifyToken,async (req, res) => {
-    const propertyId = Number(req.params.id);       // get the property ID
-    const updates = req.body;                       // get the updates
+    const propertyId = Number(req.params.id);       
+    const updates = req.body;                       
 
     if (isNaN(propertyId))
         return res.status(400).json({ message: "Invalid property ID provided." });
@@ -584,7 +585,6 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
         if (amenities) {
             filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
         }
-
 
         const workspaces = await connectToDatabaseB(getWorkspacesWithProperties, filters);
         res.status(200).json({ workspaces });
