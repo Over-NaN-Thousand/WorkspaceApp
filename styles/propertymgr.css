@@ -93,30 +93,6 @@ element.style {
     display: flex;
 }
 
-
-.popup-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, .75);
-    z-index: 1000;
-}
-
-.popup-content {
-    background-color: #f1ede8;
-    padding: 1rem;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-}
-
-
 .popup-content h2{
     margin: .5rem auto 1rem;
     font-size: clamp(14px, 2.8vw, 20px);
@@ -180,4 +156,33 @@ form {
     display: block;
     unicode-bidi: isolate;
 }
+
+/* Container to cover the whole viewport */
+#propertyPopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background-color: #f1ede8;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+  }
+  
+
+
+
+
 

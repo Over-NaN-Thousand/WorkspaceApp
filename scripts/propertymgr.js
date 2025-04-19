@@ -1,13 +1,39 @@
-// Get current user data from localStorage
+let propertiesData = [];  // Declare a global variable to store property data
 
-// Get current user data from localStorage and display it dynamically
 $(document).ready(async function () {
+
+    // Get current user data from localStorage
     const currentUser = localStorage.getItem('email');
     const token = localStorage.getItem('token');
     console.log("token:", token);
 
+    // ===== OPEN/CLOSE POPUPS =====
+    $('#propertyPopup').hide();
+
+    $('#addPropertyBtn').on('click', function () {
+        $('#propertyForm')[0].reset();
+        $('#propertyForm').removeData('id'); 
+        $('#propertyPopupTitle').text('Add Property');
+        $('#propertyPopup').show();
+    });    
+
+    $('#editPropertyBtn').on('click', function () {
+        $('#propertyForm')[0].reset();
+        $('#propertyPopupTitle').text('Edit Property');
+        $('#propertyPopup').show();
+    });  
+
+    $('#closePropertyPopup').on('click', function () {
+        $('#propertyPopup').hide(); 
+    });
+
+    $('#closeWorkspacePopup').on('click', function () {
+        $('#workspacePopup').hide(); 
+    });
+
     if (!currentUser || !token) {
         alert('No user logged in. Redirecting to login page.');
+
         window.location.href = '/WorkspaceApp/pages/login.html';
         return;
     }
@@ -25,10 +51,8 @@ $(document).ready(async function () {
         if (response.ok) {
             // Store the user data in localStorage for later use
             localStorage.setItem('userData', JSON.stringify(userData));
-        
             console.log("Setting user info...");
             console.log(userData);
-
         } else {
             alert("We cannot get your information!");
             window.location.href = "/WorkspaceApp/pages/login.html";
@@ -37,87 +61,158 @@ $(document).ready(async function () {
         console.error("Fetch error:", err);
         alert("Failed to load user data.");
     }
+
+    // ===== LOAD PROPERTIES =====
+$(document).ready(function () {
+    loadProperties();  
+});
+
+    
+
+// ===== SAVE PROPERTY =====
+$('#saveProperty').on('click', async function () {
+    const token = localStorage.getItem('token');
+    const form = $('#propertyForm');
+    const propertyId = form.data('id'); // Will be undefined for new property
+
+    const isEdit = !!propertyId;
+    const method = isEdit ? 'PUT' : 'POST';
+    const url = isEdit 
+        ? `http://localhost:3000/properties/${propertyId}`
+        : `http://localhost:3000/properties`;
+
+    try {
+        const ownerRes = await fetch(`http://localhost:3000/profile1`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!ownerRes.ok) throw new Error("Owner not found");
+
+        const ownerData = await ownerRes.json();
+
+        const propertyData = {
+            name: $('#propertyName').val(),
+            address1: $('#address1').val(),
+            address2: $('#address2').val(),
+            neighborhood: $('#neighborhood').val(),
+            city: $('#city').val(),
+            province: $('#province').val(),
+            country: $('#country').val(),
+            postalcode: $('#postalCode').val(),
+            ownerEmail: ownerData.email, 
+        };
+
+        const res = await fetch(url, {
+            method: method,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(propertyData)
+        });
+
+        if (res.ok) {
+            alert(propertyId ? 'Property updated!' : 'Property added!');
+            $('#propertyPopup').hide();
+            form[0].reset();
+            form.removeData('id');
+            
+            // Load the properties again to show the new one
+            loadProperties();
+        } else {
+            const errorData = await res.json();
+            alert(`Failed to save property: ${errorData.message}`);
+        }
+    } catch (err) {
+        console.error("Error saving property:", err);
+        alert('Something went wrong.');
+    }
 });
 
 
-$(document).ready(function () {
+// ===== LOAD PROPERTIES =====
+async function loadProperties() {
     const token = localStorage.getItem('token');
-    const email = localStorage.getItem('email');
 
-    // ===== OPEN/CLOSE POPUPS =====
-    $('#addPropertyBtn').on('click', function () {
-        $('#propertyForm')[0].reset();
-        $('#propertyPopup h2').text('Add Property');
-        $('#propertyPopup').css('display', 'flex');
-    });
-
-    $('#closePropertyPopup').on('click', function () {
-        $('#propertyPopup').css('display', 'none');
-    });
-
-    $('#closeWorkspacePopup').on('click', function () {
-        $('#workspacePopup').css('display', 'none');
-    });
-
-    // ===== SAVE PROPERTY =====
-    $('#saveProperty').on('click', async function () {
-        try {
-            const form = $('#propertyForm');
-            const propertyId = form.data('id'); // Will be undefined for new properties
-            const method = propertyId ? 'PUT' : 'POST';
-            const endpoint = propertyId
-                ? `http://localhost:3000/properties/${propertyId}`
-                : 'http://localhost:3000/properties';
-    
-            const ownerRes = await fetch(`http://localhost:3000/profile1`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-    
-            if (!ownerRes.ok) throw new Error("Owner not found");
-    
-            const ownerData = await ownerRes.json();
-    
-            const propertyData = {
-                name: $('#propertyName').val(),
-                address1: $('#address1').val(),
-                address2: $('#address2').val(),
-                neighborhood: $('#neighborhood').val(),
-                city: $('#city').val(),
-                province: $('#province').val(),
-                country: $('#country').val(),
-                postalcode: $('#postalCode').val(),
-                ownerId: ownerData.email
-            };
-    
-            const res = await fetch(endpoint, {
-                method,
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(propertyData)
-            });
-    
-            if (res.ok) {
-                alert('Property saved!');
-                $('#propertyPopup').hide();
-                form[0].reset();
-                form.removeData('id'); // Clear edit state
-                loadProperties();
-            } else {
-                alert('Failed to save property.');
+    try {
+        const res = await fetch('http://localhost:3000/properties', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        } catch (err) {
-            console.error("Error saving property:", err);
-            alert('Something went wrong.');
-        }
-    });
-    
+        });
 
-    // ===== SAVE WORKSPACE =====
+        const data = await res.json();
+        
+        propertiesData = data.properties;
+        
+        console.log("Stored in propertiesData:", propertiesData); // confirm it worked
+
+        $('#property-list').empty();
+
+        propertiesData.forEach(property => {
+            const propertyCard = `
+                <div class="property-card" data-id="${property.propertyId}">
+                    <h3>${property.name}</h3>
+                    <p>${property.address1}, ${property.city}, ${property.province}</p>
+                    <button class="edit-property-btn" data-id="${property.propertyId}">Edit</button>
+                </div>
+            `;
+            $('#property-list').append(propertyCard);
+        });
+
+    } catch (err) {
+        console.error("Error loading properties:", err);
+    }
+}
+
+
+// Edit Property Popup Action
+$(document).on('click', '.edit-property-btn', function () {
+    const propertyId = $(this).data('id');
+    console.log('Edit button clicked. Property ID:', propertyId);
+
+    // Find the property object from the globally stored propertiesData array
+    const property = propertiesData.find(p => p.propertyId === propertyId);
+    console.log('Found property object:', property);
+
+    if (property) {
+        openEditPopup(property); // Open the edit popup with the existing property data
+    }
+});
+
+// Open the edit popup with existing property data
+function openEditPopup(property) {
+    console.log('Opening edit popup for property ID:', property.propertyId);
+
+    // Show the popup (display: block)
+    $('#propertyPopup').show();
+
+    // Change the popup title to 'Edit Property'
+    $('#propertyPopupTitle').text('Edit Property');  
+
+    // Fill form with existing property data
+    $('#propertyName').val(property.name);
+    $('#address1').val(property.address1);
+    $('#address2').val(property.address2);
+    $('#neighborhood').val(property.neighborhood);
+    $('#city').val(property.city);
+    $('#province').val(property.province);
+    $('#country').val(property.country);
+    $('#postalCode').val(property.postalcode);
+
+    // Store property _id for PUT request later
+    $('#propertyForm').data('id', property.propertyId);
+    console.log('Property ID stored in form data:', property.propertyId);
+}
+
+
+
+
+ // ===== SAVE WORKSPACE =====
     $('#saveWorkspace').on('click', async function () {
         const propertyId = $('#workspacePopup').data('property-id');
         if (!propertyId) {
@@ -125,6 +220,7 @@ $(document).ready(function () {
             return;
         }
 
+        const userData = JSON.parse(localStorage.getItem('userData'));  // Get user data from localStorage
         const workspaceData = {
             workspaceName: $('#workspaceName').val(),
             workspaceType: $('#workspaceType').val(),
@@ -135,7 +231,7 @@ $(document).ready(function () {
             rating: parseFloat($('#rating').val()),
             amenities: $('#amenities').val().split(',').map(a => a.trim()),
             propertyId: propertyId,
-            ownerEmail: email
+            ownerEmail: userData.email  // Use owner email from the logged-in user
         };
 
         try {
@@ -159,89 +255,4 @@ $(document).ready(function () {
             alert('Something went wrong.');
         }
     });
-
-    $(document).ready(async function () {
-        await loadProperties();
-        });
-
-  // ===== LOAD PROPERTIES =====
-  async function loadProperties() {
-    const token = localStorage.getItem('token');
-
-    try {
-        const response = await fetch("http://localhost:3000/properties", {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await response.json();
-        console.log("Properties loaded:", data);
-        console.log("propertyListContainer found:", document.getElementById('property-list'));
-        const propertyListContainer = document.getElementById('property-list');
-        if (!propertyListContainer) {
-            console.error("Element with id 'property-list' not found!");
-            return;
-        }
-
-        propertyListContainer.innerHTML = ''; // Clear previous content
-
-        if (!data.properties || data.properties.length === 0) {
-            propertyListContainer.innerHTML = "<p>No properties found.</p>";
-            return;
-        }
-  
-        data.properties.forEach(property => {
-            const propertyDiv = document.createElement('div');
-            propertyDiv.classList.add('property-item'); 
-        
-            propertyDiv.innerHTML = `
-                <h3>${property.name}</h3>
-                <p>${property.address1}, ${property.address2}</p>
-                <p>${property.neighborhood}</p>
-                <p>${property.city}, ${property.province} ${property.postalcode}</p>
-                <p>${property.country}</p>
-                <button class="edit-property-btn" data-id="${property._id}">Edit Property</button>
-            `;
-            propertyListContainer.appendChild(propertyDiv);
-
-            document.querySelectorAll('.edit-property-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const propertyId = e.target.getAttribute('data-id');
-                    const property = data.properties.find(p => p._id === propertyId);
-                    if (property) {
-                        openEditPopup(property);
-                    }
-                });
-            });
-
-        });
-    } catch (err) {
-        console.error("Error in loadProperties:", err);
-    }}});
-
-    // ===== OPEN EDIT POPUP =====
-    function openEditPopup(property) {
-        const form = $('#propertyForm');
-    
-        // Show popup centered
-        $('#propertyPopup').css('display', 'flex'); 
-        $('#propertyPopup h2').text('Edit Property');
-    
-        // Fill form with existing property data
-        $('#propertyName').val(property.name);
-        $('#address1').val(property.address1);
-        $('#address2').val(property.address2);
-        $('#neighborhood').val(property.neighborhood);
-        $('#city').val(property.city);
-        $('#province').val(property.province);
-        $('#country').val(property.country);
-        $('#postalCode').val(property.postalcode);
-    
-        // Store property _id for PUT request later
-        form.data('id', property._id);
-    }
-    
-    
+});

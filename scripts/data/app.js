@@ -187,7 +187,7 @@ app.get('/properties', verifyToken, async (req, res) => {
             return await client
                 .db(DATABASE)
                 .collection("properties")
-                .find({ ownerId: email })
+                .find({ ownerEmail: email })
                 .toArray();
         });
 
