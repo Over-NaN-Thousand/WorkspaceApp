@@ -138,7 +138,6 @@ const DATABASE = "WorkspaceApp";
     }
   });*/ //Repeated by Victor
 
-
   app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
