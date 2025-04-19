@@ -103,4 +103,3 @@ async function handleSignup(event) {
     //For testing
     console.log(newUser);
 }*/
-

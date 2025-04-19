@@ -1,47 +1,79 @@
-:root {
-    --prim: #275158;
-
-    --aside-bg: #ceba92ae;
-    --filter-bg: #f1ede8;
-
-    --item-text: #0e0e0e;
-    --item-border: rgba(169, 169, 169, 0.5);
-    --item-bg: #ffffff;
-}
-
-body {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 1% auto;
-    grid-template-areas:
-        "header header"
-        "aside main"
-        "footer footer";
+/* Main Content */
+/* Container */
+.container {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
 }
 
-header {
-    grid-area: header;
-
+.main-wrapper {
+    display: flex;
+    flex: 1;
 }
-
-footer {
-    grid-area: footer;
-
-}
-
+/* Main Content */
 main {
-    grid-area: main;
+    flex: 1;
+    padding: 20px;
+    background-color: #f0f0f0;
 }
 
-h1 {
-    margin: 3rem 1.1rem .1em;
-    font-size: clamp(16px, 3vw, 20px);
+.content-section {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-#addProperty {
+.content-section .header-bar {
+    background-color: #666;
+    color: var(--light);
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.content-section .content-body {
+    padding: 20px;
+}
+
+.property-list, .property-item {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+#property-list {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.property-item {
+    background-color: #e6f7ff;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.property-card {
+    background-color: #f9f9f9;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.property-card h3 {
+    margin-top: 0;
+}
+
+.property-card.selected {
+    border: 2px solid #007bff;
+    background-color: #e6f0ff;
+}
+
+/* Property & Workspace Form Styles */
+#addProperty, #addWorkspace {
     margin: 0.5rem 1.2rem;
     padding: 0.3rem 1.5rem;
     font-size: clamp(12px, 14px, 16px);
@@ -53,40 +85,104 @@ h1 {
     cursor: pointer;
 }
 
-#addProperty:hover {
+#addProperty:hover, #addWorkspace:hover {
     background-color: #e6e6e6;
 }
 
-#addWorkspace {
-    margin: 0.5rem 1.2rem;
-    padding: 0.3rem 1.5rem;
-    font-size: clamp(12px, 14px, 16px);
-    border: 1px solid var(--prim);
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(39, 81, 88, 0.1);
-    background-color: white;
-    color: var(--prim);
+element.style {
+    display: flex;
+}
+
+.popup-content h2{
+    margin: .5rem auto 1rem;
+    font-size: clamp(14px, 2.8vw, 20px);
+    text-align: center;
+}
+
+.popup-content label{
+    font-size: clamp(9px, 2vw, 14px);
+}
+
+.popup-content summary{
+    font-size: clamp(8px, 1.7vw, 12px);
+}
+
+#amenities-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .1rem;
+}
+
+#amenities-container label{
+    font-size: clamp(8px, 10px, 12px);
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1.5rem;
+}
+
+.popup-buttons button {
+    padding: .5rem 1rem;
+    border: none;
+    background-color: #275158;
+    color: #ffffff;
+    border-radius: 8px;
     cursor: pointer;
 }
 
-#addPWorkspace:hover {
-    background-color: #e6e6e6;
+.popup-buttons #deleteWorkspace {
+    background-color: #7c1717;
 }
 
-#myPropertyForm {
+.popup-buttons #closePopup {
+    background-color: #5e6a6c;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+form {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+/* Container to cover the whole viewport */
+#propertyPopup {
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-content {
+    background-color: #f1ede8;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
   }
   
 
 
 
-@media screen and (max-width: 768px) {
-    body {
-        grid-template-rows: auto auto auto;
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "header"
-            "main"
-            "footer";
-    }
-}
+
+

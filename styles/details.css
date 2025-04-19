@@ -212,24 +212,13 @@ form .signup-link a:hover {
     justify-content: center;
     gap: .2rem;
 }
-.ownerDetailsButton, .bookingButton, n{
-    padding: .3rem 1.5rem;
-    font-size: clamp(12px, 3vw, 16px);
-    font-weight: 50px;
-    background-color: #f1ede8;
-    color: rgb(0, 0, 0);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
 
-.bookingBtn{
+
+.bookingBtn, .ownerBtn, .reviewBtn{
     padding: .3rem 1.5rem;
     font-size: clamp(20px, 6vw, 25px);
     background-color: var(--prim);
     color: white;
-
 }
 
 .login-link{
@@ -324,6 +313,7 @@ form .signup-link a:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
 .popup-content{ 
@@ -379,4 +369,3 @@ form .signup-link a:hover {
 .reviewBody{
     font-size:30;
 }
-

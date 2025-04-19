@@ -1,4 +1,4 @@
-import { workspaces } from "./data/workspaceData.js";
+import { workspaces } from ".data/workspaceData.js";
 
 
 $(document).ready(function () {
