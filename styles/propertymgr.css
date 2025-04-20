@@ -123,6 +123,8 @@ element.style {
 }
 
 .popup-buttons button {
+    font-size: clamp(10px, 1.5vw, 14px);
+    font-weight: bold;
     padding: .5rem 1rem;
     border: none;
     background-color: #275158;
@@ -131,12 +133,31 @@ element.style {
     cursor: pointer;
 }
 
-.popup-buttons #deleteWorkspace {
+.popup-buttons button:hover {
+    background-color: #40828d;
+}
+
+.popup-buttons #deleteWorkspace{
     background-color: #7c1717;
 }
 
-.popup-buttons #closePopup {
-    background-color: #5e6a6c;
+
+.popup-buttons #closeWorkspacePopup:hover{
+    background-color: #7c1717;
+}
+
+.popup-buttons #deleteProperty{
+    background-color: #7c1717;
+}
+.popup-buttons #deleteProperty:hover{
+    background-color: #7c1717;
+}
+
+.popup-buttons #closePropertyPopup:hover{
+    background-color: #ac1515;
+}
+.popup-buttons #closePropertyPopup{
+    background-color: #880404;
 }
 
 
@@ -164,27 +185,87 @@ form {
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(94, 130, 133, 0.75);
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  #workspacePopup {
+#propertyPopup #workspacePopup .popup-content input,
+#propertyPopup #workspacePopup .popup-content select,
+#propertyPopup #workspacePopup .popup-content textarea {
+    font-size: 1.5rem;
+    padding: 10px;
+    margin-bottom: 12px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #8a8888;
+    background-color: #ffffff;
+}
+
+#workspacePopup .popup-content h2,
+#workspacePopup .popup-content label {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+#workspacePopup {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(94, 130, 133, 0.75);
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#workspacePopup .popup-content {
+    background-color: #fff;
+    padding: 24px 32px;
+    border-radius: 12px;
+    max-height: 85vh;
+    width: 800px;             
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    line-height: 1.5;
+    position: relative;      
+}
+
+/* Close Button (X) */
+#workspacePopup .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+}
+
+#workspacePopup .close-btn:hover {
+    color:#c42727;  
+}
+
+#workspacePopup h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    text-align: center;
+    color: #222;
+}
+
+
   .popup-content {
     background-color: #f1ede8;
     padding: 1rem;
@@ -237,7 +318,7 @@ form {
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
   }
 
-  #toggle-workspaces-btn {
+  .toggle-workspaces-btn {
     background-color: #275158;
     color: white;
     border: none;
@@ -249,7 +330,7 @@ form {
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
   }
 
-  #add-workspace-btn {
+  .add-workspace-btn {
     background-color: #40828d;
     color: white;
     border: none;
@@ -281,8 +362,94 @@ form {
     padding: 10px;
   }
 
+ /* === Workspace Card Styling === */
+.workspace-item {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
+    list-style-type: none;
+}
 
-  
+.workspace-item:hover {
+    background-color: #f0feff;
+    box-shadow: 0 4px 10px rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.workspace-item h4.workspaceTitle {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.workspace-item p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.workspace-item button {
+    margin-top: 10px;
+    margin-right: 8px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.workspace-item .edit-workspace-btn {
+    background-color: rgb(122, 119, 119);
+    color: white;
+}
+
+.workspace-item .edit-workspace-btn:hover {
+    background-color: #949494;
+}
+
+.workspace-item .delete-workspace-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.workspace-item .delete-workspace-btn:hover {
+    background-color: #a71d2a;
+}
+
+.workspace-item .workspaceTitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+    background-color: rgba(39, 125, 133, 0.774);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+#workspacePopupTitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color:#ffffff;
+    background-color: rgb(51, 163, 173);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+#propertyPopupTitle {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color:#ffffff;
+    background-color: rgb(51, 163, 173);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
 
 
 

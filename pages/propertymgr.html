@@ -120,12 +120,14 @@
     <!-- Add Workspace Popup -->
     <div id="workspacePopup" class="popup-container" style="display:none;">
         <div class="popup-header">
+            
             <h2 id="workspacePopupTitle"></h2>
-            <button id="closeWorkspacePopup" class="close-button">X</button>
+            
         <div class="popup-content">
-            <h2 id="workspacePopupTitle"></h2>
+        
             <form id="workspaceForm">
                 <p>
+                    <button class="close-btn" id="closeWorkspacePopup">X</button>
                     <label for="workspaceName">Workspace Name:</label>
                     <input type="text" id="workspaceName" name="workspaceName">
                 </p>
@@ -157,59 +159,60 @@
                     <label for="price">Price:</label>
                     <input type="number" id="price" name="price">
                 </p>
-
-                <p>
-                    <label for="amenities">Amenities:</label>
-                    <br>
-                    <input type="checkbox" class="amenity" id="Full Kitchen" name="Full Kitchen" value="Full Kitchen">
-                    <label for="Full Kitchen">Full Kitchen</label><br>
-                    <input type="checkbox" class="amenity" id="Microwave" name="Microwave" value="Microwave">
-                    <label for="Microwave">Microwave</label><br>
-                    <input type="checkbox" class="amenity" id="Coffee Maker" name="Coffee Maker" value="Coffee Maker">
-                    <label for="Coffee Maker">Coffee Maker</label><br>
-                    <input type="checkbox" class="amenity" id="Copy/Print Equipment" name="Copy/Print Equipment" value="Copy/Print Equipment">
-                    <label for="Copy/Print Equipment">Copy/Print Equipment</label><br>
-                    <input type="checkbox" class="amenity" id="Projector" name="Projector" value="Projector">
-                    <label for="Projector">Projector</label><br>
-                    <input type="checkbox" class="amenity" id="High-Speed Wi-Fi" name="High-Speed Wi-Fi" value="High-Speed Wi-Fi">
-                    <label for="High-Speed Wi-Fi">High-Speed Wi-Fi</label><br>
-                    <input type="checkbox" class="amenity" id="Whiteboards" name="Whiteboards" value="Whiteboards">
-                    <label for="Whiteboards">Whiteboards</label><br>
-                    <input type="checkbox" class="amenity" id="Conference Phones" name="Conference Phones" value="Conference Phones">
-                    <label for="Conference Phones">Conference Phones</label><br>
-                    <input type="checkbox" class="amenity" id="Adjustable Desks" name="Adjustable Desks" value="Adjustable Desks">
-                    <label for="Adjustable Desks">Adjustable Desks</label><br>
-                    <input type="checkbox" class="amenity" id="Ergonomic Chairs" name="Ergonomic Chairs" value="Ergonomic Chairs">
-                    <label for="Ergonomic Chairs">Ergonomic Chairs</label><br>
-                    <input type="checkbox" class="amenity" id="Secure Storage/Lockers" name="Secure Storage/Lockers" value="Secure Storage/Lockers">
-                    <label for="Secure Storage/Lockers">Secure Storage/Lockers</label><br>
-                    <input type="checkbox" class="amenity" id="Mail and Package Handling" name="Mail and Package Handling" value="Mail and Package Handling">
-                    <label for="Mail and Package Handling">Mail and Package Handling</label><br>
-                    <input type="checkbox" class="amenity" id="Outdoor Seating/Patio" name="Outdoor Seating/Patio" value="Outdoor Seating/Patio">
-                    <label for="Outdoor Seating/Patio">Outdoor Seating/Patio</label><br>
-                    <input type="checkbox" class="amenity" id="Receptionist/Front Desk Service" name="Receptionist/Front Desk Service" value="Receptionist/Front Desk Service">
-                    <label for="Receptionist/Front Desk Service">Receptionist/Front Desk Service</label><br>
-                    <input type="checkbox" class="amenity" id="Soundproofing" name="Soundproofing" value="Soundproofing">
-                    <label for="Soundproofing">Soundproofing</label><br>
-                    <input type="checkbox" class="amenity" id="Lounge Areas" name="Lounge Areas" value="Lounge Areas">
-                    <label for="Lounge Areas">Lounge Areas</label><br>
-                    <input type="checkbox" class="amenity" id="Casual Seating" name="Casual Seating" value="Casual Seating">
-                    <label for="Casual Seating">Casual Seating</label><br>
-                    <input type="checkbox" class="amenity" id="Tech Support" name="Tech Support" value="Tech Support">
-                    <label for="Tech Support">Tech Support</label><br>
-                    <input type="checkbox" class="amenity" id="Security Cameras" name="Security Cameras" value="Security Cameras">
-                    <label for="Security Cameras">Security Cameras</label><br>
-                    <input type="checkbox" class="amenity" id="Snack Bar" name="Snack Bar" value="Snack Bar">
-                    <label for="Snack Bar">Snack Bar</label><br>
-                    <input type="checkbox" class="amenity" id="Vending Machines" name="Vending Machines" value="Vending Machines">
-                    <label for="Vending Machines">Vending Machines</label><br>
-                    <input type="checkbox" class="amenity" id="Fitness Room" name="Fitness Room" value="Fitness Room">
-                    <label for="Fitness Room">Fitness Room</label><br>
-                    <input type="checkbox" class="amenity" id="Gym Access" name="Gym Access" value="Gym Access">
-                    <label for="Gym Access">Gym Access</label><br>
-                    <input type="checkbox" class="amenity" id="Natural Lighting" name="Natural Lighting" value="Natural Lighting">
-                    <label for="Natural Lighting">Natural Lighting</label><br>
-                </p>
+                        <p>
+                            <label for="amenities">Amenities:</label>
+                            <br>
+                    <div class="amenities-list">
+                            <input type="checkbox" class="amenity" id="Full Kitchen" name="Full Kitchen" value="Full Kitchen">
+                            <label for="Full Kitchen">Full Kitchen</label><br>
+                            <input type="checkbox" class="amenity" id="Microwave" name="Microwave" value="Microwave">
+                            <label for="Microwave">Microwave</label><br>
+                            <input type="checkbox" class="amenity" id="Coffee Maker" name="Coffee Maker" value="Coffee Maker">
+                            <label for="Coffee Maker">Coffee Maker</label><br>
+                            <input type="checkbox" class="amenity" id="Copy/Print Equipment" name="Copy/Print Equipment" value="Copy/Print Equipment">
+                            <label for="Copy/Print Equipment">Copy/Print Equipment</label><br>
+                            <input type="checkbox" class="amenity" id="Projector" name="Projector" value="Projector">
+                            <label for="Projector">Projector</label><br>
+                            <input type="checkbox" class="amenity" id="High-Speed Wi-Fi" name="High-Speed Wi-Fi" value="High-Speed Wi-Fi">
+                            <label for="High-Speed Wi-Fi">High-Speed Wi-Fi</label><br>
+                            <input type="checkbox" class="amenity" id="Whiteboards" name="Whiteboards" value="Whiteboards">
+                            <label for="Whiteboards">Whiteboards</label><br>
+                            <input type="checkbox" class="amenity" id="Conference Phones" name="Conference Phones" value="Conference Phones">
+                            <label for="Conference Phones">Conference Phones</label><br>
+                            <input type="checkbox" class="amenity" id="Adjustable Desks" name="Adjustable Desks" value="Adjustable Desks">
+                            <label for="Adjustable Desks">Adjustable Desks</label><br>
+                            <input type="checkbox" class="amenity" id="Ergonomic Chairs" name="Ergonomic Chairs" value="Ergonomic Chairs">
+                            <label for="Ergonomic Chairs">Ergonomic Chairs</label><br>
+                            <input type="checkbox" class="amenity" id="Secure Storage/Lockers" name="Secure Storage/Lockers" value="Secure Storage/Lockers">
+                            <label for="Secure Storage/Lockers">Secure Storage/Lockers</label><br>
+                            <input type="checkbox" class="amenity" id="Mail and Package Handling" name="Mail and Package Handling" value="Mail and Package Handling">
+                            <label for="Mail and Package Handling">Mail and Package Handling</label><br>
+                            <input type="checkbox" class="amenity" id="Outdoor Seating/Patio" name="Outdoor Seating/Patio" value="Outdoor Seating/Patio">
+                            <label for="Outdoor Seating/Patio">Outdoor Seating/Patio</label><br>
+                            <input type="checkbox" class="amenity" id="Receptionist/Front Desk Service" name="Receptionist/Front Desk Service" value="Receptionist/Front Desk Service">
+                            <label for="Receptionist/Front Desk Service">Receptionist/Front Desk Service</label><br>
+                            <input type="checkbox" class="amenity" id="Soundproofing" name="Soundproofing" value="Soundproofing">
+                            <label for="Soundproofing">Soundproofing</label><br>
+                            <input type="checkbox" class="amenity" id="Lounge Areas" name="Lounge Areas" value="Lounge Areas">
+                            <label for="Lounge Areas">Lounge Areas</label><br>
+                            <input type="checkbox" class="amenity" id="Casual Seating" name="Casual Seating" value="Casual Seating">
+                            <label for="Casual Seating">Casual Seating</label><br>
+                            <input type="checkbox" class="amenity" id="Tech Support" name="Tech Support" value="Tech Support">
+                            <label for="Tech Support">Tech Support</label><br>
+                            <input type="checkbox" class="amenity" id="Security Cameras" name="Security Cameras" value="Security Cameras">
+                            <label for="Security Cameras">Security Cameras</label><br>
+                            <input type="checkbox" class="amenity" id="Snack Bar" name="Snack Bar" value="Snack Bar">
+                            <label for="Snack Bar">Snack Bar</label><br>
+                            <input type="checkbox" class="amenity" id="Vending Machines" name="Vending Machines" value="Vending Machines">
+                            <label for="Vending Machines">Vending Machines</label><br>
+                            <input type="checkbox" class="amenity" id="Fitness Room" name="Fitness Room" value="Fitness Room">
+                            <label for="Fitness Room">Fitness Room</label><br>
+                            <input type="checkbox" class="amenity" id="Gym Access" name="Gym Access" value="Gym Access">
+                            <label for="Gym Access">Gym Access</label><br>
+                            <input type="checkbox" class="amenity" id="Natural Lighting" name="Natural Lighting" value="Natural Lighting">
+                            <label for="Natural Lighting">Natural Lighting</label><br>
+                        </p>
+                    </div>
                 <div class="popup-buttons">
                     <button type="button" id="saveWorkspace">Save</button>
                     <button type="button" id="closeWorkspacePopup">Close</button>
