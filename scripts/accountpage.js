@@ -12,7 +12,9 @@ $(document).ready(async function () {
         return;
     }
     try {
+
         const response = await fetch("http://localhost:3000/profile1", {
+
             method: "GET",
             headers: {//Decoding
                 Authorization: `Bearer ${token}`//Decoding
@@ -20,13 +22,14 @@ $(document).ready(async function () {
         });
         const userData = await response.json(); //Wait for backend to send back to frontend then store in data
         if (response.ok) {
+            console.log("Setting user info...");
             document.getElementById("email").textContent = userData.email;
             document.getElementById("phone").textContent = userData.phoneNumber;
             document.getElementById("owner-status").textContent = userData.owner;
             document.getElementById("coworker-status").textContent = userData.coworker;
-            document.getElementById("first-name").textContent = userData.firstName;
+            document.getElementById("profile-first-name").textContent = userData.firstName;
             document.getElementById("last-name").textContent = userData.lastName;
-
+            console.log("userData:", userData);
         }
         else {
             alert("We can not get your information!")
@@ -63,7 +66,9 @@ $('#save-password').click(async function () {
     }
 
     try {
-        const response = await fetch("/changePassword", {
+
+        const response = await fetch("http://localhost:3000/changePassword", {
+
             method: "PATCH",
             headers: {//Decoding
                 "Content-Type": "application/json",

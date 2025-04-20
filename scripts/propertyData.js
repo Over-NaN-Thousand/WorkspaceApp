@@ -36,7 +36,7 @@ const properties = [
     country: "Canada",
     neighbourhood: "Tunnel Mountain",
     imgFileName: "RockyMountainVentures.jpg",
-    ownerId: 4 // Diana
+    ownerId: 59715 // Alice
   },
   {
     propertyId: 4,

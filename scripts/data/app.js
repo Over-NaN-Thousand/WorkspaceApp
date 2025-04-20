@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const path = require("path");
 //const { MongoClient } = require('mongodb');
 
 
@@ -12,7 +13,6 @@ const {
     ObjectId,
     hashPassword,
     verifyToken,
-
     deleteOneFieldInOneObject,
     deleteOneFieldInManyObject,
     deleteManyFieldInOneObject,
@@ -57,6 +57,7 @@ const crypto = require('node:crypto');
 app.use(cors()); // allow all requests.
 app.use(express.json()); // Convert to parse json
 
+
 const DATABASE = "WorkspaceApp";
 
 
@@ -97,56 +98,114 @@ const DATABASE = "WorkspaceApp";
 
 //==================================Routes for Property===================================================//
 
-app.post("/properties", verifyToken, async (req, res) => {
+
+
+//==================================End of Routes for Property===================================================//
+//Add property
+/*app.post('/addProperties', verifyToken,async (req, res) => {
+    try {
+        const all = await findManyField("properties", {});
+        const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
+        const newId = maxId + 1;
+      const newProperty ={
+        ...req.body,
+        propertyId: newId,
+
+      };
+
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
+
+  //Display property
+  app.get('/myProperty', verifyToken, async (req, res) => {
+    try {
+      const email = req.user.email;
+      const all = await findManyField("properties", { ownerEmail: email });
+  
+      if (!all || all.length === 0) {
+        return res.status(404).json({ message: 'No properties found' });
+      }
+  
+
+      res.status(200).json(all);
+    } catch (err) {
+      console.error("Error in /myProperty:", err);
+      res.status(500).json({ error: 'Failed to fetch property' });
+    }
+  });*/ //Repeated by Victor
+
+  app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
-    if (!newProperty.name || !newProperty.ownerId)  // make sure all required fields are provided
-        return res.status(400).json({ message: "Missing required fields: propertyId, name, or ownerId." });
-
     try {
-        const highestPropertyId = await connectToDatabaseB(getHighestId,"properties","propertyId"); //get current highest propertyId, we'll add 1
-        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1; // ? is the optional chaining operator, if highestPropertyId is null or undefined, it will return 0
+        // Lookup owner by email
+        const owner = await connectToDatabaseB(
+            async (client) => {
+                return await client
+                    .db(DATABASE)
+                    .collection("usersData") 
+                    .findOne({ email: newProperty.ownerEmail }); // Find owner by email
+            }
+        );
+
+        if (!owner) {
+            return res.status(404).json({ message: "Owner not found for given email." });
+        }
+
+        // check if all required fields are present
+        if (!newProperty.name || !newProperty.ownerEmail) {
+            return res.status(400).json({ message: "Missing required fields: name or ownerEmail." });
+        }
+
+        const highestPropertyId = await connectToDatabaseB(getHighestId, "properties", "propertyId");
+        newProperty.propertyId = (highestPropertyId?.propertyId || 0) + 1;
 
         const result = await connectToDatabaseB(createProperty, newProperty);
-            if (result.acknowledged) {
-                res.status(201).json({ message: "Property created successfully.", property: newProperty });
-            } else {
-                res.status(500).json({ message: "Failed to create property." });
-            }
+
+        if (result.acknowledged) {
+            res.status(201).json({ message: "Property created successfully.", property: newProperty });
+        } else {
+            res.status(500).json({ message: "Failed to create property." });
+        }
     } catch (error) {
         console.error("Error creating property:", error);
         res.status(500).json({ message: "An error occurred while creating the property." });
     }
 });
 
-app.get("/properties", verifyToken,async (req, res) => {
-    const filters = {};
-
-    const ownerId = Number(req.headers["userid"] || req.query.userid); // try to get userId from headers, after that from query string
-    if (!isNaN(ownerId)) {
-        filters.ownerId = ownerId; 
-    } else {
-        console.error("Invalid ownerId provided:", ownerId);
-        return res.status(400).json({ message: "Invalid ownerId format." });
-    }
-
-    const propertyName = req.headers["name"] || req.query.name;
-    if (propertyName) 
-        filters.name = { $regex: req.query.name, $options: "i" }; // AL: MongoDB regex similar to LIKE, i for case-insensitive
-
+app.get('/properties', verifyToken, async (req, res) => {
     try {
-        const properties = await connectToDatabaseB(readProperties, filters);
-        // console.dir(properties);
-        res.status(200).json({ properties });
-    } catch (error) {
-        console.error("Error fetching properties:", error);
-        res.status(500).json({ message: "An error occurred while fetching properties." });
+        const { email } = req.user;
+        if (!email) return res.status(400).json({ error: 'Email missing from token' });
+
+        const properties = await connectToDatabaseB(async (client) => {
+            return await client
+                .db(DATABASE)
+                .collection("properties")
+                .find({ ownerEmail: email })
+                .toArray();
+        });
+
+        if (!properties.length) {
+            return res.status(404).json({ error: "No properties found for this owner." });
+        }
+
+        res.json({ properties });
+    } catch (err) {
+        console.error("Error in /properties:", err);
+        res.status(500).json({ error: "Failed to fetch properties." });
     }
+
 });
 
+
 app.put("/properties/:id", verifyToken,async (req, res) => {
-    const propertyId = Number(req.params.id);       // get the property ID
-    const updates = req.body;                       // get the updates
+    const propertyId = Number(req.params.id);       
+    const updates = req.body;                       
 
     if (isNaN(propertyId))
         return res.status(400).json({ message: "Invalid property ID provided." });
@@ -241,7 +300,6 @@ const salt = crypto.randomBytes(64).toString('hex');
 });
 
 
-
 app.post('/login', async (req, res) => {
     const { email, password } = req.body; //Get the email, password from frontend
 
@@ -277,6 +335,7 @@ app.post('/login', async (req, res) => {
 
 });
 
+
 //Testing used
 app.get('/protect', verifyToken, (req, res) => { //Get the token from user then decode it
     try {
@@ -286,6 +345,7 @@ app.get('/protect', verifyToken, (req, res) => { //Get the token from user then 
         res.status(500).json({ error: "Failed to get user data." });
     }
 });
+
 //Getting all data from user, frontend will take the data then display them
 app.get('/profile1', verifyToken, async (req, res) => {  //Named:/profile, verifyToken=check if the user is authorizled
     const { email } = req.user; // Get the email from token(I only stored email into the token as an id use)
@@ -359,6 +419,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
     }
 });
 
+
 app.delete('/user', verifyToken, async (req, res) => {
     const userEmail = req.headers["email"] || req.query.email;
     try {
@@ -376,9 +437,51 @@ app.delete('/user', verifyToken, async (req, res) => {
 });
 
 
+
+
 //==================================End of Routes for user==========================================================//
 
+//==================================Routes for WorkspaceDetails===================================================//
 
+
+
+/*app.post('/addWorkspaces', verifyToken, async (req, res) => {
+  try {
+
+    const newWorkspace = req.body;
+ 
+    const result = await insertOneObject("workspaces", newWorkspace);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error("[ /workspaces Error]:", error);
+    res.status(500).json({ error: 'Failed to save workspace' });
+  }
+});*/ //Repeated by Victor
+
+//Add property
+/*app.post('/properties', verifyToken,async (req, res) => {
+    try {
+      const newProperty = req.body;
+      const result = await insertOneObject("properties", newProperty);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to save property' });
+    }
+  });
+
+  app.post('/workspaces', verifyToken, async (req, res) => {
+    try {
+      const newWorkspace = req.body;
+  
+      const result = await insertOneObject("workspaces", newWorkspace);
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("[ /workspaces Error]:", error);
+      res.status(500).json({ error: 'Failed to save workspace' });
+    }
+  });*/
+
+//==================================End of Routes for WorkspaceDetails===================================================//
 
 
 
@@ -387,6 +490,7 @@ app.delete('/user', verifyToken, async (req, res) => {
 //==================================Routes for WorkspaceDetails===================================================//
 
   app.post("/workspaces", verifyToken,async (req, res) => {
+
     const newWorkspace = req.body;
     console.log("New workspace data:", newWorkspace); // For debugging
     // check that required fields were provided
@@ -432,7 +536,9 @@ app.delete('/user', verifyToken, async (req, res) => {
 });
 
 
+
 app.get("/workspacedetails", verifyToken,async (req, res) => {
+
     try {
         const filters = {};
         //AL : !discovery! HTTP headers are case insensitive but JavaScript's object (like in Express.js), all header keys are automatically converted to lowercase. 
@@ -556,6 +662,100 @@ app.delete("/workspaces/:id", verifyToken,async (req, res) => {
     }
 });
 
+
+//-------------------Public workspace route (no token needed to access)-----------------//
+
+// Getting all data from workspaces
+app.get("/publicWorkspaces",async (req, res) => {
+
+    try {
+        const filters = {};
+        
+        const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
+        if (workspaceName) 
+            filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
+
+        const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
+        if (workspaceType)
+            filters.workspaceType = workspaceType;
+
+        const leaseTerm = req.headers["leaseterm"] || req.query.leaseTerm;
+        if (leaseTerm)
+            filters.leaseTerm = leaseTerm;
+
+        const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
+        const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
+            filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
+
+        const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
+        const maxSeatCapacity = Number(req.headers["maxcapacity"] || req.query.maxCapacity);
+        if (!isNaN(minSeatCapacity) || !isNaN(maxSeatCapacity))
+            filters.seatCapacity = buildMinMaxFilter(minSeatCapacity, maxSeatCapacity);
+
+        const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
+        const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
+            filters.price = buildMinMaxFilter(minPrice, maxPrice);
+
+        const amenities = req.headers["amenities"] || req.query.amenities;
+        if (amenities) {
+            filters.amenities = { $all: [].concat(amenities) }; // make sure amenities is always an array
+        }
+
+
+        const workspaces = await connectToDatabaseB(getWorkspacesWithProperties, filters);
+        res.status(200).json({ workspaces });
+        console.log("Retreived number of workspaces:", workspaces.length); // For debugging
+    } catch (error) {
+        console.error("Error fetching workspaces:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspaces." });
+    }
+});
+
+
+
+//getting Owner data for contact info display
+app.get('/ownerContactInfo/:ownerId', async (req, res) => {
+    const { ownerId } = req.params;
+
+    try {
+        const owner = await findOneField("usersData", { userId: Number(ownerId) });
+
+        if (!owner)
+            return res.status(404).json({ error: "Owner not found" });
+
+        res.status(200).json({
+            firstName: owner.firstName,
+            lastName: owner.lastName,
+            email: owner.email,
+            phoneNumber: owner.phoneNumber
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+);
+
+app.get('/ownersWorkspaceList/:ownerId', async (req, res) => {
+    const { ownerId } = req.params;
+
+    try {
+        const ownersWorkspaceList = await findManyField("workspaces", {
+            ownerId: Number(ownerId)
+        });
+
+        if (!ownersWorkspaceList || ownersWorkspaceList.length === 0) {
+            return res.status(404).json({ error: "No workspaces found for this owner" });
+        }
+
+        res.status(200).json(ownersWorkspaceList);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
 //==================================End of Routes for WorkspaceDetails===================================================//
 
 
@@ -602,7 +802,7 @@ app.post('/bookings', verifyToken, async (req, res) => {
 });
 
 // GET: Retrieve all bookings
-app.get('/bookings', async (req, res) => {
+app.get('/bookings',verifyToken, async (req, res) => {
     try {
         await connectToDatabase(async (db) => {
             const bookings = await db.collection("bookings").find({}).toArray();
@@ -685,10 +885,5 @@ app.delete('/bookings/:id', verifyToken, async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
-
 
 
