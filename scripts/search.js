@@ -177,6 +177,9 @@ function DisplayWorkspaces(workspaceList){
                     <p><strong>Neighborhood:</strong> ${workspace.neighborhood}</p>
                     <p><strong>Location:</strong> ${workspace.address1}, ${workspace.city}, ${workspace.province}, ${workspace.country}</p>
                     <p><strong>Amenities:</strong> ${workspace.amenities.join(", ")}</p>
+                    <p><strong>Smoking:</strong> ${workspace.smoking ? "Allowed" : "Not Allowed"}</p>
+                    <p><strong>Parking:</strong> ${workspace.parking ? "Available" : "Not Available"}</p>
+                    <p><strong>Public Transport:</strong> ${workspace.publicTranspo ? "Accessible" : "Not Accessible"}</p>
                     <a href="pages/workspaceDetails.html?workspaceid=${workspace.workspaceID}" class="btnWSdetail">Details</a>
                 </div>
             </section>`;

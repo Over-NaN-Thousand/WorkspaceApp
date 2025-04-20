@@ -539,6 +539,9 @@ async function getWorkspacesWithProperties(client, filters) {
                         propertyId: 1,
                         ownerId: 1,
                         rating: 1,
+                        smoking: 1,
+                        parking: 1,
+                        publicTranspo: 1,
                         name: "$propertyDetails.name",
                         address1: "$propertyDetails.address1",
                         address2: "$propertyDetails.address2",
@@ -549,7 +552,6 @@ async function getWorkspacesWithProperties(client, filters) {
                         neighborhood: "$propertyDetails.neighbourhood", 
                         propertyImgFileName: "$propertyDetails.imgFileName", 
                         propertyOwnerId: "$propertyDetails.ownerId"
-                    
                     }
                 }
 
