@@ -19,10 +19,15 @@
 // });
 
 
+
+
+
 const fetchAllWorkspaces = async ()=> {
     try {
-        // Make a GET request to your backend endpoint
-        const response = await fetch("http://localhost:3000/workspaces");
+  
+        //public/workspacedetails is the endpoint to get all workspaces without a token
+        const response = await fetch("http://localhost:3000/publicWorkspaces");
+
         
         if (!response.ok) {
             throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
@@ -52,12 +57,17 @@ const fetchAllWorkspaces = async ()=> {
     } 
 }
 
-const allWorkspaces = await fetchAllWorkspaces();
-console.log(allWorkspaces); // AL - check if all workspaces are loaded correctly
 
+//const allWorkspaces = await fetchAllWorkspaces();
+//console.log(allWorkspaces); // AL - check if all workspaces are loaded correctly
 
+let allWorkspaces = [];
 
 $(document).ready(function() {
+    (async function () {
+
+    allWorkspaces = await fetchAllWorkspaces(); // Make sure data is ready
+    console.log(allWorkspaces); // Confirm it’s loaded
 
     //Create the filters in the page
     const optWStypes = [...new Set(allWorkspaces.map(workspace => workspace.workspaceType))]; //dynamic by using map // new Set() goes through the list and only adds unique values, but the result is not yet an array, that's what you need the dots before it ...new Set() to make it an array
@@ -89,6 +99,7 @@ $(document).ready(function() {
 
     //run Apply to initialize list
     ClickApplyBtn();
+})();
 });
 
 
@@ -109,6 +120,11 @@ function loadFiltersFromSession() {
     const filters = JSON.parse(sessionStorage.getItem('filters'));
 
     if (filters) {
+        //null/undefined protection for arrays
+        filters.workspaceTypes = filters.workspaceTypes || [];
+        filters.amenities = filters.amenities || [];
+
+
         $('input[name="optWStypes"]').each(function () {
             $(this).prop('checked', filters.workspaceTypes.includes($(this).val())); //mark optWStypes checked if the opt's value is in the list in the filter
         });
@@ -122,8 +138,10 @@ function loadFiltersFromSession() {
         $("#maxPrice").val(filters.maxPrice || '');
         $("#minCapacity").val(filters.minCapacity || '');
         $("#maxCapacity").val(filters.maxCapacity || '');
+         $("#selSort").val(filters.sortField || "workspaceName"); //load sort field
 
-            $("#selSort").val(filters.sortField || "workspaceName"); //load sort field
+        // restores previous filters when the user returns to the page to see their last filtered results
+        DisplayWorkspaces(allWorkspaces); //AL - this will show the filtered workspaces when the page is loaded
     }
 }
 
@@ -289,6 +307,8 @@ function ApplyFilters(workspaceList){
     };
     sessionStorage.setItem('filters', JSON.stringify(filters));
 
+    // SAVE FILTERED WORKSPACE LIST TO SESSION STORAGE
+    sessionStorage.setItem('workspaceList', JSON.stringify(returnList));
 
     //FINALLY! What remains from all these filtering is returned
     return returnList;
@@ -312,4 +332,3 @@ function ClickResetBtn() {
     sessionStorage.removeItem('filters');           //clear session
     DisplayWorkspaces(allWorkspaces);
 }
-
