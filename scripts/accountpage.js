@@ -92,8 +92,8 @@ $('#save-password').click(async function () {
     }
 });
 
-/*
-//This session is for the "Edit Profile" page.
+
+// This session is for the "Edit Profile" page.
 $(document).ready(function() {
     // Get current user data from localStorage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -144,8 +144,15 @@ $(document).ready(function() {
             localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButton = document.getElementById('delete-property-btn');
+            deleteButton.addEventListener('click', () => {
+                alert('Delete Property button clicked!');
+                // Add logic to delete a property
+            });
+        });
+
         // Clear input fields
         $('#current-password, #new-password, #confirm-password').val('');
     });
 });
-*/

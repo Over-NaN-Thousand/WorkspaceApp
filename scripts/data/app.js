@@ -71,7 +71,7 @@ const DATABASE = "WorkspaceApp";
 //==========================================Keep CRUD below=========================================//
 
 //For testing used
-/*app.get(`/test-db`, async (req, res) => {
+app.get(`/test-db`, async (req, res) => {
     try {
         await connectToDatabase(async (client) => {  //Connect to database first
             const databasesList = await client.db().admin().listDatabases(); //Display all database files
@@ -87,7 +87,7 @@ const DATABASE = "WorkspaceApp";
         console.error('Test connection error:', error);
         res.status(500).json({ message: 'Failed to connect to MongoDB', error: error.message });
     }
-});*/
+});
 //======================================================================================================//
 
 
@@ -98,11 +98,29 @@ const DATABASE = "WorkspaceApp";
 
 //==================================Routes for Property===================================================//
 
+app.delete('/property/:id', async (req, res) => {
+    const propertyId = req.params.id; // Get the property ID from the URL parameter
 
+    try {
+        await connectToDatabase(async (client) => {
+            const db = client.db(DATABASE);
+            const result = await db.collection('properties').deleteOne({ _id: new ObjectId(propertyId) }); // Delete the property by ID
+
+            if (result.deletedCount === 1) {
+                res.status(200).json({ message: 'Property deleted successfully!' });
+            } else {
+                res.status(404).json({ error: 'Property not found!' });
+            }
+        });
+    } catch (error) {
+        console.error('Delete property error:', error);
+        res.status(500).json({ error: 'Failed to delete property' });
+    }
+});
 
 //==================================End of Routes for Property===================================================//
 //Add property
-/*app.post('/addProperties', verifyToken,async (req, res) => {
+app.post('/addProperties', verifyToken,async (req, res) => {
     try {
         const all = await findManyField("properties", {});
         const maxId = all.reduce((max, p) => Math.max(max, p.propertyId || 0), 0);
@@ -136,7 +154,7 @@ const DATABASE = "WorkspaceApp";
       console.error("Error in /myProperty:", err);
       res.status(500).json({ error: 'Failed to fetch property' });
     }
-  });*/ //Repeated by Victor
+  }); //Repeated by Victor
 
   app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
