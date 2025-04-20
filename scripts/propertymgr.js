@@ -1,4 +1,8 @@
 let propertiesData = [];  // Declare a global variable to store property data
+let workspaceData = [];  // Declare a global variable to store workspace data
+let currentPropertyId = null;
+
+// =============================================== PROPERTY MANAGER ===========================================================
 
 $(document).ready(async function () {
 
@@ -7,8 +11,11 @@ $(document).ready(async function () {
     const token = localStorage.getItem('token');
     console.log("token:", token);
 
+    await loadProperties();
+
     // ===== OPEN/CLOSE POPUPS =====
     $('#propertyPopup').hide();
+    $('#workspacePopup').hide();
 
     $('#addPropertyBtn').on('click', function () {
         $('#propertyForm')[0].reset();
@@ -22,12 +29,29 @@ $(document).ready(async function () {
         $('#propertyPopupTitle').text('Edit Property');
         $('#propertyPopup').show();
     });  
+    
+    // Delegated because buttons are created dynamically
+    $(document).on('click', '.add-workspace-btn', function () {
+    currentPropertyId = $(this).data('property-id');
+    $('#workspacePopup').data('property-id', currentPropertyId);
+    $('#workspaceForm')[0].reset(); 
+    $('#workspaceForm').removeData('id'); 
+    $('#workspacePopupTitle').text('Add Workspace');
+    $('#workspacePopup').show(); 
+});
+
+     $(document).on('click', '#edit-Workspace-Btn', function () {
+        const workspaceId = $(this).data('workspace-id'); // get from button
+        $('#workspaceForm').data('id', workspaceId);
+        $('#workspacePopupTitle').text('Edit Workspace');
+        $('#workspacePopup').show();
+    });
 
     $('#closePropertyPopup').on('click', function () {
         $('#propertyPopup').hide(); 
     });
 
-    $('#closeWorkspacePopup').on('click', function () {
+    $(document).on('click', '#closeWorkspacePopup', function () {
         $('#workspacePopup').hide(); 
     });
 
@@ -62,14 +86,59 @@ $(document).ready(async function () {
         alert("Failed to load user data.");
     }
 
-    // ===== LOAD PROPERTIES =====
-$(document).ready(function () {
-    loadProperties();  
-});
+// ===== LOAD PROPERTIES =====
 
-    
+async function loadProperties() {
+    const token = localStorage.getItem('token');
 
-// ===== SAVE PROPERTY =====
+    try {
+        const res = await fetch('http://localhost:3000/properties', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        
+        propertiesData = data.properties;
+        
+        console.log("Stored in propertiesData:", propertiesData); // confirm it worked
+
+        $('#property-list').empty();
+
+        propertiesData.forEach(property => {
+            const propertyCard = `
+                <div class="property-card" data-property-id="${property.propertyId}">
+                    <h3>${property.name}</h3>
+                    <p>${property.address1}, ${property.city}, ${property.province}</p>
+                    
+                    <div class="property-details">
+                        <button class="edit-property-btn" data-property-id="${property.propertyId}">Edit</button>
+                        <button class="delete-property-btn" data-property-id="${property.propertyId}">Delete</button>
+
+                            <div class="workspaces-section" data-property-id="${property.propertyId}">
+                                <button class="toggle-workspaces-btn" data-property-id="${property.propertyId}">Show Workspaces</button>
+                                <button class="add-workspace-btn" data-property-id="${property.propertyId}">Add Workspace</button>
+                            </div>
+                    </div>
+
+                    <div class="workspaces-section" data-property-id="${property.propertyId}" style="display: none;">
+                        <ul class="workspaces-card" data-workspace-Id="${property.propertyId}">
+                        </ul>
+                    </div>
+                </div>
+            `;
+            $('#property-list').append(propertyCard);
+        });
+
+    } catch (err) {
+        console.error("Error loading properties:", err);
+    }
+}
+
+// ===== SAVE PROPERTY (ADD/EDIT) =====
+
 $('#saveProperty').on('click', async function () {
     const token = localStorage.getItem('token');
     const form = $('#propertyForm');
@@ -102,8 +171,14 @@ $('#saveProperty').on('click', async function () {
             province: $('#province').val(),
             country: $('#country').val(),
             postalcode: $('#postalCode').val(),
-            ownerEmail: ownerData.email, 
+            ownerEmail: ownerData.email,
+            
+            // Collecting amenities
+            parkingGarage: $('input[name="parkingGarage"]:checked').val() === 'true', 
+            publicTransportation: $('input[name="publicTransportation"]:checked').val() === 'true',
+            smokingAllowed: $('input[name="smokingAllowed"]:checked').val() === 'true' 
         };
+        
 
         const res = await fetch(url, {
             method: method,
@@ -132,48 +207,9 @@ $('#saveProperty').on('click', async function () {
     }
 });
 
-
-// ===== LOAD PROPERTIES =====
-async function loadProperties() {
-    const token = localStorage.getItem('token');
-
-    try {
-        const res = await fetch('http://localhost:3000/properties', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        const data = await res.json();
-        
-        propertiesData = data.properties;
-        
-        console.log("Stored in propertiesData:", propertiesData); // confirm it worked
-
-        $('#property-list').empty();
-
-        propertiesData.forEach(property => {
-            const propertyCard = `
-                <div class="property-card" data-id="${property.propertyId}">
-                    <h3>${property.name}</h3>
-                    <p>${property.address1}, ${property.city}, ${property.province}</p>
-                    <button class="edit-property-btn" data-id="${property.propertyId}">Edit</button>
-                    <button class="delete-property-btn" data-id="${property.propertyId}">Delete</button>
-                    </div>
-            `;
-            $('#property-list').append(propertyCard);
-        });
-
-    } catch (err) {
-        console.error("Error loading properties:", err);
-    }
-}
-
-
 // Edit Property Popup Action
 $(document).on('click', '.edit-property-btn', function () {
-    const propertyId = $(this).data('id');
+    const propertyId = $(this).data('property-id');
     console.log('Edit button clicked. Property ID:', propertyId);
 
     // Find the property object from the globally stored propertiesData array
@@ -238,50 +274,179 @@ $(document).on('click', '.delete-property-btn', async function () {
     }
 });
 
+//===================================== WORKSPACE MANAGER ============================================
 
+// ====== WORKSPACES Toggle ======
 
+$(document).on('click', '.toggle-workspaces-btn', function () {
+    const propertyId = $(this).data('property-id');
+const workspacesSection = $(`.workspaces-section[data-property-id="${propertyId}"]`);
 
- // ===== SAVE WORKSPACE =====
-    $('#saveWorkspace').on('click', async function () {
-        const propertyId = $('#workspacePopup').data('property-id');
-        if (!propertyId) {
-            alert('No property selected for workspace!');
-            return;
-        }
+    if (workspaceData.length === 0 ) {
+        alert("Please add a workspace.");
+        return;
+    }
 
-        const userData = JSON.parse(localStorage.getItem('userData'));  // Get user data from localStorage
+    // Toggle the visibility of the workspaces section
+    workspacesSection.toggle();
+
+    // Toggle button text
+    if (workspacesSection.is(':visible')) {
+        $(this).text('Hide Workspaces');
+    } else {
+        $(this).text('Show Workspaces');
+    }
+
+    // If the workspaces haven't been loaded yet, load them
+    if (!workspacesSection.hasClass('loaded')) {
+        loadWorkspaces(propertyId);
+        workspacesSection.addClass('loaded');
+    }
+
+});
+
+// ===== LOAD Workspaces =====
+
+async function loadWorkspaces(propertyId) {
+    const token = localStorage.getItem('token');
+    
+    try {
+        const res = await fetch('http://localhost:3000/workspaces', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await res.json();
+        
+        workspaceData = data.workspaces.filter(ws => ws.propertyId === propertyId);
+
+        // Store the workspace data in a global variable for later use
+        console.log("Filtered workspaceData:", workspaceData);
+
+        const $workspaceList = $(`#workspaces-${propertyId}`);
+        $workspaceList.empty(); // Clear any previous entries
+
+        workspaceData.forEach(workspace => {
+            const workspaceItem = `
+                <li class="workspace-item" data-id="${workspace.workspaceId}">
+                    <h4>${workspace.name}</h4>
+                    <p>Type: ${workspace.type}</p>
+                    <p>Lease Term: ${workspace.leaseTerm}</p>
+                    <p>Size: ${workspace.sqFt} sq ft</p>
+                    <p>Seats: ${workspace.seatCapacity}</p>
+                    <p>Price: $${workspace.price}</p>
+                    <p>Rating: ${workspace.rating || 'N/A'}</p>
+                    <p>Amenities: ${workspace.amenities.join(', ')}</p>
+                    <button id="edit-workspace-btn" data-id="${workspace.workspaceId}">Edit</button>
+                    <button class="delete-workspace-btn" data-id="${workspace.workspaceId}">Delete</button>
+                </li>
+            `;
+            $workspaceList.append(workspaceItem);
+        });
+
+    } catch (err) {
+        console.error("Error loading workspaces:", err);
+    }
+}
+
+// =====SAVE (ADD/EDIT) Workspace =====
+
+$('#saveWorkspace').on('click', async function () {
+    const token = localStorage.getItem('token');
+    const form = $('#workspaceForm');
+    const workspaceId = form.data('id'); // Will be undefined for new workspace
+
+    const isEdit = !!workspaceId;
+    const method = isEdit ? 'PUT' : 'POST';
+    const url = isEdit 
+        ? `http://localhost:3000/workspaces/${workspaceId}`
+        : `http://localhost:3000/workspaces`;
+
+    try {
+        // Fetch the owner information
+        const ownerRes = await fetch(`http://localhost:3000/profile1`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!ownerRes.ok) throw new Error("Owner not found");
+
+        const ownerData = await ownerRes.json();
+        console.log("Owner Data:", ownerData);  // Log owner data to verify it's being fetched correctly
+
+        // Gather workspace data from the form
         const workspaceData = {
             workspaceName: $('#workspaceName').val(),
             workspaceType: $('#workspaceType').val(),
             leaseTerm: $('#leaseTerm').val(),
-            sqFt: parseInt($('#sqFt').val()),
-            seatCapacity: parseInt($('#seatCapacity').val()),
-            price: parseFloat($('#price').val()),
-            rating: parseFloat($('#rating').val()),
-            amenities: $('#amenities').val().split(',').map(a => a.trim()),
-            propertyId: propertyId,
-            ownerEmail: userData.email  // Use owner email from the logged-in user
+            sqFt: $('#sqFt').val(),
+            seatCapacity: $('#seatCapacity').val(),
+            price: $('#price').val(),
+            amenities: $('.amenity:checked').map(function () {
+                return $(this).val();
+            }).get(),
+            propertyId: currentPropertyId,  
+            ownerEmail: ownerData.email, 
         };
 
+        console.log("Workspace Data:", workspaceData);  
+
+        // Make the request to save the workspace
+        const res = await fetch(url, {
+            method: method,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workspaceData)
+        });
+
+        if (res.ok) {
+            alert(workspaceId ? 'Workspace updated!' : 'Workspace added!');
+            $('#workspacePopup').hide();
+            form[0].reset();
+            form.removeData('id');
+            
+            loadWorkspaces();
+        } else {
+            const errorData = await res.json();
+            alert(`Failed to save workspace: ${errorData.message}`);
+        }
+    } catch (err) {
+        console.error("Error saving workspace:", err);
+        alert('Something went wrong.');
+    }
+});
+
+
+
+// ======= DELETE WORKSPACE ======
+$(document).on('click', '.delete-workspace-btn', async function () {
+    const workspaceId = $(this).data('id');
+    console.log('Delete button clicked. Workspace ID:', workspaceId);
+
+    if (confirm('Are you sure you want to delete this workspace?')) {
         try {
-            const res = await fetch('http://localhost:3000/addWorkspaces', {
-                method: 'POST',
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:3000/workspaces/${workspaceId}`, {
+                method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(workspaceData)
+                }
             });
 
             if (res.ok) {
-                alert('Workspace saved!');
-                $('#workspacePopup').css('display', 'none');
+                alert('Workspace deleted!');
+                loadWorkspaces(); // Reload workspaces after deletion
             } else {
-                alert('Failed to save workspace.');
+                alert('Failed to delete workspace.');
             }
         } catch (err) {
-            console.error("Error saving workspace:", err);
-            alert('Something went wrong.');
+            console.error("Error deleting workspace:", err);
         }
-    });
+    }
+});
 });

@@ -1,6 +1,5 @@
 
 // Get current user data from localStorage
-
 $(document).ready(async function () {
     const currentUser = localStorage.getItem('email');
     const token = localStorage.getItem('token');
@@ -22,13 +21,26 @@ $(document).ready(async function () {
         });
         const userData = await response.json(); //Wait for backend to send back to frontend then store in data
         if (response.ok) {
-            console.log("Setting user info...");
             document.getElementById("email").textContent = userData.email;
             document.getElementById("phone").textContent = userData.phoneNumber;
-            document.getElementById("owner-status").textContent = userData.owner;
-            document.getElementById("coworker-status").textContent = userData.coworker;
             document.getElementById("profile-first-name").textContent = userData.firstName;
             document.getElementById("last-name").textContent = userData.lastName;
+
+            // Set owner status
+            let ownerStatusText = userData.owner === "Yes" ? "Owner" : "";
+            let coworkerStatusText = userData.coworker === "Yes" ? "Coworker" : "";
+
+            let statusMessage = "";
+            if (ownerStatusText && coworkerStatusText) {
+                statusMessage = `You are an ${ownerStatusText} and a ${coworkerStatusText}`;
+            } else if (ownerStatusText) {
+                statusMessage = `You are an ${ownerStatusText}`;
+            } else if (coworkerStatusText) {
+                statusMessage = `You are a ${coworkerStatusText}`;
+            }
+
+            document.getElementById("owner-coworker-status").textContent = statusMessage;
+
             console.log("userData:", userData);
         }
         else {
@@ -38,7 +50,6 @@ $(document).ready(async function () {
     } catch (err) {
         console.error("Fetch error:", err);
         alert("Failed to load user data.");
-        console.log("Received from /profile1:", data);
     }
 });
 /*

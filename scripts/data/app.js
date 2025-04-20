@@ -35,6 +35,7 @@ const {
     readProperties,
     updateProperty,
     deleteProperty,
+    createWorkspace,
     getWorkspacesWithProperties,
     getWorkspaces,
     updateWorkspace,
@@ -47,6 +48,7 @@ const PORT = process.env.PORT || 3000;
 //Import jsonwebtoken and crypto(For member)
 const jwt = require('jsonwebtoken');
 const crypto = require('node:crypto');
+const { connect } = require('node:http2');
 
 
 //const saltString = salt.toString(`hex`);
@@ -487,42 +489,36 @@ app.delete('/user', verifyToken, async (req, res) => {
 
 
 
-//==================================Routes for WorkspaceDetails===================================================//
+//==================================Routes for Workspaces ===================================================//
 
-  app.post("/workspaces", verifyToken,async (req, res) => {
-
+app.post("/workspaces", verifyToken, async (req, res) => {
     const newWorkspace = req.body;
     console.log("New workspace data:", newWorkspace); // For debugging
-    // check that required fields were provided
-    if (!newWorkspace.propertyId || !newWorkspace.workspaceName || !newWorkspace.ownerId) {
-        return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerId." });
-    }
-    
 
     try {
-        // check that property is valid
-        const propertyExists = await connectToDatabaseB(async (client) => {
-            return await client
-                .db(DATABASE)
-                .collection("properties")
-                .findOne({ propertyId: newWorkspace.propertyId });
-        });
-        
-        if (!propertyExists) {
-            return res.status(400).json({ message: "Invalid propertyId provided. Property does not exist." });
+        // Lookup owner by email
+        const owner = await connectToDatabaseB(
+            async (client) => {
+                return await client
+                    .db(DATABASE)
+                    .collection("usersData") 
+                    .findOne({ email: newWorkspace.ownerEmail }); // Find owner by email
+            }
+        );
+
+        if (!owner) {
+            return res.status(404).json({ message: "Owner not found for given email." });
         }
 
-        // get highest workspaceID then add 1
+        // Check for missing required fields
+        if (!newWorkspace.workspaceName || !newWorkspace.ownerEmail) {
+            return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerEmail." });
+            }
+
         const highestWorkspaceId = await connectToDatabaseB(getHighestId, "workspaces", "workspaceID");
         newWorkspace.workspaceID = (highestWorkspaceId?.workspaceID || 0) + 1;
 
-        // add new workspace
-        const result = await connectToDatabaseB(async (client) => {
-            return await client
-                .db(DATABASE)
-                .collection("workspaces")
-                .insertOne(newWorkspace);
-        });
+        const result = await connectToDatabaseB(createWorkspace, newWorkspace);
 
         if (result.acknowledged) {
             res.status(201).json({ message: "Workspace created successfully.", workspace: newWorkspace });

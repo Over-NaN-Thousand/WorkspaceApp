@@ -97,7 +97,7 @@ const userData = [
     password: "HannahBear123",
     owner: "No",
     coworker: "Yes",
-    properties: []    },
+    properties: []    }
   {
     id: 34567,
     firstName: "Ian",

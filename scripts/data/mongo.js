@@ -562,6 +562,20 @@ async function getWorkspacesWithProperties(client, filters) {
     }
 }
 
+async function createWorkspace(client, workspace) {
+    try {
+        const result = await client
+            .db(DATABASE)
+            .collection("workspaces")
+            .insertOne(workspace); // insert the workspace
+        
+        console.log(`Workspace inserted successfully with ID: ${result.insertedId}`);
+        return result;
+    } catch (error) {
+        console.error("Error inserting workspace into the database:", error);
+        throw error;
+    }
+}
 
 async function getWorkspaces(client, filters) {
     try {
@@ -668,6 +682,7 @@ module.exports = {
     readProperties,
     updateProperty,
     deleteProperty,
+    createWorkspace,
     getWorkspacesWithProperties,
     getWorkspaces,
     updateWorkspace,
