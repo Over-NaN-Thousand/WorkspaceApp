@@ -127,7 +127,7 @@ $('.ownerBtn').on('click', async function () {
 
     try {
         // Make a request to the backend to fetch workspace and owner info
-        const response = await fetch(`http://localhost:3000/workspaceDetails/${workspaceID}`);
+        const response = await fetch(`http://localhost:3000/workspaceDetails/${workspaceID}`, {method:'GET'});
         
         if (response.ok) {
             const data = await response.json();
@@ -163,19 +163,20 @@ $('.ownerBtn').on('click', async function () {
 
 //------------------------Owner contact info---------------------------------//
 $(document).on('click', '.ownerBtn', async function () {
-    if (!selectedWorkspace || !selectedWorkspace.propertyId || !selectedWorkspace.propertyId.ownerId) {
+    if (!selectedWorkspace) {
         console.error("No ownerId found in selectedWorkspace");
         $(".ownerName").text("No owner information found.");
         $(".contactInfo").html(`<p>Not available</p>`);
         return;
     }
 
-    const ownerId = selectedWorkspace.propertyId.ownerId;
+    const ownerEmail = selectedWorkspace.ownerEmail;
 
     try {
-        const response = await fetch(`http://localhost:3000/ownerContactInfoById/${ownerId}`);
+        const response = await fetch(`http://localhost:3000/ownerContactInfoById/${ownerEmail}`, {method:'GET'});
         if (response.ok) {
             const ownerData = await response.json();
+            console.log("Owner Data:", ownerData); // Log the owner data for debugging
             $(".ownerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
             $(".contactInfo").html(`
                 <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>

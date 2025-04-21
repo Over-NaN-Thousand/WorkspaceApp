@@ -662,20 +662,24 @@ app.delete("/workspaces/:id", verifyToken,async (req, res) => {
 //-------------------Public workspace route (no token needed to access)-----------------//
 
 app.get("/workspaceDetails/:workspaceID", async (req, res) => {
-    const workspaceID = req.params.workspaceID;
-
+    
+    //const db = await connectToDatabase();
     try {
+        const workspaceID = parseInt(req.params.workspaceID);
         // Fetch the workspace based on the workspaceID
-        const workspace = await db.workspaces.findOne({ workspaceID: workspaceID });
-
+        const workspace = await findOneField("workspaces", { workspaceID });
+        console.log(workspaceID);
         if (!workspace) {
             return res.status(404).json({ message: "Workspace not found." });
         }
 
         // Fetch the owner's contact info using ownerEmail from the workspace data
         const ownerEmail = workspace.ownerEmail;
-        const owner = await db.users.findOne({ email: ownerEmail });
-
+        if (!ownerEmail) {
+            return res.status(404).json({ message: "Owner email missing from workspace." });
+          }
+        console.log(ownerEmail);
+        const owner = await findOneField("usersData", { email: ownerEmail });
         if (!owner) {
             return res.status(404).json({ message: "Owner not found." });
         }
@@ -746,12 +750,11 @@ app.get("/publicWorkspaces",async (req, res) => {
 });
 
 //owner contact info ---------------------------------------------
-app.get("/ownerContactInfoById/:ownerId", async (req, res) => {
+app.get("/ownerContactInfoById/:ownerEmail", async (req, res) => {
     try {
-        const ownerId = req.params.ownerId;
+        const ownerEmail = req.params.ownerEmail;
         const db = await connectToDatabase(); // your DB connection
-
-        const owner = await db.collection("users").findOne({ _id: new ObjectId(ownerId) });
+        const owner = await db.collection("usersData").findOne({email:ownerEmail});
 
         if (!owner) {
             return res.status(404).json({ message: "Owner not found" });
