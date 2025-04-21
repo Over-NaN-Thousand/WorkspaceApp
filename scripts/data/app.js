@@ -512,7 +512,7 @@ app.post("/workspaces", verifyToken, async (req, res) => {
 
         // Check for missing required fields
         if (!newWorkspace.workspaceName || !newWorkspace.ownerEmail) {
-            return res.status(400).json({ message: "Missing required fields: propertyId, workspaceName, or ownerEmail." });
+            return res.status(400).json({ message: "Missing required fields" });
             }
 
         const highestWorkspaceId = await connectToDatabaseB(getHighestId, "workspaces", "workspaceID");

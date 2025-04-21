@@ -52,11 +52,11 @@
             <form id="propertyForm">
                 <p>
                     <label class="cardTitle" for="propertyName">Property Name:</label>
-                    <input type="text" id="propertyName" name="propertyName">
+                    <input type="text" id="propertyName" name="propertyName" required>
                 </p>
                 <p>
                     <label for="address1">Address 1:</label>
-                    <input type="text" id="address1" name="address1">
+                    <input type="text" id="address1" name="address1" required>
                 </p>
                 <p>
                     <label for="address2">Address 2:</label>
@@ -64,30 +64,30 @@
                 </p>
                 <p>
                     <label for="neighborhood">Neighborhood:</label>
-                    <input type="text" id="neighborhood" name="neighborhood">
+                    <input type="text" id="neighborhood" name="neighborhood" required>
                 </p>
                 <p>
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city">
+                    <input type="text" id="city" name="city" required>
                 </p>
                 <p>
                     <label for="province">Province:</label>
-                    <input type="text" id="province" name="province">
+                    <input type="text" id="province" name="province" required>
                 </p>
                 <p>
                     <label for="country">Country:</label>
-                    <input type="text" id="country" name="country">
+                    <input type="text" id="country" name="country" required>
                 </p>
                 <p>
                     <label for="postalCode">Postal Code:</label>
-                    <input type="text" id="postalCode" name="postalCode">
+                    <input type="text" id="postalCode" name="postalCode" required>
                 </p>
                 <p>
                     <label>Amenities:</label><br>
                     
                     <!-- Parking Garage -->
                     <label for="parking-yes">Parking Garage</label>
-                    <input type="radio" class="amenity" id="parking-yes" name="parkingGarage" value="true"><br>
+                    <input type="radio" class="amenity" id="parking-yes" name="parkingGarage" value="true" required><br>
                     <label for="parking-no">No Parking Garage</label>
                     <input type="radio" class="amenity" id="parking-no" name="parkingGarage" value="false"><br>
                 </p>
@@ -95,7 +95,7 @@
                 <p>
                     <!-- Public Transportation -->
                     <label for="transit-yes">Public Transportation:</label><br>
-                    <input type="radio" class="amenity" id="transit-yes" name="publicTransportation" value="true">
+                    <input type="radio" class="amenity" id="transit-yes" name="publicTransportation" value="true" required>
                     <label for="transit-yes">Yes</label><br>
                     <input type="radio" id="transit-no" name="publicTransportation" value="false">
                     <label for="transit-no">No</label><br>
@@ -104,7 +104,7 @@
                 <p>
                     <!-- Smoking -->
                     <label for="smoking-yes">Smoking Allowed</label>
-                    <input type="radio" class="amenity" id="smoking-yes" name="smokingAllowed" value="true"><br>
+                    <input type="radio" class="amenity" id="smoking-yes" name="smokingAllowed" value="true" required><br>
                     <label for="smoking-no">Non-smoking</label>
                     <input type="radio" id="smoking-no" name="smokingAllowed" value="false"><br>
                 </p>
@@ -129,11 +129,11 @@
                 <p>
                     <button class="close-btn" id="closeWorkspacePopup">X</button>
                     <label for="workspaceName">Workspace Name:</label>
-                    <input type="text" id="workspaceName" name="workspaceName">
+                    <input type="text" id="workspaceName" name="workspaceName" required>
                 </p>
                 <p>
                     <label for="workspaceType">Workspace Type:</label>
-                    <select id="workspaceType" name="workspaceType">
+                    <select id="workspaceType" name="workspaceType" required>
                         <option value="Private Office">Private Office</option>
                         <option value="Desk">Desk in an open work area</option>
                         <option value="Meeting Room">Meeting Room</option>
@@ -141,7 +141,7 @@
                 </p>
                 <p>
                     <label for="leaseTerm">Lease Term:</label>
-                    <select id="leaseTerm" name="leaseTerm">
+                    <select id="leaseTerm" name="leaseTerm" required>
                         <option value="hourly">Daily</option>
                         <option value="daily">Weekly</option>
                         <option value="monthly">Monthly</option>
@@ -149,15 +149,15 @@
                 </p>
                 <p>
                     <label for="sqFt">Floor Area (Sq Ft):</label>
-                    <input type="number" id="sqFt" name="sqFt">
+                    <input type="number" id="sqFt" name="sqFt" required>
                 </p>
                 <p>
                     <label for="seatCapacity">Seat Capacity:</label>
-                    <input type="number" id="seatCapacity" name="seatCapacity" step="1" min="1">
+                    <input type="number" id="seatCapacity" name="seatCapacity" step="1" min="1" required>
                 </p>
                 <p>
                     <label for="price">Price:</label>
-                    <input type="number" id="price" name="price">
+                    <input type="number" id="price" name="price" required>
                 </p>
                         <p>
                             <label for="amenities">Amenities:</label>
