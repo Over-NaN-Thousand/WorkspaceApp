@@ -461,3 +461,62 @@ li:last-child {
 #submitReviewBtn:hover {
     background-color: #1d3f44;
 }
+
+
+/* Review Display */
+.reviewDisplayContainer {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewDisplayContainer h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.review-card {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.review-stars {
+    color: orange;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.review-comment {
+    font-style: italic;
+}
+
+.review-card {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.4s ease-in-out;
+}
+
+.review-card.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.review-nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.review-nav-buttons button {
+    padding: 10px 20px;
+    background-color: #275158;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

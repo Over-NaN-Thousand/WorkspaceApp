@@ -274,45 +274,7 @@ $(document).ready(function () {
         }
     }
 
-    //------------------------Reviews---------------------------------//
-    const targetReviews = selectedWorkspace.reviews || [];
-
-    const reviewContainer = $(".reviewBody").empty();
-    const reviewSection = $(".reviewContainer"); // Full review block
-    const reviewHeading = $(".reviewContainer .subHeading"); // Just the heading inside review section
-
-    let currentReviewIndex = 0;
-
-    function displayReview(index) {
-        reviewContainer.empty();
-        const review = targetReviews[index];
-        $("<p>").text(`${review.date}`).appendTo(".reviewBody");
-        $("<p>").text(`${review.comment}`).appendTo(".reviewBody");
-    }
-
-    // Only show the review section if there are reviews
-    if (targetReviews.length > 0) {
-        reviewSection.show();
-        reviewHeading.show();
-
-        displayReview(currentReviewIndex);
-
-        // Prev/Next buttons
-        const prevButton = $(`<button>`).text(`Prev`).addClass(`review-btn prev-btn`).appendTo(`.leftBtn`);
-        const nextButton = $(`<button>`).text(`Next`).addClass(`review-btn next-btn`).appendTo(`.rightBtn`);
-
-        prevButton.on("click", () => {
-            currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
-            displayReview(currentReviewIndex);
-        });
-
-        nextButton.on("click", () => {
-            currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
-            displayReview(currentReviewIndex);
-        });
-    } else {
-        reviewSection.hide(); // This hides the whole block, including heading
-    }
+    //------------------------Reviews---------------------------------/
 
     // When user clicks "Leave Review"
     $(".reviewBtn").click(() => {
@@ -325,48 +287,6 @@ $(document).ready(function () {
     });
 
     // Handle Submit Review Button
-    $("#submitReviewBtn").click(async () => {
-        const stars = $("#reviewStars").val();
-        const comment = $("#reviewComment").val().trim();
-        const workspaceName = $("#workspaceTitle").text(); // assuming this contains the workspace name
-
-        if (!stars || !comment) {
-            alert("Please provide a star rating and a comment!");
-            return;
-        }
-
-        try {
-            const res = await fetch("http://localhost:3000/reviews", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    // "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    workspaceName,
-                    rating: parseInt(stars),
-                    comment,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                alert("Review submitted!");
-                $("#overlay-review").fadeOut();
-                $("#reviewComment").val("");
-            } else {
-                alert(data.message || "Failed to submit review.");
-            }
-        } catch (err) {
-            console.error("Review error:", err);
-            alert("Error submitting review.");
-        }
-    });
-
-
-
-
     $(".reviewBtn").click(() => {
         $("#overlay-review").fadeIn();
     });
@@ -419,6 +339,8 @@ $(document).ready(function () {
                 $("#reviewComment").val("");
                 $("#reviewStars").val("");
                 $(".fa-star").removeClass("checked");
+
+                fetchReviewsAndRender(workspaceName);
             } else {
                 alert(data.message || "Review failed.");
             }
@@ -427,6 +349,61 @@ $(document).ready(function () {
             alert("Something went wrong submitting review.");
         }
     });
+
+
+    function renderReviewSlider(reviews) {
+        const container = $("#reviewCardsContainer");
+        let current = 0;
+
+        function render(index) {
+            container.fadeOut(150, () => {
+                container.empty();
+
+                const review = reviews[index];
+                const card = $("<div>").addClass("review-card active");
+                const starsDiv = $("<div>").addClass("review-stars");
+
+                for (let i = 0; i < review.rating; i++) {
+                    starsDiv.append('<i class="fa fa-star checked"></i>');
+                }
+
+                const commentDiv = $("<div>").addClass("review-comment").text(review.comment);
+                card.append(starsDiv, commentDiv);
+                container.append(card);
+
+                container.fadeIn(150);
+            });
+        }
+
+        $("#prevReviewBtn").off("click").on("click", () => {
+            current = (current - 1 + reviews.length) % reviews.length;
+            render(current);
+        });
+
+        $("#nextReviewBtn").off("click").on("click", () => {
+            current = (current + 1) % reviews.length;
+            render(current);
+        });
+
+        render(current); // show first review
+    }
+
+
+    async function fetchReviewsAndRender(workspaceName) {
+        try {
+            const response = await fetch(`http://localhost:3000/reviews?workspaceName=${encodeURIComponent(workspaceName)}`);
+            const data = await response.json();
+            if (response.ok && data.reviews) {
+                renderReviewSlider(data.reviews); // existing function
+            }
+        } catch (error) {
+            console.error("Error fetching updated reviews:", error);
+        }
+    }
+
+    const workspaceName = $("#workspaceTitle").text();
+    fetchReviewsAndRender(workspaceName);
+
 
 
 })

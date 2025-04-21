@@ -911,6 +911,23 @@ app.post('/reviews', async (req, res) => {
 });
 
 
+app.get('/reviews', async (req, res) => {
+    const { workspaceName } = req.query;
+
+    if (!workspaceName) {
+        return res.status(400).json({ error: "workspaceName is required in query." });
+    }
+
+    try {
+        const db = await connectToDatabase();
+        const reviews = await db.collection("reviews").find({ workspaceName }).toArray();
+        res.status(200).json({ reviews });
+    } catch (error) {
+        console.error("Fetching reviews failed:", error);
+        res.status(500).json({ error: "Server error while fetching reviews" });
+    }
+});
+
 
 
 
