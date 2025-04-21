@@ -38,7 +38,9 @@ $(document).ready(function () {
                 }
             
                 // Display the message in the sidebar
+
                 document.getElementById("sidebar-owner-coworker-status").textContent = statusMessage;
+
             }  
             else {
                 alert("We can not get your information!")

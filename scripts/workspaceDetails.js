@@ -1,4 +1,5 @@
 
+
 //----------------------- Get workspace from session storage-----------------------// 
 $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -40,6 +41,7 @@ const bookingBtn = document.querySelector('.bookingBtn');
 const closeBtn = popup.querySelector('.closeBtn');
 const closePopup = popup.querySelector('.close');
 
+
 // Ensure popup is hidden at start
 popupOverlay.style.display = 'none';
 
@@ -54,6 +56,8 @@ function closeFunction() {
     console.log("Closing popup");
     popupOverlay.style.display = 'none';
 }
+
+
 
    // Open popup on button click
 ownerBtn.addEventListener('click', openPopup);
@@ -71,6 +75,7 @@ $('#overlay').on('click', (event) => {
     }
 });
 
+
 // ----------------- Ensure default state -----------------
 
 overlay.style.display = 'none';
@@ -84,6 +89,7 @@ function closeAllPopups() {
     });
 }
 
+
 // Open specific overlay by ID
 function openSpecificPopup(overlayId) {
     closeAllPopups(); // Hide others
@@ -93,6 +99,7 @@ function openSpecificPopup(overlayId) {
     }
 }
     
+
 // ----------------- Event Listeners -----------------
 
 document.querySelector('.ownerBtn')?.addEventListener('click', () => {
@@ -114,6 +121,7 @@ document.querySelectorAll('.overlay').forEach(overlay => {
         }
     });
 });
+
 
 $('.ownerBtn').on('click', async function () {
     if (!selectedWorkspace || !selectedWorkspace.workspaceID) {
@@ -151,6 +159,7 @@ $('.ownerBtn').on('click', async function () {
 
 
 //------------------------Booking form---------------------------------//
+
 
     // Function to handle booking button click
     function bookingForm(){
@@ -309,3 +318,4 @@ if (targetReviews.length > 0) {
 
 }); 
     
+

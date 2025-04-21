@@ -1,9 +1,11 @@
 let propertiesData = [];  // Declare a global variable to store property data
+
 let workspacesData = {};  // Global object to store workspaces per property
 let currentPropertyId = null;
 let currentWorkspaceID = null;
 
 // =============================================== PROPERTY MANAGER ===========================================================
+
 
 $(document).ready(async function () {
 
@@ -11,6 +13,7 @@ $(document).ready(async function () {
     const currentUser = localStorage.getItem('email');
     const token = localStorage.getItem('token');
     console.log("token:", token);
+
 
     await loadProperties();
 
@@ -49,11 +52,14 @@ $(document).ready(async function () {
         $('#workspacePopup').show();
     });
 
+
     $('#closePropertyPopup').on('click', function () {
         $('#propertyPopup').hide(); 
     });
 
+
     $(document).on('click', '#closeWorkspacePopup', function () {
+
         $('#workspacePopup').hide(); 
     });
 
@@ -87,6 +93,7 @@ $(document).ready(async function () {
         console.error("Fetch error:", err);
         alert("Failed to load user data.");
     }
+
 
 // ===== LOAD PROPERTIES =====
 
@@ -168,12 +175,6 @@ $('#saveProperty').on('click', async function () {
             province: $('#province').val(),
             country: $('#country').val(),
             postalcode: $('#postalCode').val(),
-            ownerEmail: ownerData.email,
-            
-            // Collecting amenities
-            parkingGarage: $('input[name="parkingGarage"]:checked').val() === 'true', 
-            publicTransportation: $('input[name="publicTransportation"]:checked').val() === 'true',
-            smokingAllowed: $('input[name="smokingAllowed"]:checked').val() === 'true' 
         };
         
 
@@ -185,6 +186,8 @@ $('#saveProperty').on('click', async function () {
             },
             body: JSON.stringify(propertyData)
         });
+
+
 
         if (res.ok) {
             alert(propertyId ? 'Property updated!' : 'Property added!');
@@ -204,9 +207,11 @@ $('#saveProperty').on('click', async function () {
     }
 });
 
+
 // Edit Property Popup Action
 $(document).on('click', '.edit-property-btn', function () {
     const propertyId = $(this).data('property-id');
+
     console.log('Edit button clicked. Property ID:', propertyId);
 
     // Find the property object from the globally stored propertiesData array
@@ -238,11 +243,13 @@ function openEditPopup(property) {
     $('#country').val(property.country);
     $('#postalCode').val(property.postalcode);
 
+
     // Boolean radio buttons
     const booleanFields = ['parkingGarage', 'publicTransportation', 'smokingAllowed'];
     booleanFields.forEach(field => {
         $(`input[name="${field}"][value="${property[field].toString()}"]`).prop('checked', true);
     });
+
 
     // Store property _id for PUT request later
     $('#propertyForm').data('id', property.propertyId);
@@ -252,6 +259,7 @@ function openEditPopup(property) {
 //======= DELETE PROPERTY =======
 
 $(document).on('click', '.delete-property-btn', async function () {
+
     const propertyId = $(this).data('property-id');
     console.log('Delete button clicked. Property ID:', propertyId);
 
@@ -262,6 +270,7 @@ $(document).on('click', '.delete-property-btn', async function () {
             // Step 1: Fetch associated workspaces
             const workspacesRes = await fetch(`http://localhost:3000/workspaces`, {
                 method: 'GET',
+
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -286,10 +295,12 @@ $(document).on('click', '.delete-property-btn', async function () {
                 }
             }
 
+
             // Step 3: Delete the property
             const deletePropertyRes = await fetch(`http://localhost:3000/properties/${propertyId}`, {
                 method: 'DELETE',
                 headers: {
+
                     'Authorization': `Bearer ${token}`
                 }
             });
@@ -533,4 +544,5 @@ $(document).on('click', '.delete-workspace-btn', async function () {
         }
     }
 });
+
 });

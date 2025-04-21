@@ -21,8 +21,10 @@ $(document).ready(async function () {
         });
         const userData = await response.json(); //Wait for backend to send back to frontend then store in data
         if (response.ok) {
+            console.log("Setting user info...");
             document.getElementById("email").textContent = userData.email;
             document.getElementById("phone").textContent = userData.phoneNumber;
+
             document.getElementById("profile-first-name").textContent = userData.firstName;
             document.getElementById("last-name").textContent = userData.lastName;
 
@@ -40,7 +42,6 @@ $(document).ready(async function () {
             }
 
             document.getElementById("owner-coworker-status").textContent = statusMessage;
-
             console.log("userData:", userData);
         }
         else {

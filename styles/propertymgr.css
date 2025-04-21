@@ -19,6 +19,8 @@ main {
 
 .content-section {
     background-color: #fff;
+
+
     border-radius: 8px;
     overflow: hidden;
 }
@@ -35,6 +37,7 @@ main {
     padding: 20px;
 }
 
+
 .property-list, .property-item {
     display: block !important;
     visibility: visible !important;
@@ -43,6 +46,7 @@ main {
 
 #property-list {
     border-radius: 8px;
+
     padding: 10px;
     background-color: #f9f9f9;
 }
@@ -52,7 +56,16 @@ main {
     margin: 10px 0;
     padding: 10px;
 
+
+
+.property-card {
+    background-color: #f9f9f9;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
 }
+
 
 .property-card {
     background-color: #dbdbdb;
@@ -62,12 +75,15 @@ main {
     margin-bottom: 10px;
 }
 
+
 .property-card h3 {
     margin-top: 0;
 }
 
 .property-card.selected {
+
     border: 2px solid rgba(196, 191, 191, 0.2);
+
     background-color: #e6f0ff;
 }
 
@@ -123,8 +139,10 @@ element.style {
 }
 
 .popup-buttons button {
+
     font-size: clamp(10px, 1.5vw, 14px);
     font-weight: bold;
+
     padding: .5rem 1rem;
     border: none;
     background-color: #275158;
@@ -132,6 +150,7 @@ element.style {
     border-radius: 8px;
     cursor: pointer;
 }
+
 
 .popup-buttons button:hover {
     background-color: #40828d;
@@ -172,6 +191,7 @@ div {
     unicode-bidi: isolate;
 }
 
+
 form {
     display: block;
     unicode-bidi: isolate;
@@ -185,11 +205,15 @@ form {
     left: 0;
     height: 100vh;
     width: 100vw;
+
     background-color: rgba(94, 130, 133, 0.75);
+
     z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
+
+
   }
 
 #propertyPopup #workspacePopup .popup-content input,
@@ -454,6 +478,7 @@ form {
 :invalid {
     border-color: red;
 }
+
 
 
 

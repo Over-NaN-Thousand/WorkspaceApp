@@ -658,8 +658,8 @@ app.delete("/workspaces/:id", verifyToken,async (req, res) => {
     }
 });
 
-
 //-------------------Public workspace route (no token needed to access)-----------------//
+
 
 app.get("/workspaceDetails/:workspaceID", async (req, res) => {
     const workspaceID = req.params.workspaceID;
@@ -695,6 +695,7 @@ app.get("/workspaceDetails/:workspaceID", async (req, res) => {
         res.status(500).json({ message: "An error occurred while fetching workspace or owner information." });
     }
 });
+
 
 
 // Getting all data from workspaces
@@ -745,6 +746,7 @@ app.get("/publicWorkspaces",async (req, res) => {
     }
 });
 
+
 //owner contact info ---------------------------------------------
 app.get("/ownerContactInfoById/:ownerId", async (req, res) => {
     try {
@@ -758,12 +760,14 @@ app.get("/ownerContactInfoById/:ownerId", async (req, res) => {
         }
 
         res.json({
+
             firstName: owner.firstName,
             lastName: owner.lastName,
             email: owner.email,
             phoneNumber: owner.phoneNumber
         });
     } catch (err) {
+
         console.error("Error fetching owner info:", err);
         res.status(500).json({ message: "Error retrieving owner" });
     }
@@ -778,6 +782,7 @@ app.get('/ownersWorkspaceList/:ownerEmail', async (req, res) => {
     try {
         const ownersWorkspaceList = await findManyField("workspaces", {
             ownerEmail: ownerEmail.toLowerCase()
+
         });
 
         if (!ownersWorkspaceList || ownersWorkspaceList.length === 0) {
@@ -790,6 +795,8 @@ app.get('/ownersWorkspaceList/:ownerEmail', async (req, res) => {
         res.status(500).json({ error: "Something went wrong" });
     }
 });
+
+
 
 
 //==================================End of Routes for WorkspaceDetails===================================================//
