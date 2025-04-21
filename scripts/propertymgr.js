@@ -238,6 +238,12 @@ function openEditPopup(property) {
     $('#country').val(property.country);
     $('#postalCode').val(property.postalcode);
 
+    // Boolean radio buttons
+    const booleanFields = ['parkingGarage', 'publicTransportation', 'smokingAllowed'];
+    booleanFields.forEach(field => {
+        $(`input[name="${field}"][value="${property[field].toString()}"]`).prop('checked', true);
+    });
+
     // Store property _id for PUT request later
     $('#propertyForm').data('id', property.propertyId);
     console.log('Property ID stored in form data:', property.propertyId);
