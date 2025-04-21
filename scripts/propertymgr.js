@@ -114,6 +114,7 @@ $('#saveProperty').on('click', async function () {
             body: JSON.stringify(propertyData)
         });
 
+
         if (res.ok) {
             alert(propertyId ? 'Property updated!' : 'Property added!');
             $('#propertyPopup').hide();

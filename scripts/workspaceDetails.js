@@ -28,45 +28,36 @@ $(document).ready(function () {
         return;
     }
 
-// ----------------------Populate the workspace details in the HTML---------------------------------//
-/*
-    const targetId = selectedWorkspace.workspaceID; // Get the workspace ID from the URL
-    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
-    const targetOwnerId = targetWorkspace.ownerId;
-    const targetPropertyId = targetWorkspace.propertyId;
-    const targetOwner = userData.find(user => user.id === targetOwnerId);
-    const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
-    const workspaceRating = targetWorkspace.rating;
-    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
+
+    // ----------------------Populate the workspace details in the HTML---------------------------------//
+    /*
+        const targetId = selectedWorkspace.workspaceID; // Get the workspace ID from the URL
+        const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
+        const targetOwnerId = targetWorkspace.ownerId;
+        const targetPropertyId = targetWorkspace.propertyId;
+        const targetOwner = userData.find(user => user.id === targetOwnerId);
+        const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
+        const workspaceRating = targetWorkspace.rating;
+        const targetReviews = reviews.filter(review => review.workspaceID === targetId);
+    
+    
+    //------------------------Workspace details page---------------------------------//
+    
+        const leftContainer = $("#workspace-display-left");
+        const rightContainer = $("#workspace-display-right");
+    */
+    //----------------------------------popups---------------------------------------------// 
+
+    const popupOverlay = document.getElementById('overlay');
+    const popup = document.getElementById('popup');
+    const closePopup = popup.querySelector('.close');
+    const ownerBtn = document.querySelector('.ownerBtn');
+    const bookingBtn = document.querySelector('.bookingBtn');
+    const closeBtn = popup.querySelector('.closeBtn');
 
 
-//------------------------Workspace details page---------------------------------//
+    // Ensure popup is hidden at start
 
-    const leftContainer = $("#workspace-display-left");
-    const rightContainer = $("#workspace-display-right");
-*/
-//----------------------------------popups---------------------------------------------// 
- 
-const popupOverlay = document.getElementById('overlay');
-const popup = document.getElementById('popup');
-const closePopup = popup.querySelector('.close');
-const ownerBtn = document.querySelector('.ownerBtn');
-const bookingBtn = document.querySelector('.bookingBtn');
-const closeBtn = popup.querySelector('.closeBtn'); 
-
-
-// Ensure popup is hidden at start
-popupOverlay.style.display = 'none';
-
-// Open popup function
-function openPopup() {
-    console.log("Opening popup");
-    popupOverlay.style.display = 'block';
-}
-
-// Close popup function
-function closeFunction() {
-    console.log("Closing popup");
     popupOverlay.style.display = 'none';
 }
     
@@ -88,62 +79,32 @@ $('#overlay').on('click', (event) => {
     }
 });
 
+    //------------------------Booking form---------------------------------//
 
-/*
-// ----------------- Popup Elements -----------------
-const overlay = document.getElementById('overlay');
-const popup = document.getElementById('popup');
-const closePopupBtn = popup.querySelector('.close');
-const ownerBtn = document.querySelector('.ownerBtn');
-const bookingBtn = document.querySelector('.bookingBtn');
-const closeBtn = popup.querySelector('.closeBtn');
-
-// ----------------- Ensure default state -----------------
-
-overlay.style.display = 'none';
-
-// ----------------- General Popup Functions -----------------
-
-// Close all overlays
-function closeAllPopups() {
-    document.querySelectorAll('.overlay').forEach(overlay => {
-        overlay.style.display = 'none';
-    });
-}
-
-// Open specific overlay by ID
-function openSpecificPopup(overlayId) {
-    closeAllPopups(); // Hide others
-    const targetOverlay = document.getElementById(overlayId);
-    if (targetOverlay) {
-        targetOverlay.style.display = 'block';
+    // Function to handle booking button click
+    function bookingForm() {
+        // Redirect to book.html page
+        window.location.href = '/WorkspaceApp/pages/bookingtemp.html';
     }
-}
-    
 
-// ----------------- Event Listeners -----------------
+    bookingBtn.addEventListener('click', bookingForm);
 
-document.querySelector('.ownerBtn')?.addEventListener('click', () => {
-    openSpecificPopup('overlay-owner');
-});
 
-document.querySelector('.reviewBtn')?.addEventListener('click', () => {
-    openSpecificPopup('overlay-review');
-});
+    //------------------------Owner contact info---------------------------------//
 
-document.querySelectorAll('.overlay .close, .overlay .closeBtn').forEach(btn => {
-    btn.addEventListener('click', closeAllPopups);
-});
+    const ownerId = selectedWorkspace.ownerId;
 
-document.querySelectorAll('.overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            closeAllPopups();
-        }
-    });
-});
-*/
-//------------------------Booking form---------------------------------//
+    if (!ownerId) {
+        // No ownerId found – show fallback text
+        $(".OwnerName").text("No owner information found.");
+        $(".ContactInfo").html(`<p>Not available</p>`);
+        $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
+        $(".contact-owner-btn").prop("disabled", true); // Optional
+    } else {
+        // Fetch owner contact info
+        $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
+            $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
+            $(".ContactInfo").html(`
 
     // Function to handle booking button click
     function bookingForm(){
@@ -169,148 +130,247 @@ if (!ownerId) {
     $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
         $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
         $(".ContactInfo").html(`
+
             <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
             <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
         `);
 
-        // Fetch other workspaces by the same owner
-        $.get(`/ownersWorkspaceList/${ownerId}`, function (workspaces) {
-            const ownersOtherWorkspaces = $(".WorkspacesList").empty();
-            const filtered = workspaces.filter(ws => ws.workspaceID != selectedWorkspace.workspaceID);
 
-            if (filtered.length > 0) {
-                filtered.forEach(ws => {
-                    $("<li>").text(ws.workspaceName).appendTo(ownersOtherWorkspaces);
-                });
-            } else {
-                $("<li>").text("No other workspaces available").appendTo(ownersOtherWorkspaces);
-            }
+            // Fetch other workspaces by the same owner
+            $.get(`/ownersWorkspaceList/${ownerId}`, function (workspaces) {
+                const ownersOtherWorkspaces = $(".WorkspacesList").empty();
+                const filtered = workspaces.filter(ws => ws.workspaceID != selectedWorkspace.workspaceID);
+
+                if (filtered.length > 0) {
+                    filtered.forEach(ws => {
+                        $("<li>").text(ws.workspaceName).appendTo(ownersOtherWorkspaces);
+                    });
+                } else {
+                    $("<li>").text("No other workspaces available").appendTo(ownersOtherWorkspaces);
+                }
+            }).fail(() => {
+                $(".WorkspacesList").html(`<li>Failed to load other workspaces</li>`);
+            });
+
         }).fail(() => {
-            $(".WorkspacesList").html(`<li>Failed to load other workspaces</li>`);
+            $(".OwnerName").text("No owner information found.");
+            $(".ContactInfo").html(`<p>Not available</p>`);
+            $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
+            $(".contact-owner-btn").prop("disabled", true);
         });
+    }
 
-    }).fail(() => {
-        $(".OwnerName").text("No owner information found.");
-        $(".ContactInfo").html(`<p>Not available</p>`);
-        $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
-        $(".contact-owner-btn").prop("disabled", true);
+    //------------------------Left Section---------------------------------//
+
+
+    const sectionDivL = $("<div>").appendTo("#workspace-display-left");
+
+    // Set workspace name in the existing div
+    $("#workspaceTitle").text(selectedWorkspace.workspaceName).appendTo(sectionDivL);
+
+    // Left section list
+    const ulL = $("<ul>").addClass("detailsList");
+
+    // Address details
+    $("<li>").addClass("detailBoxHeading").text("Address").appendTo(ulL);
+    $("<li>").text(`Line 1: ${selectedWorkspace.address1}`).appendTo(ulL);
+    $("<li>").text(`Line 2: ${selectedWorkspace.address2}`).appendTo(ulL);
+    $("<li>").text(`Postal Code: ${selectedWorkspace.postalcode}`).appendTo(ulL);
+    $("<li>").text(`City: ${selectedWorkspace.city}`).appendTo(ulL);
+    $("<li>").text(`Province: ${selectedWorkspace.province}`).appendTo(ulL);
+    $("<li>").text(`Country: ${selectedWorkspace.country}`).appendTo(ulL);
+
+    // Workspace details
+    $("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
+    $("<li>").text(`Type: ${selectedWorkspace.workspaceType}`).appendTo(ulL);
+    $("<li>").text(`Price: $${selectedWorkspace.price} / ${selectedWorkspace.leaseTerm}`).appendTo(ulL);
+    $("<li>").text(`Square Footage: ${selectedWorkspace.sqFt} sq ft`).appendTo(ulL);
+    $("<li>").text(`Seat Capacity: ${selectedWorkspace.seatCapacity}`).appendTo(ulL);
+
+    // Display amenities if they exist
+    if (selectedWorkspace.amenities && selectedWorkspace.amenities.length > 0) {
+        $("<li>").addClass("detailBoxHeading").text("Amenities").appendTo(ulL);
+        selectedWorkspace.amenities.forEach(amenity => {
+            $("<li>").text(`- ${amenity}`).appendTo(ulL);  // Display each amenity directly
+        });
+    } else {
+        // If no amenities, hide the section (or show "N/A")
+        $("<li>").addClass("detailBoxHeading").text("Amenities: N/A").appendTo(ulL);
+    }
+
+    sectionDivL.append(ulL);
+
+    //------------------------Right Section---------------------------------//
+
+    // Get ratings array from the selected workspace
+    let workspaceRating = selectedWorkspace.rating || [];
+
+    // If the rating is an array with a single string (like ["2, 3, 5, 2, 2"]), split it into individual numbers
+    if (workspaceRating.length === 1 && typeof workspaceRating[0] === "string") {
+        workspaceRating = workspaceRating[0].split(",").map(r => Number(r.trim()));
+    }
+
+    console.log("Raw Ratings Array:", workspaceRating);
+
+    // Calculate average rating
+    const averageStarRating = workspaceRating.length > 0
+        ? Math.round(workspaceRating.reduce((a, b) => a + b, 0) / workspaceRating.length)
+        : 0;
+
+    console.log("Average Rating:", averageStarRating);
+
+    const starRatingDiv = $(".starRating").empty();
+    const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
+
+    // Toggle visibility based on rating availability
+    ratingHeading.toggle(workspaceRating.length > 0);
+    starRatingDiv.toggle(workspaceRating.length > 0);
+
+    // If ratings exist, render stars
+    if (workspaceRating.length > 0) {
+        for (let i = 0; i < averageStarRating; i++) {
+            $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
+        }
+    }
+
+    //------------------------Reviews---------------------------------/
+
+    // When user clicks "Leave Review"
+    $(".reviewBtn").click(() => {
+        $("#overlay-review").fadeIn();
     });
-}
 
-//------------------------Left Section---------------------------------//
-
-
-const sectionDivL = $("<div>").appendTo("#workspace-display-left");
-
-// Set workspace name in the existing div
-$("#workspaceTitle").text(selectedWorkspace.workspaceName).appendTo(sectionDivL);
-
-// Left section list
-const ulL = $("<ul>").addClass("detailsList");
-
-// Address details
-$("<li>").addClass("detailBoxHeading").text("Address").appendTo(ulL);
-$("<li>").text(`Line 1: ${selectedWorkspace.address1}`).appendTo(ulL);
-$("<li>").text(`Line 2: ${selectedWorkspace.address2}`).appendTo(ulL);
-$("<li>").text(`Postal Code: ${selectedWorkspace.postalcode}`).appendTo(ulL);
-$("<li>").text(`City: ${selectedWorkspace.city}`).appendTo(ulL);
-$("<li>").text(`Province: ${selectedWorkspace.province}`).appendTo(ulL);
-$("<li>").text(`Country: ${selectedWorkspace.country}`).appendTo(ulL);
-
-// Workspace details
-$("<li>").addClass("detailBoxHeading").text("Details").appendTo(ulL);
-$("<li>").text(`Type: ${selectedWorkspace.workspaceType}`).appendTo(ulL);
-$("<li>").text(`Price: $${selectedWorkspace.price} / ${selectedWorkspace.leaseTerm}`).appendTo(ulL);
-$("<li>").text(`Square Footage: ${selectedWorkspace.sqFt} sq ft`).appendTo(ulL);
-$("<li>").text(`Seat Capacity: ${selectedWorkspace.seatCapacity}`).appendTo(ulL);
-
-// Display amenities if they exist
-if (selectedWorkspace.amenities && selectedWorkspace.amenities.length > 0) {
-    $("<li>").addClass("detailBoxHeading").text("Amenities").appendTo(ulL);
-    selectedWorkspace.amenities.forEach(amenity => {
-        $("<li>").text(`- ${amenity}`).appendTo(ulL);  // Display each amenity directly
+    // When user clicks the close button (X)
+    $("#overlay-review .close").click(() => {
+        $("#overlay-review").fadeOut();
     });
-} else {
-    // If no amenities, hide the section (or show "N/A")
-    $("<li>").addClass("detailBoxHeading").text("Amenities: N/A").appendTo(ulL);
-}
 
-sectionDivL.append(ulL);
+    // Handle Submit Review Button
+    $(".reviewBtn").click(() => {
+        $("#overlay-review").fadeIn();
+    });
 
-//------------------------Right Section---------------------------------//
+    $("#overlay-review .close").click(() => {
+        $("#overlay-review").fadeOut();
+    });
 
-// Get ratings array from the selected workspace
-let workspaceRating = selectedWorkspace.rating || [];
+    //Handle star selection
+    $(".star-input .fa-star").click(function () {
+        const index = $(this).index();
+        $(".star-input .fa-star").removeClass("checked");
+        for (let i = 0; i <= index; i++) {
+            $(".star-input .fa-star").eq(i).addClass("checked");
+        }
 
-// If the rating is an array with a single string (like ["2, 3, 5, 2, 2"]), split it into individual numbers
-if (workspaceRating.length === 1 && typeof workspaceRating[0] === "string") {
-    workspaceRating = workspaceRating[0].split(",").map(r => Number(r.trim()));
-}
+        // Save rating to a hidden field or variable
+        $("#reviewStars").val(index + 1); // if you're using a hidden input with ID 'reviewStars'
+    });
 
-console.log("Raw Ratings Array:", workspaceRating);
+    //Submit review
+    $("#submitReviewBtn").click(async () => {
+        const rating = $("#reviewStars").val();
+        const comment = $("#reviewComment").val().trim();
+        const workspaceName = $("#workspaceTitle").text();
 
-// Calculate average rating
-const averageStarRating = workspaceRating.length > 0 
-    ? Math.round(workspaceRating.reduce((a, b) => a + b, 0) / workspaceRating.length)
-    : 0;
+        if (!rating || !comment) {
+            alert("Please select stars and write a comment!");
+            return;
+        }
 
-console.log("Average Rating:", averageStarRating);
+        try {
+            const res = await fetch("http://localhost:3000/reviews", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // "Authorization": `Bearer ${localStorage.getItem("token")}` // if needed
+                },
+                body: JSON.stringify({
+                    workspaceName,
+                    rating: parseInt(rating),
+                    comment,
+                }),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert("Review submitted!");
+                $("#overlay-review").fadeOut();
+                $("#reviewComment").val("");
+                $("#reviewStars").val("");
+                $(".fa-star").removeClass("checked");
+
+                fetchReviewsAndRender(workspaceName);
+            } else {
+                alert(data.message || "Review failed.");
+            }
+        } catch (err) {
+            console.error("Review error:", err);
+            alert("Something went wrong submitting review.");
+        }
+    });
+
 
 const starRatingDiv = $(".starRating").empty();
 const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
 
-// Toggle visibility based on rating availability
-ratingHeading.toggle(workspaceRating.length > 0);
-starRatingDiv.toggle(workspaceRating.length > 0);
 
-// If ratings exist, render stars
-if (workspaceRating.length > 0) {
-    for (let i = 0; i < averageStarRating; i++) {
-        $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
+    function renderReviewSlider(reviews) {
+        const container = $("#reviewCardsContainer");
+        let current = 0;
+
+        function render(index) {
+            container.fadeOut(150, () => {
+                container.empty();
+
+                const review = reviews[index];
+                const card = $("<div>").addClass("review-card active");
+                const starsDiv = $("<div>").addClass("review-stars");
+
+                for (let i = 0; i < review.rating; i++) {
+                    starsDiv.append('<i class="fa fa-star checked"></i>');
+                }
+
+                const commentDiv = $("<div>").addClass("review-comment").text(review.comment);
+                card.append(starsDiv, commentDiv);
+                container.append(card);
+
+                container.fadeIn(150);
+            });
+        }
+
+        $("#prevReviewBtn").off("click").on("click", () => {
+            current = (current - 1 + reviews.length) % reviews.length;
+            render(current);
+        });
+
+        $("#nextReviewBtn").off("click").on("click", () => {
+            current = (current + 1) % reviews.length;
+            render(current);
+        });
+
+        render(current); // show first review
     }
-}
 
-//------------------------Reviews---------------------------------//
-const targetReviews = selectedWorkspace.reviews || [];
 
-const reviewContainer = $(".reviewBody").empty();
-const reviewSection = $(".reviewContainer"); // Full review block
-const reviewHeading = $(".reviewContainer .subHeading"); // Just the heading inside review section
+    async function fetchReviewsAndRender(workspaceName) {
+        try {
+            const response = await fetch(`http://localhost:3000/reviews?workspaceName=${encodeURIComponent(workspaceName)}`);
+            const data = await response.json();
+            if (response.ok && data.reviews) {
+                renderReviewSlider(data.reviews); // existing function
+            }
+        } catch (error) {
+            console.error("Error fetching updated reviews:", error);
+        }
+    }
 
-let currentReviewIndex = 0;
+    const workspaceName = $("#workspaceTitle").text();
+    fetchReviewsAndRender(workspaceName);
 
-function displayReview(index) {
-    reviewContainer.empty();
-    const review = targetReviews[index];
-    $("<p>").text(`${review.date}`).appendTo(".reviewBody");
-    $("<p>").text(`${review.comment}`).appendTo(".reviewBody");
-}
-
-// Only show the review section if there are reviews
-if (targetReviews.length > 0) {
-    reviewSection.show();
-    reviewHeading.show();
 
     displayReview(currentReviewIndex);
 
-    // Prev/Next buttons
-    const prevButton = $(`<button>`).text(`Prev`).addClass(`review-btn prev-btn`).appendTo(`.leftBtn`);
-    const nextButton = $(`<button>`).text(`Next`).addClass(`review-btn next-btn`).appendTo(`.rightBtn`);
-
-    prevButton.on("click", () => {
-        currentReviewIndex = (currentReviewIndex - 1 + targetReviews.length) % targetReviews.length;
-        displayReview(currentReviewIndex);
-    });
-
-    nextButton.on("click", () => {
-        currentReviewIndex = (currentReviewIndex + 1) % targetReviews.length;
-        displayReview(currentReviewIndex);
-    });
-} else {
-    reviewSection.hide(); // This hides the whole block, including heading
-}
-    
 
 })
 
-    
+
