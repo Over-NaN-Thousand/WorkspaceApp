@@ -24,40 +24,28 @@
     <header id="header-mainjs"></header>
  
         <div class="main">
- 
- <!-- Owner Popup 
-<div id="overlay-owner" class="overlay">
-    <div id="popup-owner" class="popup">
-      <span class="close">&times;</span>
-      <div class="content">
-        <h1 class="title">Owner Information</h1>
-        <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
-        <h2 class="subHeading">Workspaces:</h2>
-        <ul class="WorkspacesList"></ul>
-        <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
-      </div>
-      <button class="closeBtn">Close</button>
-    </div>
-  </div>-->
-
-  <div id="overlay" class="Popup">
-    <div class="popup" id="popup">
+            
+  <div id="overlay" class="popup">
+    <div id="popup" >
         <span class="close">&times;</span><!--close with X in corner-->
         <div class="content">
-            <h1 class="title">Owner Information</h1>
+            <h1 class="title">Owner Contact Information</h1>
             <h2 class="ownerName" aria-placeholder="Owner Name"></h2>
-            <h2 class="subHeading">Workspaces:</h2>
-            <ul class="WorkspacesList"></ul>
-            <div class="ContactInfo" style="background-color:#0e0e0e; color:white; padding: 5px;" >Email:</div>
+            <!--<h2 class="subHeading">Workspaces:</h2>-->
+            <!--<ul class="WorkspacesList"></ul>-->
+            <div class="ContactInfo" style="background-color:#105966; color:white; padding: 5px;" >Email:</div>
+            <div class="ContactInfo" aria-placeholder="Owner Email"></div>
+            <div class="ContactInfo" style="background-color:#105966; color:white; padding: 5px;">Phone:</div>
+            <div class="ContactInfo" aria-placeholder="Owner Phone"></div>
             <button class="closeBtn">Close</button>
         </div>
     </div>
 </div>
 
   
-  Review Popup 
+ 
   <div id="overlay-review" class="overlay">
-    <div id="popup-review" class="popup">
+    <div id="popup-review" >
       <span class="close">&times;</span>
       <div class="content">Leave a Review</div>
       <select type="dropdown">
@@ -71,10 +59,8 @@
     </div>
   </div>
 
-            
 
- 
-            <div class="detailsBoxL">
+            <div class="detailsBoxL" id="sectionDivL">
                 <div class="title" id="workspaceTitle"></div>
                 <!--Left box-->
                 <div id="workspace-display-left">
@@ -83,7 +69,7 @@
  
                 <!--button for Owner contact-->
                 <div class="rowBtn">
-                    <button class="ownerBtn">Owner Info</button>
+                    <button class="ownerBtn" data-workspace-id="">Contact Owner</button>
                 </div>
                     <div class="rowBtn">
                 <!--button for booking-->

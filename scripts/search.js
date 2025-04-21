@@ -39,16 +39,24 @@ const fetchAllWorkspaces = async ()=> {
         // Update the global allWorkspaces variable
         return data.workspaces.map(workspace => ({
             ...workspace,  // Keep all workspace fields
-            propertyName: workspace.name,
+            workspaceName: workspace.name,
+            workspaceType: workspace.workspaceType,
             address1: workspace.address1,
             address2: workspace.address2,
-            neighborhood: workspace.neighborhood || "",
+            neighborhood: workspace.neighborhood,
             city: workspace.city,
             province: workspace.province,
             country: workspace.country,
             postalcode: workspace.postalcode,
-            propertyImgFileName: workspace.propertyImgFileName,
-            propertyOwnerId: workspace.propertyOwnerId
+            price: workspace.price,
+            amenities: workspace.amenities,
+            sqft: workspace.sqft,
+            leaseTerm: workspace.leaseTerm,
+            seatCapacity: workspace.seatCapacity,
+            propertyId: workspace.PropertyId,
+            propertyName: workspace.propertyName,
+            ownerEmail: workspace.ownerEmail,
+            workspaceID: workspace.workspaceID
         }));
 
     } catch (error) {

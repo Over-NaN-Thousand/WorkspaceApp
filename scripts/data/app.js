@@ -661,6 +661,42 @@ app.delete("/workspaces/:id", verifyToken,async (req, res) => {
 
 //-------------------Public workspace route (no token needed to access)-----------------//
 
+app.get("/workspaceDetails/:workspaceID", async (req, res) => {
+    const workspaceID = req.params.workspaceID;
+
+    try {
+        // Fetch the workspace based on the workspaceID
+        const workspace = await db.workspaces.findOne({ workspaceID: workspaceID });
+
+        if (!workspace) {
+            return res.status(404).json({ message: "Workspace not found." });
+        }
+
+        // Fetch the owner's contact info using ownerEmail from the workspace data
+        const ownerEmail = workspace.ownerEmail;
+        const owner = await db.users.findOne({ email: ownerEmail });
+
+        if (!owner) {
+            return res.status(404).json({ message: "Owner not found." });
+        }
+
+        // Return workspace and owner details
+        res.status(200).json({
+            workspace,
+            owner: {
+                firstName: owner.firstName,
+                lastName: owner.lastName,
+                email: owner.email,
+                phoneNumber: owner.phoneNumber
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching workspace or owner info:", error);
+        res.status(500).json({ message: "An error occurred while fetching workspace or owner information." });
+    }
+});
+
+
 // Getting all data from workspaces
 app.get("/publicWorkspaces",async (req, res) => {
 
@@ -709,36 +745,39 @@ app.get("/publicWorkspaces",async (req, res) => {
     }
 });
 
-
-
-//getting Owner data for contact info display
-app.get('/ownerContactInfo/:ownerId', async (req, res) => {
-    const { ownerId } = req.params;
-
+//owner contact info ---------------------------------------------
+app.get("/ownerContactInfoById/:ownerId", async (req, res) => {
     try {
-        const owner = await findOneField("usersData", { userId: Number(ownerId) });
+        const ownerId = req.params.ownerId;
+        const db = await connectToDatabase(); // your DB connection
 
-        if (!owner)
-            return res.status(404).json({ error: "Owner not found" });
+        const owner = await db.collection("users").findOne({ _id: new ObjectId(ownerId) });
 
-        res.status(200).json({
+        if (!owner) {
+            return res.status(404).json({ message: "Owner not found" });
+        }
+
+        res.json({
             firstName: owner.firstName,
             lastName: owner.lastName,
             email: owner.email,
             phoneNumber: owner.phoneNumber
         });
     } catch (err) {
-        res.status(500).json({ error: "Something went wrong" });
+        console.error("Error fetching owner info:", err);
+        res.status(500).json({ message: "Error retrieving owner" });
     }
-}
-);
+});
 
-app.get('/ownersWorkspaceList/:ownerId', async (req, res) => {
-    const { ownerId } = req.params;
+
+
+
+app.get('/ownersWorkspaceList/:ownerEmail', async (req, res) => {
+    const { ownerEmail } = req.params;
 
     try {
         const ownersWorkspaceList = await findManyField("workspaces", {
-            ownerId: Number(ownerId)
+            ownerEmail: ownerEmail.toLowerCase()
         });
 
         if (!ownersWorkspaceList || ownersWorkspaceList.length === 0) {
@@ -751,6 +790,7 @@ app.get('/ownersWorkspaceList/:ownerId', async (req, res) => {
         res.status(500).json({ error: "Something went wrong" });
     }
 });
+
 
 //==================================End of Routes for WorkspaceDetails===================================================//
 

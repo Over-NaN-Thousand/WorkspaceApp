@@ -1,59 +1,44 @@
-//import workspaces from './workspaceData.js';
-import userData from './userData.js';//for owner contact info
-//import properties from './propertyData.js';
-import reviews from './workspaceReviews.js';
 
 //----------------------- Get workspace from session storage-----------------------// 
-
 $(document).ready(function () {
-    // Fetch the workspace ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const workspaceId = urlParams.get('workspaceid');
+    const workspaceID = parseInt(urlParams.get('workspaceid')); // convert to number
 
-    // Retrieve the workspace list from sessionStorage
-    const workspaceList = JSON.parse(sessionStorage.getItem('workspaceList')); // sessionStorage instead of localStorage
+    const workspaceList = JSON.parse(sessionStorage.getItem('workspaceList'));
+    console.log("workspaceList from sessionStorage:", workspaceList);
+    console.log("workspaceID from URL:", workspaceID);
 
-    // Check if workspace list or workspace ID is missing
-    if (!workspaceList || !workspaceId) {
-        $('#workspace-details').text('Workspace not found.');
+    if (!workspaceList || isNaN(workspaceID)) {
+        console.error('Workspace list or workspace ID is missing or invalid');
         return;
     }
 
-    // Find the specific workspace from the list based on the workspace ID
-    const selectedWorkspace = workspaceList.find(ws => ws.workspaceID == workspaceId);
+    const selectedWorkspace = workspaceList.find(ws => ws.workspaceID === workspaceID);
 
-    // If the workspace isn't found, show an error
+    console.log("Selected Workspace:", selectedWorkspace);
+
+
     if (!selectedWorkspace) {
-        $('#workspace-details').text('Workspace not found.');
+        console.error('Workspace not found in list');
         return;
     }
 
-// ----------------------Populate the workspace details in the HTML---------------------------------//
-/*
-    const targetId = selectedWorkspace.workspaceID; // Get the workspace ID from the URL
-    const targetWorkspace = workspaces.find(workspace => workspace.workspaceID === Number(targetId));
-    const targetOwnerId = targetWorkspace.ownerId;
-    const targetPropertyId = targetWorkspace.propertyId;
-    const targetOwner = userData.find(user => user.id === targetOwnerId);
-    const targetProperty = properties.find(property => property.propertyId === targetPropertyId);
-    const workspaceRating = targetWorkspace.rating;
-    const targetReviews = reviews.filter(review => review.workspaceID === targetId);
+    console.log("Selected Workspace:", selectedWorkspace);
+    $("#workspaceTitle").text(selectedWorkspace.workspaceName);
 
 
-//------------------------Workspace details page---------------------------------//
 
-    const leftContainer = $("#workspace-display-left");
-    const rightContainer = $("#workspace-display-right");
-*/
+
 //----------------------------------popups---------------------------------------------// 
  
+// ----------------- Popup Elements -----------------//
 const popupOverlay = document.getElementById('overlay');
+const overlay = document.getElementById('overlay');
 const popup = document.getElementById('popup');
-const closePopup = popup.querySelector('.close');
 const ownerBtn = document.querySelector('.ownerBtn');
 const bookingBtn = document.querySelector('.bookingBtn');
-const closeBtn = popup.querySelector('.closeBtn'); 
-
+const closeBtn = popup.querySelector('.closeBtn');
+const closePopup = popup.querySelector('.close');
 
 // Ensure popup is hidden at start
 popupOverlay.style.display = 'none';
@@ -69,8 +54,6 @@ function closeFunction() {
     console.log("Closing popup");
     popupOverlay.style.display = 'none';
 }
-    
-
 
    // Open popup on button click
 ownerBtn.addEventListener('click', openPopup);
@@ -87,16 +70,6 @@ $('#overlay').on('click', (event) => {
         closeFunction();
     }
 });
-
-
-/*
-// ----------------- Popup Elements -----------------
-const overlay = document.getElementById('overlay');
-const popup = document.getElementById('popup');
-const closePopupBtn = popup.querySelector('.close');
-const ownerBtn = document.querySelector('.ownerBtn');
-const bookingBtn = document.querySelector('.bookingBtn');
-const closeBtn = popup.querySelector('.closeBtn');
 
 // ----------------- Ensure default state -----------------
 
@@ -120,7 +93,6 @@ function openSpecificPopup(overlayId) {
     }
 }
     
-
 // ----------------- Event Listeners -----------------
 
 document.querySelector('.ownerBtn')?.addEventListener('click', () => {
@@ -142,7 +114,42 @@ document.querySelectorAll('.overlay').forEach(overlay => {
         }
     });
 });
-*/
+
+$('.ownerBtn').on('click', async function () {
+    if (!selectedWorkspace || !selectedWorkspace.workspaceID) {
+        console.error('Workspace ID is undefined');
+        $(".ownerName").text("No owner information found.");
+        $(".contactInfo").html(`<p>Not available</p>`);
+        return;
+    }
+
+    const workspaceID = selectedWorkspace.workspaceID;
+
+    try {
+        // Make a request to the backend to fetch workspace and owner info
+        const response = await fetch(`http://localhost:3000/workspaceDetails/${workspaceID}`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Display workspace and owner info in the popup
+            $(".ownerName").text(`${data.owner.firstName} ${data.owner.lastName}`);
+            $(".contactInfo").html(`
+                <p>Email: <a href="mailto:${data.owner.email}">${data.owner.email}</a></p>
+                <p>Phone: <a href="tel:${data.owner.phoneNumber}">${data.owner.phoneNumber}</a></p>
+            `);
+        } else {
+            $(".ownerName").text("No owner information found.");
+            $(".contactInfo").html(`<p>Not available</p>`);
+        }
+    } catch (error) {
+        console.error("Error fetching workspace details:", error);
+        $(".ownerName").text("No owner information found.");
+        $(".contactInfo").html(`<p>Not available</p>`);
+    }
+});
+
+
 //------------------------Booking form---------------------------------//
 
     // Function to handle booking button click
@@ -155,47 +162,37 @@ document.querySelectorAll('.overlay').forEach(overlay => {
 
 
 //------------------------Owner contact info---------------------------------//
+$(document).on('click', '.ownerBtn', async function () {
+    if (!selectedWorkspace || !selectedWorkspace.propertyId || !selectedWorkspace.propertyId.ownerId) {
+        console.error("No ownerId found in selectedWorkspace");
+        $(".ownerName").text("No owner information found.");
+        $(".contactInfo").html(`<p>Not available</p>`);
+        return;
+    }
 
-const ownerId = selectedWorkspace.ownerId;
+    const ownerId = selectedWorkspace.propertyId.ownerId;
 
-if (!ownerId) {
-    // No ownerId found – show fallback text
-    $(".OwnerName").text("No owner information found.");
-    $(".ContactInfo").html(`<p>Not available</p>`);
-    $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
-    $(".contact-owner-btn").prop("disabled", true); // Optional
-} else {
-    // Fetch owner contact info
-    $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
-        $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
-        $(".ContactInfo").html(`
-            <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
-            <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
-        `);
+    try {
+        const response = await fetch(`http://localhost:3000/ownerContactInfoById/${ownerId}`);
+        if (response.ok) {
+            const ownerData = await response.json();
+            $(".ownerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
+            $(".contactInfo").html(`
+                <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
+                <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
+            `);
+        } else {
+            $(".ownerName").text("No owner information found.");
+            $(".contactInfo").html(`<p>Not available</p>`);
+        }
+    } catch (error) {
+        console.error("Error fetching owner info:", error);
+        $(".ownerName").text("No owner information found.");
+        $(".contactInfo").html(`<p>Not available</p>`);
+    }
+});
 
-        // Fetch other workspaces by the same owner
-        $.get(`/ownersWorkspaceList/${ownerId}`, function (workspaces) {
-            const ownersOtherWorkspaces = $(".WorkspacesList").empty();
-            const filtered = workspaces.filter(ws => ws.workspaceID != selectedWorkspace.workspaceID);
 
-            if (filtered.length > 0) {
-                filtered.forEach(ws => {
-                    $("<li>").text(ws.workspaceName).appendTo(ownersOtherWorkspaces);
-                });
-            } else {
-                $("<li>").text("No other workspaces available").appendTo(ownersOtherWorkspaces);
-            }
-        }).fail(() => {
-            $(".WorkspacesList").html(`<li>Failed to load other workspaces</li>`);
-        });
-
-    }).fail(() => {
-        $(".OwnerName").text("No owner information found.");
-        $(".ContactInfo").html(`<p>Not available</p>`);
-        $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
-        $(".contact-owner-btn").prop("disabled", true);
-    });
-}
 
 //------------------------Left Section---------------------------------//
 
@@ -309,8 +306,6 @@ if (targetReviews.length > 0) {
 } else {
     reviewSection.hide(); // This hides the whole block, including heading
 }
-    
 
-})
-
+}); 
     

@@ -228,8 +228,8 @@ form .signup-link a:hover {
 }
 
 
-.closeBtn {
-    background-color: #275158;
+#closeBtn {
+    background-color: #8d1c1c;
     color: #fff;
     padding: 10px 20px;
     border: none;
