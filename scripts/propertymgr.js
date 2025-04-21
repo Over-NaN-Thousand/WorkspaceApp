@@ -114,6 +114,7 @@ $('#saveProperty').on('click', async function () {
             body: JSON.stringify(propertyData)
         });
 
+
         if (res.ok) {
             alert(propertyId ? 'Property updated!' : 'Property added!');
             $('#propertyPopup').hide();
@@ -159,7 +160,8 @@ async function loadProperties() {
                     <h3>${property.name}</h3>
                     <p>${property.address1}, ${property.city}, ${property.province}</p>
                     <button class="edit-property-btn" data-id="${property.propertyId}">Edit</button>
-                </div>
+                    <button class="delete-property-btn" data-id="${property.propertyId}">Delete</button>
+                    </div>
             `;
             $('#property-list').append(propertyCard);
         });
@@ -208,6 +210,34 @@ function openEditPopup(property) {
     $('#propertyForm').data('id', property.propertyId);
     console.log('Property ID stored in form data:', property.propertyId);
 }
+
+//======= DELETE PROPERTY =======
+
+$(document).on('click', '.delete-property-btn', async function () {
+    const propertyId = $(this).data('id');
+    console.log('Delete button clicked. Property ID:', propertyId);
+
+    if (confirm('Are you sure you want to delete this property?')) {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:3000/properties/${propertyId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (res.ok) {
+                alert('Property deleted!');
+                loadProperties(); // Reload properties after deletion
+            } else {
+                alert('Failed to delete property.');
+            }
+        } catch (err) {
+            console.error("Error deleting property:", err);
+        }
+    }
+});
 
 
 

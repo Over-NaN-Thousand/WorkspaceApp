@@ -28,6 +28,7 @@ $(document).ready(function () {
         return;
     }
 
+
     // ----------------------Populate the workspace details in the HTML---------------------------------//
     /*
         const targetId = selectedWorkspace.workspaceID; // Get the workspace ID from the URL
@@ -56,97 +57,28 @@ $(document).ready(function () {
 
 
     // Ensure popup is hidden at start
+
     popupOverlay.style.display = 'none';
+}
+    
 
-    // Open popup function
-    function openPopup() {
-        console.log("Opening popup");
-        popupOverlay.style.display = 'block';
+
+   // Open popup on button click
+ownerBtn.addEventListener('click', openPopup);
+
+// Close popup with 'x' button
+closePopup.addEventListener('click', closeFunction);
+
+// Close popup with close button
+closeBtn.addEventListener('click', closeFunction);
+
+// Close popup by clicking outside
+$('#overlay').on('click', (event) => {
+    if (event.target === popupOverlay) {
+        closeFunction();
     }
+});
 
-    // Close popup function
-    function closeFunction() {
-        console.log("Closing popup");
-        popupOverlay.style.display = 'none';
-    }
-
-
-
-    // Open popup on button click
-    ownerBtn.addEventListener('click', openPopup);
-
-    // Close popup with 'x' button
-    closePopup.addEventListener('click', closeFunction);
-
-    // Close popup with close button
-    closeBtn.addEventListener('click', closeFunction);
-
-    // Close popup by clicking outside
-    $('#overlay').on('click', (event) => {
-        if (event.target === popupOverlay) {
-            closeFunction();
-        }
-    });
-
-
-
-
-    /*
-    // ----------------- Popup Elements -----------------
-    const overlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const closePopupBtn = popup.querySelector('.close');
-    const ownerBtn = document.querySelector('.ownerBtn');
-    const bookingBtn = document.querySelector('.bookingBtn');
-    const closeBtn = popup.querySelector('.closeBtn');
-    
-    // ----------------- Ensure default state -----------------
-    
-    overlay.style.display = 'none';
-    
-    // ----------------- General Popup Functions -----------------
-    
-    // Close all overlays
-    function closeAllPopups() {
-        document.querySelectorAll('.overlay').forEach(overlay => {
-            overlay.style.display = 'none';
-        });
-    }
-    
-    // Open specific overlay by ID
-    function openSpecificPopup(overlayId) {
-        closeAllPopups(); // Hide others
-        const targetOverlay = document.getElementById(overlayId);
-        if (targetOverlay) {
-            targetOverlay.style.display = 'block';
-        }
-    }
-        
-    
-    // ----------------- Event Listeners -----------------
-    
-
-    
-    document.querySelector('.ownerBtn')?.addEventListener('click', () => {
-        openSpecificPopup('overlay-owner');
-    });
-    
-    document.querySelector('.reviewBtn')?.addEventListener('click', () => {
-        openSpecificPopup('overlay-review');
-    });
-    
-    document.querySelectorAll('.overlay .close, .overlay .closeBtn').forEach(btn => {
-        btn.addEventListener('click', closeAllPopups);
-    });
-    
-    document.querySelectorAll('.overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                closeAllPopups();
-            }
-        });
-    });
-    */
     //------------------------Booking form---------------------------------//
 
     // Function to handle booking button click
@@ -173,9 +105,36 @@ $(document).ready(function () {
         $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
             $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
             $(".ContactInfo").html(`
+
+    // Function to handle booking button click
+    function bookingForm(){
+    // Redirect to book.html page
+    window.location.href = '/WorkspaceApp/pages/bookingtemp.html';
+    }
+
+    bookingBtn.addEventListener('click', bookingForm);
+
+
+//------------------------Owner contact info---------------------------------//
+
+const ownerId = selectedWorkspace.ownerId;
+
+if (!ownerId) {
+    // No ownerId found – show fallback text
+    $(".OwnerName").text("No owner information found.");
+    $(".ContactInfo").html(`<p>Not available</p>`);
+    $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
+    $(".contact-owner-btn").prop("disabled", true); // Optional
+} else {
+    // Fetch owner contact info
+    $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
+        $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
+        $(".ContactInfo").html(`
+
             <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
             <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
         `);
+
 
             // Fetch other workspaces by the same owner
             $.get(`/ownersWorkspaceList/${ownerId}`, function (workspaces) {
@@ -351,6 +310,10 @@ $(document).ready(function () {
     });
 
 
+const starRatingDiv = $(".starRating").empty();
+const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
+
+
     function renderReviewSlider(reviews) {
         const container = $("#reviewCardsContainer");
         let current = 0;
@@ -405,6 +368,9 @@ $(document).ready(function () {
     fetchReviewsAndRender(workspaceName);
 
 
+    displayReview(currentReviewIndex);
+
 
 })
+
 

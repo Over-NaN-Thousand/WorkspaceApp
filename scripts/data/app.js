@@ -138,8 +138,7 @@ const DATABASE = "WorkspaceApp";
     }
   });*/ //Repeated by Victor
 
-
-app.post("/properties", verifyToken, async (req, res) => {
+  app.post("/properties", verifyToken, async (req, res) => {
     const newProperty = req.body;
 
     try {
@@ -148,7 +147,10 @@ app.post("/properties", verifyToken, async (req, res) => {
             async (client) => {
                 return await client
                     .db(DATABASE)
-                    .collection("usersData")
+
+
+                    .collection("usersData") 
+
                     .findOne({ email: newProperty.ownerEmail }); // Find owner by email
             }
         );
@@ -204,9 +206,12 @@ app.get('/properties', verifyToken, async (req, res) => {
 });
 
 
-app.put("/properties/:id", verifyToken, async (req, res) => {
-    const propertyId = Number(req.params.id);
-    const updates = req.body;
+
+
+app.put("/properties/:id", verifyToken,async (req, res) => {
+    const propertyId = Number(req.params.id);       
+    const updates = req.body;                       
+
 
     if (isNaN(propertyId))
         return res.status(400).json({ message: "Invalid property ID provided." });
@@ -667,13 +672,16 @@ app.delete("/workspaces/:id", verifyToken, async (req, res) => {
 //-------------------Public workspace route (no token needed to access)-----------------//
 
 // Getting all data from workspaces
-app.get("/publicWorkspaces", async (req, res) => {
+
+
+app.get("/publicWorkspaces",async (req, res) => {
 
     try {
         const filters = {};
-
+        
         const workspaceName = req.headers["workspacename"] || req.query.workspaceName;
-        if (workspaceName)
+        if (workspaceName) 
+
             filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
 
         const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
@@ -686,7 +694,10 @@ app.get("/publicWorkspaces", async (req, res) => {
 
         const minSqFt = Number(req.headers["minsqft"] || req.query.minSqFt);
         const maxSqFt = Number(req.headers["maxsqft"] || req.query.maxSqFt);
-        if (!isNaN(minSqFt) || !isNaN(maxSqFt))
+
+
+        if (!isNaN(minSqFt) || !isNaN(maxSqFt)) 
+
             filters.sqFt = buildMinMaxFilter(minSqFt, maxSqFt); // buildMinMaxFilter is a helper function to create the filter
 
         const minSeatCapacity = Number(req.headers["mincapacity"] || req.query.minCapacity);
@@ -696,7 +707,10 @@ app.get("/publicWorkspaces", async (req, res) => {
 
         const minPrice = Number(req.headers["minprice"] || req.query.minPrice);
         const maxPrice = Number(req.headers["maxprice"] || req.query.maxPrice);
-        if (!isNaN(minPrice) || !isNaN(maxPrice))
+
+
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) 
+
             filters.price = buildMinMaxFilter(minPrice, maxPrice);
 
         const amenities = req.headers["amenities"] || req.query.amenities;
