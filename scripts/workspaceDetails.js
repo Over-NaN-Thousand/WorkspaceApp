@@ -134,10 +134,9 @@ $('.ownerBtn').on('click', async function () {
             
             // Display workspace and owner info in the popup
             $(".ownerName").text(`${data.owner.firstName} ${data.owner.lastName}`);
-            $(".contactInfo").html(`
-                <p>Email: <a href="mailto:${data.owner.email}">${data.owner.email}</a></p>
-                <p>Phone: <a href="tel:${data.owner.phoneNumber}">${data.owner.phoneNumber}</a></p>
-            `);
+            $("#email").html(`Email: <a href="mailto:${data.owner.email}">${data.owner.email}</a>`);
+            $("#phone").html(`Phone: <a href="tel:${data.owner.phoneNumber}">${data.owner.phoneNumber}</a>`);
+
         } else {
             $(".ownerName").text("No owner information found.");
             $(".contactInfo").html(`<p>Not available</p>`);
