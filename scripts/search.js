@@ -39,24 +39,16 @@ const fetchAllWorkspaces = async ()=> {
         // Update the global allWorkspaces variable
         return data.workspaces.map(workspace => ({
             ...workspace,  // Keep all workspace fields
-            workspaceName: workspace.workspaceName,
-            workspaceType: workspace.workspaceType,
+            propertyName: workspace.name,
             address1: workspace.address1,
             address2: workspace.address2,
-            neighborhood: workspace.neighborhood,
+            neighborhood: workspace.neighborhood || "",
             city: workspace.city,
             province: workspace.province,
             country: workspace.country,
             postalcode: workspace.postalcode,
-            price: workspace.price,
-            amenities: workspace.amenities,
-            sqft: workspace.sqft,
-            leaseTerm: workspace.leaseTerm,
-            seatCapacity: workspace.seatCapacity,
-            propertyId: workspace.PropertyId,
-            propertyName: workspace.name,
-            ownerEmail: workspace.ownerEmail,
-            workspaceID: workspace.workspaceID
+            propertyImgFileName: workspace.propertyImgFileName,
+            propertyOwnerId: workspace.propertyOwnerId
         }));
 
     } catch (error) {
@@ -185,6 +177,9 @@ function DisplayWorkspaces(workspaceList){
                     <p><strong>Neighborhood:</strong> ${workspace.neighborhood}</p>
                     <p><strong>Location:</strong> ${workspace.address1}, ${workspace.city}, ${workspace.province}, ${workspace.country}</p>
                     <p><strong>Amenities:</strong> ${workspace.amenities.join(", ")}</p>
+                    <p><strong>Smoking:</strong> ${workspace.smokingAllowed ? "Allowed" : "Not Allowed"}</p>
+                    <p><strong>Parking:</strong> ${workspace.parkingGarage ? "Available" : "Not Available"}</p>
+                    <p><strong>Public Transport:</strong> ${workspace.publicTransportation ? "Accessible" : "Not Accessible"}</p>
                     <a href="pages/workspaceDetails.html?workspaceid=${workspace.workspaceID}" class="btnWSdetail">Details</a>
                 </div>
             </section>`;
@@ -244,10 +239,22 @@ function ApplyFilters(workspaceList){
 
 
     //FILTER BY LEASE TERM
-
     const pickedTerm = $('input[name="optTerm"]:checked').val(); // AL - get value of the selected radio button
     if (pickedTerm) {                 // AL - only filter if a term is selected
         returnList = returnList.filter(workspace => workspace.leaseTerm === pickedTerm);
+    }
+
+    const smokingAllowed = $('input[name="smoking"]:checked').val();
+    if (smokingAllowed) {                
+        returnList = returnList.filter(workspace => workspace.smokingAllowed === (smokingAllowed === "true"));
+    }
+    const parkingGarage = $('input[name="parking"]:checked').val();
+    if (parkingGarage) {                
+        returnList = returnList.filter(workspace => workspace.parkingGarage === (parkingGarage === "true"));
+    }
+    const publicTransportation = $('input[name="publicTransport"]:checked').val();
+    if (publicTransportation) {
+        returnList = returnList.filter(workspace => workspace.publicTransportation === (publicTransportation === "true"));
     }
 
 
