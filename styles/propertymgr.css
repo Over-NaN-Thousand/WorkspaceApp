@@ -306,6 +306,10 @@ form {
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
   }
 
+  .edit-property-btn:hover{
+    background-color: rgb(177, 174, 174);
+  }
+
   .delete-property-btn {
     background-color: #7c1717;
     color: white;
@@ -318,6 +322,10 @@ form {
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
   }
 
+  .delete-property-btn:hover{
+    background-color: rgb(189, 4, 4);
+  }
+
   .toggle-workspaces-btn {
     background-color: #275158;
     color: white;
@@ -328,6 +336,10 @@ form {
     font-size: 1rem;
     margin-top: 10px;
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
+  }
+
+  .toggle-workspaces-btn:hover{
+    background-color: teal;
   }
 
   .add-workspace-btn {
@@ -353,6 +365,14 @@ form {
     margin-top: 10px;
     margin-left: auto;
     box-shadow: 0 4px 6px rgba(39, 81, 88, 0.404);
+  }
+
+  #addPropertyBtn:hover {
+    background-Color: rgb(2, 148, 148);
+  }
+
+  .add-workspace-btn:hover {
+    background-color: rgb(83, 134, 134);
   }
 
   .toolbar {

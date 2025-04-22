@@ -711,11 +711,11 @@ app.get("/publicWorkspaces",async (req, res) => {
         if (workspaceName) 
             filters.workspaceName = { $regex: workspaceName, $options: "i" }; // case-insensitive regex
 
-        const workspaceType = req.headers["workspacetype"] || req.query.workspaceType;
+        const workspaceType = req.headers["workspaceType"] || req.query.workspaceType;
         if (workspaceType)
             filters.workspaceType = workspaceType;
 
-        const leaseTerm = req.headers["leaseterm"] || req.query.leaseTerm;
+        const leaseTerm = req.headers["leaseTerm"] || req.query.leaseTerm;
         if (leaseTerm)
             filters.leaseTerm = leaseTerm;
 

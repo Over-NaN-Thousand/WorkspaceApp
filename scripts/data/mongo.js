@@ -546,7 +546,7 @@ async function getWorkspacesWithProperties(client, filters) {
                         city: "$propertyDetails.city",
                         province: "$propertyDetails.province",
                         country: "$propertyDetails.country",
-                        neighborhood: "$propertyDetails.neighbourhood", 
+                        neighborhood: "$propertyDetails.neighborhood", 
                         propertyImgFileName: "$propertyDetails.imgFileName", 
                         propertyOwnerId: "$propertyDetails.ownerId",
                         ownerEmail: "$propertyDetails.ownerEmail"

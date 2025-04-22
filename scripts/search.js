@@ -39,7 +39,7 @@ const fetchAllWorkspaces = async ()=> {
         // Update the global allWorkspaces variable
         return data.workspaces.map(workspace => ({
             ...workspace,  // Keep all workspace fields
-            workspaceName: workspace.name,
+            workspaceName: workspace.workspaceName,
             workspaceType: workspace.workspaceType,
             address1: workspace.address1,
             address2: workspace.address2,
@@ -54,7 +54,7 @@ const fetchAllWorkspaces = async ()=> {
             leaseTerm: workspace.leaseTerm,
             seatCapacity: workspace.seatCapacity,
             propertyId: workspace.PropertyId,
-            propertyName: workspace.propertyName,
+            propertyName: workspace.name,
             ownerEmail: workspace.ownerEmail,
             workspaceID: workspace.workspaceID
         }));

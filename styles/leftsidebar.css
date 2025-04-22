@@ -99,11 +99,11 @@ aside{
 /*Button*/
 .sidebar-menu .button input{
     margin-top: 40px;
-    color: black;
+    color: rgb(255, 255, 255);
     display: block;      
     font-size: inherit;        
     line-height: normal;        
-    background:red;
+    background:rgb(9, 110, 136);
 
     height: 3rem;
     width: 100%;
@@ -118,4 +118,12 @@ aside{
 }
 .sidebar-menu .button input:hover {
     background-color: var(--prim);
+}
+
+#logoutBtn {
+    background-color: rgb(165, 10, 10);
+}
+
+#logoutBtn:hover {
+    background-color: rgb(201, 0, 0);
 }
