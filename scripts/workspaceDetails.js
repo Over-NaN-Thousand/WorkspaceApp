@@ -1,8 +1,3 @@
-//import workspaces from './workspaceData.js';
-import userData from './userData.js';//for owner contact info
-//import properties from './propertyData.js';
-import reviews from './workspaceReviews.js';
-
 //----------------------- Get workspace from session storage-----------------------// 
 
 $(document).ready(function () {
@@ -59,25 +54,26 @@ $(document).ready(function () {
     // Ensure popup is hidden at start
 
     popupOverlay.style.display = 'none';
-}
-    
 
 
-   // Open popup on button click
-ownerBtn.addEventListener('click', openPopup);
 
-// Close popup with 'x' button
-closePopup.addEventListener('click', closeFunction);
 
-// Close popup with close button
-closeBtn.addEventListener('click', closeFunction);
-
-// Close popup by clicking outside
-$('#overlay').on('click', (event) => {
-    if (event.target === popupOverlay) {
-        closeFunction();
+    function openPopup() {
+        popupOverlay.style.display = 'block';
     }
-});
+
+    function closeFunction() {
+        popupOverlay.style.display = 'none';
+    }
+    // Close popup with close button
+    closeBtn.addEventListener('click', closeFunction);
+
+    // Close popup by clicking outside
+    $('#overlay').on('click', (event) => {
+        if (event.target === popupOverlay) {
+            closeFunction();
+        }
+    });
 
     //------------------------Booking form---------------------------------//
 
@@ -105,32 +101,6 @@ $('#overlay').on('click', (event) => {
         $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
             $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
             $(".ContactInfo").html(`
-
-    // Function to handle booking button click
-    function bookingForm(){
-    // Redirect to book.html page
-    window.location.href = '/WorkspaceApp/pages/bookingtemp.html';
-    }
-
-    bookingBtn.addEventListener('click', bookingForm);
-
-
-//------------------------Owner contact info---------------------------------//
-
-const ownerId = selectedWorkspace.ownerId;
-
-if (!ownerId) {
-    // No ownerId found – show fallback text
-    $(".OwnerName").text("No owner information found.");
-    $(".ContactInfo").html(`<p>Not available</p>`);
-    $(".WorkspacesList").html(`<li>No other workspaces available</li>`);
-    $(".contact-owner-btn").prop("disabled", true); // Optional
-} else {
-    // Fetch owner contact info
-    $.get(`/ownerContactInfo/${ownerId}`, function (ownerData) {
-        $(".OwnerName").text(`${ownerData.firstName} ${ownerData.lastName}`);
-        $(".ContactInfo").html(`
-
             <p>Email: <a href="mailto:${ownerData.email}">${ownerData.email}</a></p>
             <p>Phone: <a href="tel:${ownerData.phoneNumber}">${ownerData.phoneNumber}</a></p>
         `);
@@ -202,48 +172,9 @@ if (!ownerId) {
 
     //------------------------Right Section---------------------------------//
 
-    // Get ratings array from the selected workspace
-    let workspaceRating = selectedWorkspace.rating || [];
 
-    // If the rating is an array with a single string (like ["2, 3, 5, 2, 2"]), split it into individual numbers
-    if (workspaceRating.length === 1 && typeof workspaceRating[0] === "string") {
-        workspaceRating = workspaceRating[0].split(",").map(r => Number(r.trim()));
-    }
-
-    console.log("Raw Ratings Array:", workspaceRating);
-
-    // Calculate average rating
-    const averageStarRating = workspaceRating.length > 0
-        ? Math.round(workspaceRating.reduce((a, b) => a + b, 0) / workspaceRating.length)
-        : 0;
-
-    console.log("Average Rating:", averageStarRating);
-
-    const starRatingDiv = $(".starRating").empty();
-    const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
-
-    // Toggle visibility based on rating availability
-    ratingHeading.toggle(workspaceRating.length > 0);
-    starRatingDiv.toggle(workspaceRating.length > 0);
-
-    // If ratings exist, render stars
-    if (workspaceRating.length > 0) {
-        for (let i = 0; i < averageStarRating; i++) {
-            $("<span>").addClass("fa fa-star checked").appendTo(starRatingDiv);
-        }
-    }
 
     //------------------------Reviews---------------------------------/
-
-    // When user clicks "Leave Review"
-    $(".reviewBtn").click(() => {
-        $("#overlay-review").fadeIn();
-    });
-
-    // When user clicks the close button (X)
-    $("#overlay-review .close").click(() => {
-        $("#overlay-review").fadeOut();
-    });
 
     // Handle Submit Review Button
     $(".reviewBtn").click(() => {
@@ -310,8 +241,8 @@ if (!ownerId) {
     });
 
 
-const starRatingDiv = $(".starRating").empty();
-const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
+    const starRatingDiv = $(".starRating").empty();
+    const ratingHeading = $(".detailBoxHeading:contains('Average Rating')");
 
 
     function renderReviewSlider(reviews) {

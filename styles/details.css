@@ -43,6 +43,7 @@ body {
 
 .main {
     display: flex;
+    flex-direction: row;
     gap: 100px;
     /* Space between the boxes */
     padding: 15px;
@@ -218,7 +219,9 @@ li:last-child {
 
 
 
-.bookingBtn, .ownerBtn, .reviewBtn{
+.bookingBtn,
+.ownerBtn,
+.reviewBtn {
     padding: .3rem 1.5rem;
     font-size: clamp(20px, 6vw, 25px);
     background-color: var(--prim);
@@ -374,7 +377,7 @@ li:last-child {
 
 
 .reviewBody {
-    font-size: 30;
+    font-size: 30px;
 }
 
 
@@ -520,3 +523,4 @@ li:last-child {
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
