@@ -10,7 +10,6 @@ const {
     connectToDatabase,
     connectToDatabaseB,
     ObjectId,
-    ObjectId,
     hashPassword,
     verifyToken,
     deleteOneFieldInOneObject,
@@ -87,14 +86,8 @@ const DATABASE = "WorkspaceApp";
         console.error('Test connection error:', error);
         res.status(500).json({ message: 'Failed to connect to MongoDB', error: error.message });
     }
-});*/
+});
 //======================================================================================================//
-
-
-
-
-
-
 
 
       res.status(200).json(all);
@@ -102,8 +95,8 @@ const DATABASE = "WorkspaceApp";
       console.error("Error in /myProperty:", err);
       res.status(500).json({ error: 'Failed to fetch property' });
     }
-  });*/ //Repeated by Victor
-
+  }); //Repeated by Victor
+*/
 //==================================Routes for Property===================================================//
 
 
@@ -373,7 +366,7 @@ app.get('/profile2', verifyToken, async (req, res) => {  //Named:/profile, verif
 app.delete('/user', verifyToken, async (req, res) => {
     const userEmail = req.headers["email"] || req.query.email;
     try {
-    const result = await deleteOneObject("usersData", {email:userEmail});
+        const result = await deleteOneObject("usersData", { email: userEmail });
         if (result.deletedCount > 0) {
             res.status(200).json({ message: "User deleted successfully." });
         } else {
@@ -436,7 +429,7 @@ app.delete('/user', verifyToken, async (req, res) => {
 
 //==================================Routes for WorkspaceDetails===================================================//
 
-  app.post("/workspaces", verifyToken,async (req, res) => {
+app.post("/workspaces", verifyToken, async (req, res) => {
 
     const newWorkspace = req.body;
     console.log("New workspace data:", newWorkspace); // For debugging
@@ -484,7 +477,7 @@ app.delete('/user', verifyToken, async (req, res) => {
 
 
 
-app.get("/workspacedetails", verifyToken,async (req, res) => {
+app.get("/workspacedetails", verifyToken, async (req, res) => {
 
     try {
         const filters = {};
@@ -541,12 +534,12 @@ app.get("/workspacedetails", verifyToken,async (req, res) => {
     }
 });
 
-app.get("/workspaces", verifyToken,async (req, res) => {
+app.get("/workspaces", verifyToken, async (req, res) => {
     try {
         const filters = {};
         const rawOwnerId = req.headers["ownerid"] || req.query.ownerId;
         if (rawOwnerId) {
-            const ownerId = Number(rawOwnerId); 
+            const ownerId = Number(rawOwnerId);
             if (!isNaN(ownerId)) {
                 filters.ownerId = ownerId;
             } else {
@@ -565,17 +558,17 @@ app.get("/workspaces", verifyToken,async (req, res) => {
 
 
 
-app.put("/workspaces/:id", verifyToken,async (req, res) => {
+app.put("/workspaces/:id", verifyToken, async (req, res) => {
     const workspaceId = Number(req.params.id);       // get the workspace ID
     const updates = req.body;                       // get the updates
 
     if (isNaN(workspaceId))
         return res.status(400).json({ message: "Invalid workspace ID provided." });
-    
 
-    if (!updates || Object.keys(updates).length === 0) 
+
+    if (!updates || Object.keys(updates).length === 0)
         return res.status(400).json({ message: "No updates provided in request body." });
-    
+
     try {
         const result = await connectToDatabaseB(updateWorkspace, workspaceId, updates);
         if (result.modifiedCount > 0) {
@@ -589,7 +582,7 @@ app.put("/workspaces/:id", verifyToken,async (req, res) => {
     }
 });
 
-app.delete("/workspaces/:id", verifyToken,async (req, res) => {
+app.delete("/workspaces/:id", verifyToken, async (req, res) => {
     const workspaceId = Number(req.params.id);
 
     if (isNaN(workspaceId)) {

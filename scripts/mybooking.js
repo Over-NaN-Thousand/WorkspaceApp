@@ -46,8 +46,7 @@ $(document).ready(function () {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    // If token is needed:
-                    // Authorization: `Bearer ${localStorage.getItem("token")}`
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify({
                     workspaceName,
